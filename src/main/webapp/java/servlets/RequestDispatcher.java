@@ -9,6 +9,6 @@ import java.io.IOException;
 public class RequestDispatcher extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getWriter().println();
+        resp.getWriter().println("This is " + RequestDispatcher.class.getName());
     }
 }
