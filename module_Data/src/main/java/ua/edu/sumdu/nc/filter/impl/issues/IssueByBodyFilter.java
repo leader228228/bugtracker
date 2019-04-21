@@ -12,18 +12,23 @@ import java.util.regex.Pattern;
 
 public class IssueByBodyFilter extends IssueFilter {
     private String title;
+    private boolean isStrict;
 
     public IssueByBodyFilter(DAO dao, String title, boolean isStrict) {
         super(dao);
-        this.title = isStrict ? '^' + Pattern.quote(title) + '$' : '%' + Pattern.quote(title) + '%';
+        this.title = title;
+        this.isStrict = isStrict;
     }
 
     @Override
     public Collection<Issue> execute() throws SQLException {
         try (Connection connection = dao.getConnection()) {
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement("SELECT * FROM BT_ISSUES WHERE BODY LIKE ?");
-            preparedStatement.setString(1, title);
+            PreparedStatement preparedStatement;
+            if (isStrict) {
+                preparedStatement = connection.prepareStatement("SELECT * FROM BT_ISSUES WHERE BODY = ?");
+            } else {
+                preparedStatement = connection.prepareStatement("SELECT * FROM BT_ISSUES WHERE CONTAINS(BODY, ?)");
+            }
             return new AllIssuesParser().parse(preparedStatement.executeQuery());
         }
     }

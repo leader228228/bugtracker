@@ -1,5 +1,6 @@
 package ua.edu.sumdu.nc.filter.impl.issues;
 
+import sun.dc.pr.PRError;
 import ua.edu.sumdu.nc.dao.DAO;
 import ua.edu.sumdu.nc.entities.bt.Issue;
 import ua.edu.sumdu.nc.parsers.impl.issues.AllIssuesParser;
@@ -8,15 +9,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.regex.Pattern;
 
-public class IssueByTitleFilter extends IssueFilter {
-    private String title;
+public class IssueByReplyBodyFilter extends IssueFilter {
+    private String replyBody;
     private boolean isStrict;
 
-    public IssueByTitleFilter(DAO dao, String title, boolean isStrict) {
+
+    public IssueByReplyBodyFilter(DAO dao, String replyBody, boolean isStrict) {
         super(dao);
-        this.title = title;
+        this.replyBody = replyBody;
         this.isStrict = isStrict;
     }
 
@@ -26,11 +27,18 @@ public class IssueByTitleFilter extends IssueFilter {
             PreparedStatement preparedStatement;
             if (isStrict) {
                 preparedStatement = connection.prepareStatement(
-                        "SELECT * FROM BT_ISSUES WHERE TITLE = ?;");
+                        "SELECT * " +
+                        "FROM BT_ISSUES LEFT JOIN BT_REPLIES " +
+                        "ON BT_ISSUES.ISSUE_ID = BT_REPLIES.ISSUE_ID " +
+                        "WHERE BT_REPLIES.BODY = ?");
             } else {
                 preparedStatement = connection.prepareStatement(
-                        "SELECT * FROM BT_ISSUES WHERE CONTAINS(TITLE, ?);");
+                        "SELECT * " +
+                        "FROM BT_ISSUES LEFT JOIN BT_REPLIES " +
+                        "ON BT_ISSUES.ISSUE_ID = BT_REPLIES.ISSUE_ID " +
+                        "WHERE CONTAINS(BT_REPLIES.BODY, ?)");
             }
+            preparedStatement.setString(1, replyBody);
             return new AllIssuesParser().parse(preparedStatement.executeQuery());
         }
     }
