@@ -42,13 +42,4 @@ public class ProjectImpl implements Project {
         this.adminId = adminId;
     }
 
-    @Override
-    public void save() {
-        // TODO
-    }
-
-    @Override
-    public void delete() {
-        // TODO
-    }
 }

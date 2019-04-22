@@ -48,14 +48,4 @@ public class UserImpl implements User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    @Override
-    public void save() {
-        // TODO
-    }
-
-    @Override
-    public void delete() {
-        // TODO
-    }
 }

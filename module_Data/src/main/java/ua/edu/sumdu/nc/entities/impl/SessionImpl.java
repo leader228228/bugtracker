@@ -71,13 +71,4 @@ public class SessionImpl implements Session {
         this.token = token;
     }
 
-    @Override
-    public void save() {
-        //TODO
-    }
-
-    @Override
-    public void delete() {
-        //TODO
-    }
 }

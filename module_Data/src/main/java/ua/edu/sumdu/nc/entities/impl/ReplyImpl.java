@@ -6,6 +6,7 @@ public class ReplyImpl implements Reply {
     private long replyId;
     private String body;
     private long issueId;
+    private long authorId;
 
     public ReplyImpl(long replyId) {
         this.replyId = replyId;
@@ -43,12 +44,12 @@ public class ReplyImpl implements Reply {
     }
 
     @Override
-    public void save() {
-        // TODO
+    public long getAuthorId() {
+        return authorId;
     }
 
     @Override
-    public void delete() {
-        // TODO
+    public void setAuthorId(long authorId) {
+        this.authorId = authorId;
     }
 }

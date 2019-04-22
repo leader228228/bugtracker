@@ -16,7 +16,7 @@ public class IssueStatusImpl implements IssueStatus {
     }
 
     @Override
-    public long getStatusId() {
+    public int getStatusId() {
         return statusId;
     }
 
@@ -30,13 +30,4 @@ public class IssueStatusImpl implements IssueStatus {
         value = newValue;
     }
 
-    @Override
-    public void save() {
-        // TODO
-    }
-
-    @Override
-    public void delete() {
-        // TODO
-    }
 }
