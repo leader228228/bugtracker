@@ -1,13 +1,9 @@
 package ua.edu.sumdu.nc.entities.impl;
 
-import ua.edu.sumdu.nc.dao.DAO;
-import ua.edu.sumdu.nc.dao.impl.DAOImpl;
+import org.springframework.context.annotation.Bean;
 import ua.edu.sumdu.nc.entities.bt.Issue;
 
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 public class IssueImpl implements Issue {
     private long issueId;

@@ -1,11 +1,14 @@
 package ua.edu.sumdu.nc.dao.impl;
 
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import ua.edu.sumdu.nc.dao.DAO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+@Service
 public class DAOImpl implements DAO {
     // TODO REPLACE CONNECTION CONFIGURATION WITH PROPERTIES
     @Override
