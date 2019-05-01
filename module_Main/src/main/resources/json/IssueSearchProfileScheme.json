@@ -1,0 +1,14 @@
+{
+  "type" : "object",
+  "IssueSearchProfile" : {
+	"criteria" : {"$ref" : "#/definitions/Criteria" }
+  },
+  "definitions" : {
+	"Criteria" : {
+	  "anyOf" : [
+		{ "type" : "string", "pattern" : "^PROJECT_ID$" },
+		{ "type" : "string", "pattern" : "^NAME$" }
+	  ]
+	}
+  }
+}

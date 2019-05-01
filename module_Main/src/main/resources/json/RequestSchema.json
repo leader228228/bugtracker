@@ -1,0 +1,11 @@
+{
+    "type": "object",
+    "title": "Request",
+    "properties": {
+        "body": {
+            "anyOf": [{"$schema": "SearchProfileScheme.json"}]
+        }
+    },
+    "required" : ["body"],
+    "additionalProperties" : false
+}

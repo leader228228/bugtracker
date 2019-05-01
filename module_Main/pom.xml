@@ -10,10 +10,27 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>module_Main</artifactId>
-    <name>module_Parent</name>
+    <name>module_Main</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+    <build>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/res</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>
