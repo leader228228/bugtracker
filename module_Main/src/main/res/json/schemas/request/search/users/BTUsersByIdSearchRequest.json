@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "title": "BTUsersByIdSearchRequest",
+  "properties": {
+    "userIdFrom": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "userIdTo": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "searchBy": {
+      "allOf": [
+        {"pattern": "^BTUsersByIdSearchRequest$"}
+      ]
+    }
+  },
+  "required": ["userIdFrom", "userIdTo"]
+}

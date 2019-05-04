@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "title": "BTUsersByNameSearchRequest",
+  "properties": {
+    "userName": {
+      "format": "regex"
+    },
+    "searchBy": {
+      "allOf": [
+        {"pattern": "^BTUsersByNameSearchRequest$"}
+      ]
+    }
+  },
+  "required": ["userName"]
+}

@@ -1,0 +1,19 @@
+{
+  "$id": "BTRequest",
+  "type": "object",
+  "title": "BTRequest",
+  "oneOf": [
+    {"$ref": "classpath://schemas/request/BTSearchRequest.json"}
+  ],
+  "properties": {
+    "action" : {
+      "$ref": "#/definitions/action"
+    }
+  },
+  "definitions": {
+    "action" : {
+      "type": "string"
+    }
+  },
+  "required" : ["action"]
+}

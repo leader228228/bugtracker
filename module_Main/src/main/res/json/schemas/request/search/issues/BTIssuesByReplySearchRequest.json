@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "title": "BTIssuesByReplySearchRequest",
+  "properties": {
+    "replyBody": {
+      "format": "regex"
+    },
+    "searchBy": {
+      "allOf": [
+        {"pattern": "^BTIssuesByReplySearchRequest$"}
+      ]
+    }
+  },
+  "required": ["replyBody"]
+}

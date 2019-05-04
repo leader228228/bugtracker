@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "title": "BTIssuesRequest",
+  "oneOf": [
+    {"$ref": "classpath://schemas/request/search/issues/BTIssuesByNameSearchRequest.json"},
+    {"$ref": "classpath://schemas/request/search/issues/BTIssuesByIdSearchRequest.json"},
+    {"$ref": "classpath://schemas/request/search/issues/BTIssuesByReplySearchRequest.json"}
+  ]
+}
