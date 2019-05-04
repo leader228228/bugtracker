@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "title": "BTSearchRequest",
+  "oneOf": [
+    {"$ref": "classpath://schemas/request/search/projects/BTProjectsSearchRequest.json"},
+    {"$ref": "classpath://schemas/request/search/projects/BTIssuesSearchRequest.json"},
+    {"$ref": "classpath://schemas/request/search/projects/BTUsersSearchRequest.json"}
+  ],
+  "properties": {
+    "searchBy": {
+      "$ref": "#/definitions/searchBy"
+    }
+  },
+  "definitions": {
+    "searchBy": {
+      "enum": ["BTProjectsSearchRequest", "BTIssuesSearchRequest", "BTUsersSearchRequest"]
+    }
+  },
+  "required": ["searchBy"]
+}

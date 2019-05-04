@@ -1,0 +1,8 @@
+{
+  "type": "object",
+  "title": "BTProjectsSearchRequest",
+  "oneOf": [
+    {"$ref": "classpath://schemas/request/search/projects/BTProjectsByIdSearchRequest.json"},
+    {"$ref": "classpath://schemas/request/search/projects/BTProjectsByNameSearchRequest.json"}
+  ]
+}

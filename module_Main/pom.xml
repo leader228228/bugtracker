@@ -11,6 +11,14 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>module_Main</artifactId>
     <name>module_Main</name>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.1.4.RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>

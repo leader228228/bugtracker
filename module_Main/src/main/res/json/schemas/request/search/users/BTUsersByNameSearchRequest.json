@@ -1,0 +1,10 @@
+{
+  "type": "object",
+  "title": "BTUsersByNameSearchRequest",
+  "properties": {
+    "userName": {
+      "format": "regex"
+    }
+  },
+  "required": ["userName"]
+}

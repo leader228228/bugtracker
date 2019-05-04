@@ -1,0 +1,10 @@
+{
+  "type": "object",
+  "title": "BTProjectsByNameSearchRequest",
+  "properties": {
+    "projectName": {
+      "format": "regex"
+    }
+  },
+  "required": ["projectName"]
+}

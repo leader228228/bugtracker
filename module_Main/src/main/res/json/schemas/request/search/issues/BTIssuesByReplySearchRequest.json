@@ -1,0 +1,10 @@
+{
+  "type": "object",
+  "title": "BTIssuesByReplySearchRequest",
+  "properties": {
+    "replyBody": {
+      "format": "regex"
+    }
+  },
+  "required": ["replyBody"]
+}
