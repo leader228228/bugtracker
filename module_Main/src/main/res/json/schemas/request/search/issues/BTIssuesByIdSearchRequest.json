@@ -9,11 +9,6 @@
     "issueIdTo": {
       "type": "integer",
       "minimum": 0
-    },
-    "searchBy": {
-      "allOf": [
-        {"pattern": "^BTIssuesByIdRequest$"}
-      ]
     }
   },
   "required": ["issueIdFrom", "issueIdTo"]

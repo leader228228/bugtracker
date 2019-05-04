@@ -9,11 +9,6 @@
     "projectIdTo": {
       "type": "integer",
       "minimum": 0
-    },
-    "searchBy": {
-      "allOf": [
-        {"pattern": "^BTProjectsByIdSearchRequest$"}
-      ]
     }
   },
   "required": ["projectIdFrom", "projectIdTo"]

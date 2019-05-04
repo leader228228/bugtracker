@@ -12,7 +12,7 @@
   },
   "definitions": {
     "action" : {
-      "type": "string"
+      "enum": ["search"]
     }
   },
   "required" : ["action"]

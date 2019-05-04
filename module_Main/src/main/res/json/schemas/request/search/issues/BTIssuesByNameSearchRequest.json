@@ -4,11 +4,6 @@
   "properties": {
     "issueName": {
       "format": "regex"
-    },
-    "searchBy": {
-      "allOf": [
-        {"pattern": "^BTIssuesByNameSearchRequest$"}
-      ]
     }
   },
   "required": ["issueName"]

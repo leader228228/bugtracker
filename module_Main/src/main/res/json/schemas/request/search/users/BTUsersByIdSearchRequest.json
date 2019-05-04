@@ -9,11 +9,6 @@
     "userIdTo": {
       "type": "integer",
       "minimum": 0
-    },
-    "searchBy": {
-      "allOf": [
-        {"pattern": "^BTUsersByIdSearchRequest$"}
-      ]
     }
   },
   "required": ["userIdFrom", "userIdTo"]

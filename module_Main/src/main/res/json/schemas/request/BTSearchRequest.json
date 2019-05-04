@@ -4,20 +4,16 @@
   "oneOf": [
     {"$ref": "classpath://schemas/request/search/projects/BTProjectsSearchRequest.json"},
     {"$ref": "classpath://schemas/request/search/projects/BTIssuesSearchRequest.json"},
-    {"$ref": "classpath://schemas/request/search/projects/BTUsersSearchRequest.json"},
     {"$ref": "classpath://schemas/request/search/projects/BTUsersSearchRequest.json"}
   ],
   "properties": {
     "searchBy": {
       "$ref": "#/definitions/searchBy"
-    },
-    "action": {
-      "pattern": "^search$"
     }
   },
   "definitions": {
     "searchBy": {
-      "type": "string"
+      "enum": ["BTProjectsSearchRequest", "BTIssuesSearchRequest", "BTUsersSearchRequest"]
     }
   },
   "required": ["searchBy"]

@@ -4,11 +4,6 @@
   "properties": {
     "projectName": {
       "format": "regex"
-    },
-    "searchBy": {
-      "allOf": [
-        {"pattern": "^BTProjectsByNameSearchRequest$"}
-      ]
     }
   },
   "required": ["projectName"]
