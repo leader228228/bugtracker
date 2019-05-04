@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
 
-public class ProjectByNameFilter extends ProjectFileter {
+public class ProjectByNameFilter extends ProjectFilter {
     private String name;
     private boolean isStrict;
 

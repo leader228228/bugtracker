@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
 
-public class ProjectByIdFilter extends ProjectFileter {
+public class ProjectByIdFilter extends ProjectFilter {
     private long [] projectId;
 
     public ProjectByIdFilter(DAO dao, long...projectId) {
