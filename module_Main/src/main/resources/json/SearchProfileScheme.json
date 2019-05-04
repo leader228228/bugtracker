@@ -1,9 +1,0 @@
-{
-  "type": "object",
-  "title": "SearchProfile",
-  "properties": {
-	"criteria": {
-	  "anyOf": [{"$ref": "IssueSearchProfileScheme.json"}]
-	}
-  }
-}
