@@ -1,8 +1,8 @@
 package ua.edu.sumdu.nc.data.filters.impl.projects;
 
-import org.springframework.stereotype.Repository;
 import ua.edu.sumdu.nc.data.dao.DAO;
 import ua.edu.sumdu.nc.data.entities.bt.Project;
+import ua.edu.sumdu.nc.data.parsers.Parser;
 import ua.edu.sumdu.nc.data.parsers.impl.projects.AllProjectsParser;
 
 import java.sql.Connection;
@@ -10,19 +10,20 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
 
-@Repository
 public class ProjectByNameFilter extends ProjectFilter {
     private String name;
     private boolean isStrict;
 
-    public ProjectByNameFilter(DAO dao) {
-        super(dao); // TODO replace with context.getBean()
+    public ProjectByNameFilter(Parser<Project> parser, DAO dao) {
+        super(parser, dao);
     }
 
-    public ProjectByNameFilter(DAO dao, String name, boolean isStrict) {
-        super(dao);
-        this.name = name;
-        this.isStrict = isStrict;
+    public Parser<Project> getParser() {
+        return parser;
+    }
+
+    public void setParser(Parser<Project> parser) {
+        this.parser = parser;
     }
 
     public String getName() {
@@ -52,7 +53,7 @@ public class ProjectByNameFilter extends ProjectFilter {
                 preparedStatement = connection.prepareStatement(
                         "SELECT * FROM BT_PROJECTS WHERE CONTAINS(NAME, ?);");
             }
-            return new AllProjectsParser().parse(preparedStatement.executeQuery());
+            return parser.parse(preparedStatement.executeQuery());
         }
     }
 }

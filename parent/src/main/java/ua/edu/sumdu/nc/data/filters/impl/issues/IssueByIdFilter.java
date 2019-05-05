@@ -1,8 +1,8 @@
 package ua.edu.sumdu.nc.data.filters.impl.issues;
 
-import org.springframework.stereotype.Repository;
 import ua.edu.sumdu.nc.data.dao.DAO;
 import ua.edu.sumdu.nc.data.entities.bt.Issue;
+import ua.edu.sumdu.nc.data.parsers.Parser;
 import ua.edu.sumdu.nc.data.parsers.impl.issues.AllIssuesParser;
 
 import java.sql.Connection;
@@ -10,12 +10,18 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
 
-@Repository
 public class IssueByIdFilter extends IssueFilter {
     private long [] issueId;
 
-    public IssueByIdFilter(DAO dao, long...issueId) {
-        super(dao);
+    public IssueByIdFilter(Parser<Issue> parser, DAO dao) {
+        super(parser, dao);
+    }
+
+    public long[] getIssueId() {
+        return issueId;
+    }
+
+    public void setIssueId(long[] issueId) {
         this.issueId = issueId;
     }
 
@@ -29,7 +35,7 @@ public class IssueByIdFilter extends IssueFilter {
             PreparedStatement preparedStatement =
                     connection.prepareStatement("SELECT * FROM BT_ISSUES WHERE ISSUE_ID IN ?");
             preparedStatement.setArray(1, connection.createArrayOf("NUMBER", longs));
-            return new AllIssuesParser().parse(preparedStatement.executeQuery());
+            return parser.parse(preparedStatement.executeQuery());
         }
     }
 }

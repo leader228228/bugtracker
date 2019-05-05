@@ -1,8 +1,8 @@
 package ua.edu.sumdu.nc.data.filters.impl.issues;
 
-import org.springframework.stereotype.Repository;
 import ua.edu.sumdu.nc.data.dao.DAO;
 import ua.edu.sumdu.nc.data.entities.bt.Issue;
+import ua.edu.sumdu.nc.data.parsers.Parser;
 import ua.edu.sumdu.nc.data.parsers.impl.issues.AllIssuesParser;
 
 import java.sql.Connection;
@@ -10,16 +10,28 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
 
-@Repository
 public class IssueByReplyBodyFilter extends IssueFilter {
     private String replyBody;
     private boolean isStrict;
 
+    public IssueByReplyBodyFilter(Parser<Issue> parser, DAO dao) {
+        super(parser, dao);
+    }
 
-    public IssueByReplyBodyFilter(DAO dao, String replyBody, boolean isStrict) {
-        super(dao);
+    public String getReplyBody() {
+        return replyBody;
+    }
+
+    public void setReplyBody(String replyBody) {
         this.replyBody = replyBody;
-        this.isStrict = isStrict;
+    }
+
+    public boolean isStrict() {
+        return isStrict;
+    }
+
+    public void setStrict(boolean strict) {
+        isStrict = strict;
     }
 
     @Override
@@ -40,7 +52,7 @@ public class IssueByReplyBodyFilter extends IssueFilter {
                         "WHERE CONTAINS(BT_REPLIES.BODY, ?)");
             }
             preparedStatement.setString(1, replyBody);
-            return new AllIssuesParser().parse(preparedStatement.executeQuery());
+            return parser.parse(preparedStatement.executeQuery());
         }
     }
 }

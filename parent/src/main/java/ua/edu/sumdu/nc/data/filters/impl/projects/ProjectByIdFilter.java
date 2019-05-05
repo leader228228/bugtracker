@@ -1,26 +1,20 @@
 package ua.edu.sumdu.nc.data.filters.impl.projects;
 
-import org.springframework.stereotype.Repository;
 import ua.edu.sumdu.nc.data.dao.DAO;
 import ua.edu.sumdu.nc.data.entities.bt.Project;
-import ua.edu.sumdu.nc.data.parsers.impl.projects.AllProjectsParser;
+import ua.edu.sumdu.nc.data.parsers.Parser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
 
-@Repository
 public class ProjectByIdFilter extends ProjectFilter {
     private long [] projectId;
+    private Parser<Project> parser;
 
-    public ProjectByIdFilter(DAO dao) {
-        super(dao); // TODO replace with context.getBean()
-    }
-
-    public ProjectByIdFilter(DAO dao, long...projectId) {
-        super(dao);
-        this.projectId = projectId;
+    public ProjectByIdFilter(Parser<Project> parser, DAO dao) {
+        super(parser, dao);
     }
 
     public long[] getProjectId() {
@@ -29,6 +23,14 @@ public class ProjectByIdFilter extends ProjectFilter {
 
     public void setProjectId(long[] projectId) {
         this.projectId = projectId;
+    }
+
+    public Parser<Project> getParser() {
+        return parser;
+    }
+
+    public void setParser(Parser<Project> parser) {
+        this.parser = parser;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class ProjectByIdFilter extends ProjectFilter {
             PreparedStatement preparedStatement =
                     connection.prepareStatement("SELECT * FROM BT_PROJECTS WHERE PROJECT_ID IN ?");
             preparedStatement.setArray(1, connection.createArrayOf("NUMBER", longs));
-            return new AllProjectsParser().parse(preparedStatement.executeQuery());
+            return parser.parse(preparedStatement.executeQuery());
         }
     }
 }
