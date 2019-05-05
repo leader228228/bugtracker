@@ -7,8 +7,7 @@
     <artifactId>bugtracker</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>module_Data</module>
-        <module>module_Main</module>
+        <module>parent</module>
     </modules>
     <packaging>pom</packaging>
     <name>bugtracker</name>
