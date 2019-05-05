@@ -7,6 +7,9 @@ public class ProjectImpl implements Project {
     private String name;
     private long adminId;
 
+    public ProjectImpl() {
+    }
+
     public ProjectImpl(long projectId) {
         this.projectId = projectId;
     }
@@ -20,6 +23,10 @@ public class ProjectImpl implements Project {
         this.projectId = projectId;
         this.name = name;
         this.adminId = adminId;
+    }
+
+    public void setProjectId(long projectId) {
+        this.projectId = projectId;
     }
 
     public long getProjectId() {

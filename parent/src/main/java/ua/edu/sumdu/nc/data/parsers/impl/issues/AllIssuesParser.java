@@ -1,5 +1,6 @@
 package ua.edu.sumdu.nc.data.parsers.impl.issues;
 
+import org.springframework.stereotype.Service;
 import ua.edu.sumdu.nc.data.entities.bt.Issue;
 import ua.edu.sumdu.nc.data.entities.impl.IssueImpl;
 
@@ -8,6 +9,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.LinkedList;
 
+@Service
 public class AllIssuesParser implements IssueParser {
     /**
      *  Parses the {@code ResultSet} extracting Issues from it

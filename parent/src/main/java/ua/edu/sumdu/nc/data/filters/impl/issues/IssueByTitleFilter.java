@@ -1,5 +1,6 @@
 package ua.edu.sumdu.nc.data.filters.impl.issues;
 
+import org.springframework.stereotype.Repository;
 import ua.edu.sumdu.nc.data.dao.DAO;
 import ua.edu.sumdu.nc.data.entities.bt.Issue;
 import ua.edu.sumdu.nc.data.parsers.impl.issues.AllIssuesParser;
@@ -9,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
 
+@Repository
 public class IssueByTitleFilter extends IssueFilter {
     private String title;
     private boolean isStrict;

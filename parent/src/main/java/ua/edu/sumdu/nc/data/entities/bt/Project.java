@@ -13,6 +13,7 @@ public interface Project extends Entity {
     void setName(String name);
     long getAdminId();
     void setAdminId(long adminId);
+    void setProjectId(long projectId);
 
     @Override
     default void updateOrSave() throws SQLException, IOException {

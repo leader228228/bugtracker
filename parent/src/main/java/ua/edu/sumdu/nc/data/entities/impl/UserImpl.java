@@ -9,6 +9,13 @@ public class UserImpl implements User {
     private String login;
     private String password;
 
+    public UserImpl() {
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
     public UserImpl(long userId) {
         this.userId = userId;
     }

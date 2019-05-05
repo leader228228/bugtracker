@@ -1,6 +1,5 @@
 package ua.edu.sumdu.nc.data.dao.impl;
 
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import ua.edu.sumdu.nc.data.dao.DAO;
 

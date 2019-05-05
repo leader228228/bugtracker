@@ -23,6 +23,8 @@ public interface Issue extends Entity {
     void setStatusId(int statusId);
     long getProjectId();
     void setProjectId(long projectId);
+    void setIssueId(long issueId);
+    void setTitle(String title);
 
     @Override
     default void updateOrSave() throws SQLException, IOException {

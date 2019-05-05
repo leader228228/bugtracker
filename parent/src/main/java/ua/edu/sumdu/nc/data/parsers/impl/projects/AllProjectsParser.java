@@ -1,6 +1,6 @@
 package ua.edu.sumdu.nc.data.parsers.impl.projects;
 
-import ua.edu.sumdu.nc.data.entities.bt.Issue;
+import org.springframework.stereotype.Service;
 import ua.edu.sumdu.nc.data.entities.bt.Project;
 import ua.edu.sumdu.nc.data.entities.impl.ProjectImpl;
 
@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.LinkedList;
 
+@Service
 public class AllProjectsParser implements ProjectParser {
     /**
      *  Parses the {@code ResultSet} extracting {@code Project}s from it

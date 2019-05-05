@@ -8,6 +8,9 @@ public class ReplyImpl implements Reply {
     private long issueId;
     private long authorId;
 
+    public ReplyImpl() {
+    }
+
     public ReplyImpl(long replyId) {
         this.replyId = replyId;
     }
@@ -21,6 +24,10 @@ public class ReplyImpl implements Reply {
         this.replyId = replyId;
         this.body = body;
         this.issueId = issueId;
+    }
+
+    public void setReplyId(long replyId) {
+        this.replyId = replyId;
     }
 
     public long getReplyId() {

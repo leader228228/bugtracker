@@ -18,6 +18,7 @@ public interface Session extends Entity {
     void setTillDate(Date tillDate);
     String getToken();
     void setToken(String token);
+    void setSesionId(long sesionId);
 
     @Override
     default void updateOrSave() throws SQLException, IOException {

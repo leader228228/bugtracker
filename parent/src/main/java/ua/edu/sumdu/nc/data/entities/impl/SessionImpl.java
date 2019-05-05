@@ -11,6 +11,9 @@ public class SessionImpl implements Session {
     private Date tillDate;
     private String token;
 
+    public SessionImpl() {
+    }
+
     public SessionImpl(long sesionId) {
         this.sesionId = sesionId;
     }
@@ -33,6 +36,10 @@ public class SessionImpl implements Session {
         this.fromDate = fromDate;
         this.tillDate = tillDate;
         this.token = token;
+    }
+
+    public void setSesionId(long sesionId) {
+        this.sesionId = sesionId;
     }
 
     public long getSesionId() {

@@ -11,6 +11,7 @@ public interface IssueStatus extends Entity {
     int getStatusId();
     String getValue();
     void setValue(String newValue);
+    void setStatusId(int statusId);
 
     @Override
     default void updateOrSave() throws SQLException, IOException {

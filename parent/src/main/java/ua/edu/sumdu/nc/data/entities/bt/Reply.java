@@ -15,6 +15,7 @@ public interface Reply extends Entity {
     void setIssueId(long issueId);
     long getAuthorId();
     void setAuthorId(long authorId);
+    void setReplyId(long replyId);
 
     @Override
     default void updateOrSave() throws SQLException, IOException {

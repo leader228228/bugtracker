@@ -1,10 +1,12 @@
 package ua.edu.sumdu.nc.data.entities.impl;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import ua.edu.sumdu.nc.data.entities.bt.Issue;
 
 import java.sql.Date;
 
+@Component
 public class IssueImpl implements Issue {
     private long issueId;
     private long reporterId;
@@ -14,6 +16,9 @@ public class IssueImpl implements Issue {
     private Date created;
     private int statusId;
     private long projectId;
+
+    public IssueImpl() {
+    }
 
     public IssueImpl(long issueId) {
         this.issueId = issueId;
@@ -41,6 +46,14 @@ public class IssueImpl implements Issue {
         this.issueId = issueId;
         this.title = title;
         this.body = body;
+    }
+
+    public void setIssueId(long issueId) {
+        this.issueId = issueId;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override

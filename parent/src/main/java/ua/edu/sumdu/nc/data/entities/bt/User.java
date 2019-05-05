@@ -17,6 +17,7 @@ public interface User extends Entity {
     void setLogin(String login);
     String getPassword();
     void setPassword(String password);
+    void setUserId(long userId);
 
     @Override
     default void updateOrSave() throws SQLException, IOException {
