@@ -6,6 +6,13 @@
         <format>ear</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <includes>
+                <include><!--${basedir}/application.xml-->*</include>
+            </includes>
+        </fileSet>
+    </fileSets>
     <dependencySets>
         <dependencySet>
             <useProjectArtifact>false</useProjectArtifact>
