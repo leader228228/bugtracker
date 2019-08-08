@@ -2,7 +2,7 @@ package filters.impl.projects;
 
 import dao.DAO;
 import entities.bt.Project;
-import parsers.Parser;
+import dbparsers.DBParser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,9 +11,9 @@ import java.util.Collection;
 
 public class ProjectByIdFilter extends ProjectFilter {
     private long [] projectId;
-    private Parser<Project> parser;
+    private DBParser<Project> parser;
 
-    public ProjectByIdFilter(Parser<Project> parser, DAO dao) {
+    public ProjectByIdFilter(DBParser<Project> parser, DAO dao) {
         super(parser, dao);
     }
 
@@ -25,11 +25,11 @@ public class ProjectByIdFilter extends ProjectFilter {
         this.projectId = projectId;
     }
 
-    public Parser<Project> getParser() {
+    public DBParser<Project> getParser() {
         return parser;
     }
 
-    public void setParser(Parser<Project> parser) {
+    public void setParser(DBParser<Project> parser) {
         this.parser = parser;
     }
 

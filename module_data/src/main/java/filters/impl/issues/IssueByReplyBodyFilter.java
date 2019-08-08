@@ -2,8 +2,7 @@ package filters.impl.issues;
 
 import dao.DAO;
 import entities.bt.Issue;
-import parsers.Parser;
-import parsers.impl.issues.AllIssuesParser;
+import dbparsers.DBParser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +13,7 @@ public class IssueByReplyBodyFilter extends IssueFilter {
     private String replyBody;
     private boolean isStrict;
 
-    public IssueByReplyBodyFilter(Parser<Issue> parser, DAO dao) {
+    public IssueByReplyBodyFilter(DBParser<Issue> parser, DAO dao) {
         super(parser, dao);
     }
 

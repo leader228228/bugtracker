@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public abstract class Controller extends DispatcherServlet {
 
-    public static final JSONObject INVALID_REQUEST = new JSONObject("{\"error\":\"invalid request\"}");
+    public static final JSONObject INVALID_RESPONSE = new JSONObject("{\"error\":\"invalid request\"}");
 
     @Resource(name = "BTRequestSchema")
     protected static Schema schema;

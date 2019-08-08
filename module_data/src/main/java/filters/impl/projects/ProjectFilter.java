@@ -3,10 +3,10 @@ package filters.impl.projects;
 import dao.DAO;
 import entities.bt.Project;
 import filters.Filter;
-import parsers.Parser;
+import dbparsers.DBParser;
 
 abstract class ProjectFilter extends Filter<Project> {
-    public ProjectFilter(Parser<Project> parser, DAO dao) {
+    public ProjectFilter(DBParser<Project> parser, DAO dao) {
         super(parser, dao);
     }
 }

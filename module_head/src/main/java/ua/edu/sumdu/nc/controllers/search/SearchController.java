@@ -1,15 +1,12 @@
-package ua.edu.sumdu.nc.controllers;
+package ua.edu.sumdu.nc.controllers.search;
 
-import org.everit.json.schema.Schema;
-import org.everit.json.schema.ValidationException;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 import filters.Filter;
 import filters.factory.FilterFactory;
+import ua.edu.sumdu.nc.controllers.Controller;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.Collection;
 
@@ -22,7 +19,7 @@ public class SearchController extends Controller {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public Object handle(@RequestBody String requestBody) {
         if (!isRequestBodyValid(requestBody)) {
-            return INVALID_REQUEST;
+            return INVALID_RESPONSE;
         }
         JSONObject requestBodyJSON = new JSONObject(requestBody);
         Filter filter = filterFactory.getFor(requestBodyJSON);

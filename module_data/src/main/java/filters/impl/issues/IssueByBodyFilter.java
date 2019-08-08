@@ -2,8 +2,8 @@ package filters.impl.issues;
 
 import dao.DAO;
 import entities.bt.Issue;
-import parsers.Parser;
-import parsers.impl.issues.AllIssuesParser;
+import dbparsers.DBParser;
+import dbparsers.impl.issues.AllIssuesDBParser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +14,7 @@ public class IssueByBodyFilter extends IssueFilter {
     private String title;
     private boolean isStrict;
 
-    public IssueByBodyFilter(Parser<Issue> parser, DAO dao) {
+    public IssueByBodyFilter(DBParser<Issue> parser, DAO dao) {
         super(parser, dao);
     }
 
@@ -43,7 +43,7 @@ public class IssueByBodyFilter extends IssueFilter {
             } else {
                 preparedStatement = connection.prepareStatement("SELECT * FROM BT_ISSUES WHERE CONTAINS(BODY, ?)");
             }
-            return new AllIssuesParser().parse(preparedStatement.executeQuery());
+            return new AllIssuesDBParser().parse(preparedStatement.executeQuery());
         }
     }
 }

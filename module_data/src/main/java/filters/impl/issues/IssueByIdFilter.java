@@ -2,8 +2,7 @@ package filters.impl.issues;
 
 import dao.DAO;
 import entities.bt.Issue;
-import parsers.Parser;
-import parsers.impl.issues.AllIssuesParser;
+import dbparsers.DBParser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +12,7 @@ import java.util.Collection;
 public class IssueByIdFilter extends IssueFilter {
     private long [] issueId;
 
-    public IssueByIdFilter(Parser<Issue> parser, DAO dao) {
+    public IssueByIdFilter(DBParser<Issue> parser, DAO dao) {
         super(parser, dao);
     }
 

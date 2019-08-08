@@ -1,16 +1,16 @@
 package filters;
 
 import dao.DAO;
-import parsers.Parser;
+import dbparsers.DBParser;
 
 import java.sql.SQLException;
 import java.util.Collection;
 
 public abstract class Filter<T> {
-    protected Parser<T> parser;
+    protected DBParser<T> parser;
     protected DAO dao;
 
-    public Filter(Parser<T> parser, DAO dao) {
+    public Filter(DBParser<T> parser, DAO dao) {
         this.parser = parser;
         this.dao = dao;
     }

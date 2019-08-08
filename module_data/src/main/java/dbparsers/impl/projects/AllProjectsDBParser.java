@@ -1,4 +1,4 @@
-package parsers.impl.projects;
+package dbparsers.impl.projects;
 
 import org.springframework.stereotype.Service;
 import entities.bt.Project;
@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 @Service
-public class AllProjectsParser implements ProjectParser {
+public class AllProjectsDBParser implements ProjectDBParser {
     /**
      *  Parses the {@code ResultSet} extracting {@code Project}s from it
      *

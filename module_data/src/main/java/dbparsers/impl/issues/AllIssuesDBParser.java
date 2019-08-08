@@ -1,4 +1,4 @@
-package parsers.impl.issues;
+package dbparsers.impl.issues;
 
 import org.springframework.stereotype.Service;
 import entities.bt.Issue;
@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 @Service
-public class AllIssuesParser implements IssueParser {
+public class AllIssuesDBParser implements IssueDBParser {
     /**
      *  Parses the {@code ResultSet} extracting Issues from it
      *

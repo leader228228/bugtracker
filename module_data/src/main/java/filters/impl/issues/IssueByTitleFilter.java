@@ -1,10 +1,8 @@
 package filters.impl.issues;
 
-import org.springframework.stereotype.Repository;
 import dao.DAO;
 import entities.bt.Issue;
-import parsers.Parser;
-import parsers.impl.issues.AllIssuesParser;
+import dbparsers.DBParser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +13,7 @@ public class IssueByTitleFilter extends IssueFilter {
     private String title;
     private boolean isStrict;
 
-    public IssueByTitleFilter(Parser<Issue> parser, DAO dao) {
+    public IssueByTitleFilter(DBParser<Issue> parser, DAO dao) {
         super(parser, dao);
     }
 

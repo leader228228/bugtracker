@@ -3,11 +3,11 @@ package filters.impl.issues;
 import dao.DAO;
 import entities.bt.Issue;
 import filters.Filter;
-import parsers.Parser;
+import dbparsers.DBParser;
 
 abstract class IssueFilter extends Filter<Issue> {
 
-    public IssueFilter(Parser<Issue> parser, DAO dao) {
+    public IssueFilter(DBParser<Issue> parser, DAO dao) {
         super(parser, dao);
     }
 
@@ -19,11 +19,11 @@ abstract class IssueFilter extends Filter<Issue> {
         this.dao = dao;
     }
 
-    public Parser<Issue> getParser() {
+    public DBParser<Issue> getParser() {
         return parser;
     }
 
-    public void setParser(Parser<Issue> parser) {
+    public void setParser(DBParser<Issue> parser) {
         this.parser = parser;
     }
 }

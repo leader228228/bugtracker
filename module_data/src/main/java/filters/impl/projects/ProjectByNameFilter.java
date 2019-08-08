@@ -2,8 +2,7 @@ package filters.impl.projects;
 
 import dao.DAO;
 import entities.bt.Project;
-import parsers.Parser;
-import parsers.impl.projects.AllProjectsParser;
+import dbparsers.DBParser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,15 +13,15 @@ public class ProjectByNameFilter extends ProjectFilter {
     private String name;
     private boolean isStrict;
 
-    public ProjectByNameFilter(Parser<Project> parser, DAO dao) {
+    public ProjectByNameFilter(DBParser<Project> parser, DAO dao) {
         super(parser, dao);
     }
 
-    public Parser<Project> getParser() {
+    public DBParser<Project> getParser() {
         return parser;
     }
 
-    public void setParser(Parser<Project> parser) {
+    public void setParser(DBParser<Project> parser) {
         this.parser = parser;
     }
 
