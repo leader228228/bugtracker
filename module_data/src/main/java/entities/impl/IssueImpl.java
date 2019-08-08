@@ -1,8 +1,8 @@
 package entities.impl;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 import entities.bt.Issue;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 
@@ -17,6 +17,7 @@ public class IssueImpl implements Issue {
     private int statusId;
     private long projectId;
 
+    @Autowired
     public IssueImpl() {
     }
 

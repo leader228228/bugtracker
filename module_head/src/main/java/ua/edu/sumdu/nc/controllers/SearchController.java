@@ -14,24 +14,15 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 @RestController
-public class SearchController {
-    @Resource(name = "BTRequestSchema")
-    private static Schema schema;
-
+public class SearchController extends Controller {
     @Resource(name = "FilterFactory")
     private FilterFactory filterFactory;
 
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public Object handle(@RequestBody String requestBody, HttpServletResponse response) {
-        try {
-            if (!isRequestBodyValid(requestBody)) {
-                response.setStatus(400);
-                return "{\"error\":\"invalid request\"}";
-            }
-        } catch (JSONException e) {
-            response.setStatus(400);
-            return "JSON syntax exception";
+    public Object handle(@RequestBody String requestBody) {
+        if (!isRequestBodyValid(requestBody)) {
+            return INVALID_REQUEST;
         }
         JSONObject requestBodyJSON = new JSONObject(requestBody);
         Filter filter = filterFactory.getFor(requestBodyJSON);
@@ -39,23 +30,8 @@ public class SearchController {
         try {
             collection = filter.execute();
         } catch (SQLException e) {
-            response.setStatus(500);
             return "Database error occurred";
         }
         return collection;
-    }
-
-    private boolean isRequestBodyValid(JSONObject requestBody) {
-        try {
-            schema.validate(requestBody);
-        } catch (ValidationException e) {
-            return false;
-        }
-        return true;
-    }
-
-    private boolean isRequestBodyValid(String requestBody) {
-        JSONObject jsonObject = new JSONObject(requestBody);
-        return isRequestBodyValid(jsonObject);
     }
 }

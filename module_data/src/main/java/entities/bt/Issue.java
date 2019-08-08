@@ -1,6 +1,7 @@
 package entities.bt;
 
 import dao.impl.DAOImpl;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -8,6 +9,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+@Component
 public interface Issue extends Entity {
     long getIssueId();
     long getReporterId();

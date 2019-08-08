@@ -1,5 +1,6 @@
 package ua.edu.sumdu.nc.main.config;
 
+import entities.impl.IssueImpl;
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.loader.SchemaClient;
 import org.everit.json.schema.loader.SchemaLoader;
@@ -38,7 +39,7 @@ public class AppConfig {
         AppConfig.context = context;
     }
 
-    @Bean
+    @Bean(name = "DAO")
     @Scope(scopeName = "singleton")
     public DAO DAO() {
         return new DAOImpl();
@@ -120,5 +121,11 @@ public class AppConfig {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Bean(name = "Issue")
+    @Scope(scopeName = "prototype")
+    public Issue issue() {
+        return new IssueImpl();
     }
 }
