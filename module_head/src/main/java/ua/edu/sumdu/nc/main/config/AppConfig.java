@@ -14,7 +14,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
 import ua.edu.sumdu.nc.Utils;
 import ua.edu.sumdu.nc.controllers.search.SearchController;
-import ua.edu.sumdu.nc.db.creators.Creator;
 import ua.edu.sumdu.nc.db.creators.CreatorSelector;
 import ua.edu.sumdu.nc.db.dbparsers.DBParser;
 import ua.edu.sumdu.nc.db.dbparsers.issues.AllIssuesDBParser;
@@ -34,14 +33,6 @@ import java.net.URISyntaxException;
 public class AppConfig {
     private static ApplicationContext context = new AnnotationConfigApplicationContext("ua.edu.sumdu.nc");
 
-    public static ApplicationContext getContext() {
-        return context;
-    }
-
-    public static void setContext(ApplicationContext context) {
-        AppConfig.context = context;
-    }
-
     @Bean(name = "DAO")
     @Scope(scopeName = "singleton")
     public DAO DAO() {
@@ -51,7 +42,7 @@ public class AppConfig {
     // Filters configurations
     @Bean(name = {"BTIssuesByBodySearchRequest", "IssueByBodyFilter"})
     @Scope(scopeName = "singleton")
-    public IssueByBodyFilter issueByBodyFilter(@Qualifier(value = "AllIssuesParser") DBParser<Issue> parser, DAO dao) {
+    public IssueByBodyFilter issueByBodyFilter(@Qualifier(value = "AllIssuesParser") AllIssuesDBParser parser, DAO dao) {
         return new IssueByBodyFilter(parser, dao);
     }
 
@@ -143,5 +134,4 @@ public class AppConfig {
     public CreatorSelector creatorSelector(@Autowired ApplicationContext applicationContext) {
         return new CreatorSelector(applicationContext);
     }
-
 }

@@ -2,7 +2,8 @@ package ua.edu.sumdu.nc.db.filters.issues;
 
 import dao.DAO;
 import entities.bt.Issue;
-import ua.edu.sumdu.nc.db.dbparsers.DBParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ua.edu.sumdu.nc.db.dbparsers.issues.AllIssuesDBParser;
 
 import java.sql.Connection;
@@ -10,11 +11,13 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
 
+@Repository
 public class IssueByBodyFilter extends IssueFilter {
     private String title;
     private boolean isStrict;
+    private AllIssuesDBParser parser;
 
-    public IssueByBodyFilter(DBParser<Issue> parser, DAO dao) {
+    public IssueByBodyFilter(@Autowired AllIssuesDBParser parser, @Autowired DAO dao) {
         super(parser, dao);
     }
 
@@ -43,7 +46,7 @@ public class IssueByBodyFilter extends IssueFilter {
             } else {
                 preparedStatement = connection.prepareStatement("SELECT * FROM BT_ISSUES WHERE CONTAINS(BODY, ?)");
             }
-            return new AllIssuesDBParser().parse(preparedStatement.executeQuery());
+            return parser.parse(preparedStatement.executeQuery());
         }
     }
 }
