@@ -16,24 +16,8 @@ import java.util.LinkedList;
 public class AllIssuesDBParser implements IssueDBParser {
     private DAO dao;
     private final Schema schema;
-    private static final String INSERT_ISSUE_QUERY =
-            "insert into" +
-                " bt_issues (TITLE, BODY, REPORTER_ID, ASSIGNEE_ID, CREATED, STATUS_ID, PROJECT_ID)" +
-            " values " +
-                "(?, ?, ?, ?, ?, ?, ?)";
-    private static final String UPDATE_ISSUE_QUERY =
-            "update " +
-                "bt_issues " +
-            "set " +
-                "title = ?, " +
-                "body = ?, " +
-                "reporter_id = ?, " +
-                "assignee_id = ?, " +
-                "created = ?, " +
-                "status_id = ?, " +
-                "project_id = ? " +
-            "where " +
-                "issue_id = ?";
+
+
     public AllIssuesDBParser(@Autowired DAO dao, @Autowired Schema schema) {
         this.dao = dao;
         this.schema = schema;

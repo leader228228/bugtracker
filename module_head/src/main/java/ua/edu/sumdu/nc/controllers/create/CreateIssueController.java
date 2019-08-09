@@ -7,27 +7,23 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
 import ua.edu.sumdu.nc.controllers.Controller;
-import ua.edu.sumdu.nc.controllers.create.parsers.InputParser;
 
 @RestController
 public class CreateIssueController extends Controller {
     private ApplicationContext applicationContext;
     private Object response;
     private Issue issue;
-    public CreateIssueController(
-            @Autowired ApplicationContext applicationContext,
-            @Autowired @Qualifier(value = "IssueParser") InputParser<JSONObject, Issue> parser) {
+    public CreateIssueController(@Autowired ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
-        this.parser = parser;
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/create")
+    @RequestMapping(method = RequestMethod.POST, path = "/create/issue")
     @ResponseBody
     public Object handle(@RequestBody String requestBody) throws Exception {
         if (!isRequestBodyValid(requestBody)) {
             return INVALID_RESPONSE;
         }
-        issue = parser.parse(new JSONObject(requestBody));
+
         issue.updateOrSave();
         return response;
     }
