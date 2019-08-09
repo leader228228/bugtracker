@@ -39,7 +39,7 @@
                                 <descriptor>assembly-descriptor.xml</descriptor>
                             </descriptors>
                             <archiverConfig>
-                                <appxml>${basedir}/src/application.xml</appxml>
+                                <appxml>${basedir}/src/main/res/application.xml</appxml>
                             </archiverConfig>
                         </configuration>
                     </execution>

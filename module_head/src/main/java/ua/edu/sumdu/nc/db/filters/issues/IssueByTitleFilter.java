@@ -34,7 +34,7 @@ public class IssueByTitleFilter extends IssueFilter {
     }
 
     @Override
-    public Collection<Issue> execute() throws SQLException {
+    public Collection<Issue> execute() throws Exception {
         try (Connection connection = dao.getConnection()) {
             PreparedStatement preparedStatement;
             if (isStrict) {

@@ -6,29 +6,32 @@
         <format>ear</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
-    <fileSets>
+    <!--<fileSets>
         <fileSet>
             <includes>
-                <include><!--${basedir}/application.xml-->*</include>
+                <include>${project.build.outputDirectory}</include>
             </includes>
         </fileSet>
-    </fileSets>
+    </fileSets>-->
     <dependencySets>
         <dependencySet>
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveDependencies>true</useTransitiveDependencies>
             <outputDirectory>lib</outputDirectory>
+            <excludes>
+                <exclude>${project.groupId}:module_head:*</exclude>
+                <exclude>${project.groupId}:module_data:*</exclude>
+            </excludes>
             <unpack>false</unpack>
-            <includes>
-                <include>${project.groupId}:*:*</include>
-            </includes>
+            <includes/>
         </dependencySet>
     </dependencySets>
     <moduleSets>
         <moduleSet>
             <useAllReactorProjects>true</useAllReactorProjects>
             <includes>
-                <include>${project.groupId}:*:*</include>
+                <include>${project.groupId}:module_head:*</include>
+                <include>${project.groupId}:module_data:*</include>
             </includes>
             <excludes>
                 <exclude>${project.groupId}:assembly:*</exclude>
@@ -36,6 +39,7 @@
             <binaries>
                 <outputDirectory>modules</outputDirectory>
                 <unpack>false</unpack>
+                <includeDependencies>false</includeDependencies>
             </binaries>
         </moduleSet>
     </moduleSets>

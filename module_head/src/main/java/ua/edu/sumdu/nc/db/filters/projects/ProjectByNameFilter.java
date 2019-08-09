@@ -42,7 +42,7 @@ public class ProjectByNameFilter extends ProjectFilter {
     }
 
     @Override
-    public Collection<Project> execute() throws SQLException {
+    public Collection<Project> execute() throws Exception {
         try (Connection connection = dao.getConnection()) {
             PreparedStatement preparedStatement;
             if (isStrict) {

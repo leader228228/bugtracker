@@ -34,7 +34,7 @@ public class ProjectByIdFilter extends ProjectFilter {
     }
 
     @Override
-    public Collection<Project> execute() throws SQLException {
+    public Collection<Project> execute() throws Exception {
         try (Connection connection = dao.getConnection()) {
             Long[] longs = new Long[projectId.length];
             for (int i = 0; i < projectId.length; i++) {
