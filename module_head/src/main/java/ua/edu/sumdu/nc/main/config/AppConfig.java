@@ -2,24 +2,23 @@ package ua.edu.sumdu.nc.main.config;
 
 import dao.DAO;
 import dao.impl.DAOImpl;
-import dbparsers.DBParser;
-import dbparsers.impl.issues.AllIssuesDBParser;
-import dbparsers.impl.projects.AllProjectsDBParser;
+import ua.edu.sumdu.nc.db.dbparsers.DBParser;
+import ua.edu.sumdu.nc.db.dbparsers.issues.AllIssuesDBParser;
+import ua.edu.sumdu.nc.db.dbparsers.projects.AllProjectsDBParser;
 import entities.bt.Issue;
 import entities.bt.Project;
 import entities.impl.IssueImpl;
-import filters.factory.FilterFactory;
-import filters.factory.FilterFactoryImpl;
-import filters.impl.issues.IssueByBodyFilter;
-import filters.impl.issues.IssueByIdFilter;
-import filters.impl.issues.IssueByReplyBodyFilter;
-import filters.impl.issues.IssueByTitleFilter;
-import filters.impl.projects.ProjectByIdFilter;
-import filters.impl.projects.ProjectByNameFilter;
+import ua.edu.sumdu.nc.db.filters.factory.FilterFactory;
+import ua.edu.sumdu.nc.db.filters.factory.FilterFactoryImpl;
+import ua.edu.sumdu.nc.db.filters.issues.IssueByBodyFilter;
+import ua.edu.sumdu.nc.db.filters.issues.IssueByIdFilter;
+import ua.edu.sumdu.nc.db.filters.issues.IssueByReplyBodyFilter;
+import ua.edu.sumdu.nc.db.filters.issues.IssueByTitleFilter;
+import ua.edu.sumdu.nc.db.filters.projects.ProjectByIdFilter;
+import ua.edu.sumdu.nc.db.filters.projects.ProjectByNameFilter;
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.loader.SchemaClient;
 import org.everit.json.schema.loader.SchemaLoader;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -93,20 +92,14 @@ public class AppConfig {
     // Parsers configuration
     @Bean(name = "AllIssuesParser")
     @Scope(scopeName = "singleton")
-    public AllIssuesDBParser allIssuesParser() {
-        return new AllIssuesDBParser();
+    public AllIssuesDBParser allIssuesParser(@Autowired DAO dao, @Autowired Schema schema, Filter<>) {
+        return new AllIssuesDBParser(dao, schema, );
     }
 
     @Bean(name = "AllProjectsParser")
     @Scope(scopeName = "singleton")
     public AllProjectsDBParser allProjectsParser() {
         return new AllProjectsDBParser();
-    }
-
-    @Bean(name = "FilterFactory")
-    @Scope(scopeName = "singleton")
-    public FilterFactory filterFactory() {
-        return new FilterFactoryImpl();
     }
 
     @Bean(name = "BTRequestSchema")
@@ -134,16 +127,10 @@ public class AppConfig {
         return new IssueImpl();
     }
 
-    @Bean(name = "IssueParser")
-    @Scope(scopeName = "singleton")
-    public InputParser<JSONObject, Issue> issueParser(Utils utils, ApplicationContext applicationContext) {
-        return new IssueInputParser(utils, applicationContext);
-    }
-
     @Bean(name = "Utils")
     @Scope(scopeName = "singleton")
-    public Utils utils(@Autowired ApplicationContext applicationContext) {
-        return new Utils(applicationContext);
+    public Utils utils(@Autowired ApplicationContext applicationContext, DAO dao) {
+        return new Utils(applicationContext, dao);
     }
 
 }

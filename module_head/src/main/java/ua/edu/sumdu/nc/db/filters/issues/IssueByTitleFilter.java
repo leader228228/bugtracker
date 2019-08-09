@@ -1,20 +1,19 @@
-package filters.impl.issues;
+package ua.edu.sumdu.nc.db.filters.issues;
 
 import dao.DAO;
 import entities.bt.Issue;
-import dbparsers.DBParser;
-import dbparsers.impl.issues.AllIssuesDBParser;
+import ua.edu.sumdu.nc.db.dbparsers.DBParser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
 
-public class IssueByBodyFilter extends IssueFilter {
+public class IssueByTitleFilter extends IssueFilter {
     private String title;
     private boolean isStrict;
 
-    public IssueByBodyFilter(DBParser<Issue> parser, DAO dao) {
+    public IssueByTitleFilter(DBParser<Issue> parser, DAO dao) {
         super(parser, dao);
     }
 
@@ -39,11 +38,13 @@ public class IssueByBodyFilter extends IssueFilter {
         try (Connection connection = dao.getConnection()) {
             PreparedStatement preparedStatement;
             if (isStrict) {
-                preparedStatement = connection.prepareStatement("SELECT * FROM BT_ISSUES WHERE BODY = ?");
+                preparedStatement = connection.prepareStatement(
+                        "SELECT * FROM BT_ISSUES WHERE TITLE = ?;");
             } else {
-                preparedStatement = connection.prepareStatement("SELECT * FROM BT_ISSUES WHERE CONTAINS(BODY, ?)");
+                preparedStatement = connection.prepareStatement(
+                        "SELECT * FROM BT_ISSUES WHERE CONTAINS(TITLE, ?);");
             }
-            return new AllIssuesDBParser().parse(preparedStatement.executeQuery());
+            return parser.parse(preparedStatement.executeQuery());
         }
     }
 }

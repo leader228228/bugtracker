@@ -1,8 +1,11 @@
-package dbparsers.impl.issues;
+package ua.edu.sumdu.nc.db.dbparsers.issues;
 
-import org.springframework.stereotype.Service;
+import dao.DAO;
 import entities.bt.Issue;
 import entities.impl.IssueImpl;
+import org.everit.json.schema.Schema;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +14,31 @@ import java.util.LinkedList;
 
 @Service
 public class AllIssuesDBParser implements IssueDBParser {
+    private DAO dao;
+    private final Schema schema;
+    private static final String INSERT_ISSUE_QUERY =
+            "insert into" +
+                " bt_issues (TITLE, BODY, REPORTER_ID, ASSIGNEE_ID, CREATED, STATUS_ID, PROJECT_ID)" +
+            " values " +
+                "(?, ?, ?, ?, ?, ?, ?)";
+    private static final String UPDATE_ISSUE_QUERY =
+            "update " +
+                "bt_issues " +
+            "set " +
+                "title = ?, " +
+                "body = ?, " +
+                "reporter_id = ?, " +
+                "assignee_id = ?, " +
+                "created = ?, " +
+                "status_id = ?, " +
+                "project_id = ? " +
+            "where " +
+                "issue_id = ?";
+    public AllIssuesDBParser(@Autowired DAO dao, @Autowired Schema schema) {
+        this.dao = dao;
+        this.schema = schema;
+    }
+
     /**
      *  Parses the {@code ResultSet} extracting Issues from it
      *

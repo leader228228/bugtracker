@@ -10,12 +10,11 @@ import ua.edu.sumdu.nc.controllers.Controller;
 import ua.edu.sumdu.nc.controllers.create.parsers.InputParser;
 
 @RestController
-public class SubmitIssueController extends Controller {
-    private InputParser<JSONObject, Issue> parser;
+public class CreateIssueController extends Controller {
     private ApplicationContext applicationContext;
     private Object response;
     private Issue issue;
-    public SubmitIssueController(
+    public CreateIssueController(
             @Autowired ApplicationContext applicationContext,
             @Autowired @Qualifier(value = "IssueParser") InputParser<JSONObject, Issue> parser) {
         this.applicationContext = applicationContext;

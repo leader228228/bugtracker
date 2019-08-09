@@ -1,9 +1,8 @@
-package filters;
+package ua.edu.sumdu.nc.db.filters;
 
 import dao.DAO;
-import dbparsers.DBParser;
+import ua.edu.sumdu.nc.db.dbparsers.DBParser;
 
-import java.sql.SQLException;
 import java.util.Collection;
 
 public abstract class Filter<T> {
@@ -15,6 +14,6 @@ public abstract class Filter<T> {
         this.dao = dao;
     }
 
-    public abstract Collection<T> execute() throws SQLException;
+    public abstract Collection<T> execute() throws Exception;
 }
 

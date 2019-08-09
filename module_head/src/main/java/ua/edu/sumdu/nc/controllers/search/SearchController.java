@@ -2,8 +2,8 @@ package ua.edu.sumdu.nc.controllers.search;
 
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
-import filters.Filter;
-import filters.factory.FilterFactory;
+import ua.edu.sumdu.nc.db.filters.Filter;
+import ua.edu.sumdu.nc.db.filters.factory.FilterFactory;
 import ua.edu.sumdu.nc.controllers.Controller;
 
 import javax.annotation.Resource;

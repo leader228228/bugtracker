@@ -1,7 +1,7 @@
-package dbparsers.impl.projects;
+package ua.edu.sumdu.nc.db.dbparsers.projects;
 
 import entities.bt.Project;
-import dbparsers.DBParser;
+import ua.edu.sumdu.nc.db.dbparsers.DBParser;
 
 public interface ProjectDBParser extends DBParser<Project> {
 

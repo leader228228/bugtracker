@@ -1,12 +1,11 @@
-package filters.impl.issues;
+package ua.edu.sumdu.nc.db.filters.issues;
 
 import dao.DAO;
 import entities.bt.Issue;
-import dbparsers.DBParser;
+import ua.edu.sumdu.nc.db.dbparsers.DBParser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Collection;
 
 public class IssueByIdFilter extends IssueFilter {
@@ -25,7 +24,7 @@ public class IssueByIdFilter extends IssueFilter {
     }
 
     @Override
-    public Collection<Issue> execute() throws SQLException {
+    public Collection<Issue> execute() throws Exception {
         try (Connection connection = dao.getConnection()) {
             Long[] longs = new Long[issueId.length];
             for (int i = 0; i < issueId.length; i++) {

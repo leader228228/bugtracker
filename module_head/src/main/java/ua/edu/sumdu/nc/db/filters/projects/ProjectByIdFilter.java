@@ -1,8 +1,8 @@
-package filters.impl.projects;
+package ua.edu.sumdu.nc.db.filters.projects;
 
 import dao.DAO;
 import entities.bt.Project;
-import dbparsers.DBParser;
+import ua.edu.sumdu.nc.db.dbparsers.DBParser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

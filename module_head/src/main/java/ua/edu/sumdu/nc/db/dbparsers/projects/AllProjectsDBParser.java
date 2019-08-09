@@ -1,4 +1,4 @@
-package dbparsers.impl.projects;
+package ua.edu.sumdu.nc.db.dbparsers.projects;
 
 import org.springframework.stereotype.Service;
 import entities.bt.Project;

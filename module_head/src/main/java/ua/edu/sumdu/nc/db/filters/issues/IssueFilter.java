@@ -1,11 +1,11 @@
-package filters.impl.issues;
+package ua.edu.sumdu.nc.db.filters.issues;
 
 import dao.DAO;
 import entities.bt.Issue;
-import filters.Filter;
-import dbparsers.DBParser;
+import ua.edu.sumdu.nc.db.filters.Filter;
+import ua.edu.sumdu.nc.db.dbparsers.DBParser;
 
-abstract class IssueFilter extends Filter<Issue> {
+public abstract class IssueFilter extends Filter<Issue> {
 
     public IssueFilter(DBParser<Issue> parser, DAO dao) {
         super(parser, dao);
