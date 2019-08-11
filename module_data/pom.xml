@@ -23,9 +23,6 @@
                         </goals>
                         <phase>package</phase>
                         <configuration>
-                            <!--<descriptors>
-                                <descriptor>assembly-descriptor.xml</descriptor>
-                            </descriptors>-->
                             <descriptorRefs>
                                 <descriptorRef>jar-with-dependencies</descriptorRef>
                             </descriptorRefs>
