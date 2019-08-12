@@ -40,7 +40,7 @@
                                 <descriptor>assembly-descriptor.xml</descriptor>
                             </descriptors>
                             <archiverConfig>
-                                <appxml>${basedir}/src/main/res/application.xml</appxml>
+                                <appxml>${basedir}/application.xml</appxml>
                             </archiverConfig>
                             <finalName>bugtracker</finalName>
                             <appendAssemblyId>false</appendAssemblyId>

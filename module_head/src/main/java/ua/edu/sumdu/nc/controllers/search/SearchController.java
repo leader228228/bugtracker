@@ -13,8 +13,8 @@ public class SearchController extends Controller {
         this.filterSelector = filterSelector;
     }
 
-    @GetMapping(path = "search")
-    public Object handle(@RequestBody String requestBody) {
+    @GetMapping(path = "/search")
+    public Object handle(/*@RequestBody String requestBody*/) {
         return "It works";
         /*if (!isRequestBodyValid(requestBody)) {
             return INVALID_RESPONSE;
