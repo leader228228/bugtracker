@@ -1,7 +1,9 @@
 package entities.impl;
 
 import entities.bt.User;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserImpl implements User {
     private long userId;
     private String firstName;

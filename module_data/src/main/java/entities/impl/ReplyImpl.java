@@ -1,7 +1,9 @@
 package entities.impl;
 
 import entities.bt.Reply;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ReplyImpl implements Reply {
     private long replyId;
     private String body;

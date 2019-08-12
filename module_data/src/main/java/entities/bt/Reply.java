@@ -1,12 +1,14 @@
 package entities.bt;
 
 import dao.impl.DAOImpl;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+@Component
 public interface Reply extends Entity {
     long getReplyId();
     String getBody();

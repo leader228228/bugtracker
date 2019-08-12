@@ -1,9 +1,11 @@
 package entities.impl;
 
 import entities.bt.Session;
+import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 
+@Component
 public class SessionImpl implements Session {
     private long sesionId;
     private long userId;

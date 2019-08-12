@@ -29,9 +29,10 @@ import ua.edu.sumdu.nc.db.filters.projects.ProjectByNameFilter;
 import java.net.URISyntaxException;
 
 @Configuration
-@ComponentScan(basePackages = "ua.edu.sumdu.nc")
+@ComponentScan(basePackages = {"ua.edu.sumdu.nc", "dao", "entities"})
 public class AppConfig {
-    private static ApplicationContext context = new AnnotationConfigApplicationContext("ua.edu.sumdu.nc");
+    private static ApplicationContext context =
+            new AnnotationConfigApplicationContext("ua.edu.sumdu.nc", "dao", "entities");
 
     @Bean(name = "DAO")
     @Scope(scopeName = "singleton")
@@ -42,47 +43,47 @@ public class AppConfig {
     // Filters configurations
     @Bean(name = {"BTIssuesByBodySearchRequest", "IssueByBodyFilter"})
     @Scope(scopeName = "singleton")
-    public IssueByBodyFilter issueByBodyFilter(@Qualifier(value = "AllIssuesParser") AllIssuesDBParser parser, DAO dao) {
+    public IssueByBodyFilter issueByBodyFilter(@Qualifier(value = "AllIssuesParser") AllIssuesDBParser parser, @Qualifier("DAO") DAO dao) {
         return new IssueByBodyFilter(parser, dao);
     }
 
     @Bean(name = {"BTIssuesByIdSearchRequest", "IssueByIdFilter"})
     @Scope(scopeName = "singleton")
-    public IssueByIdFilter issueByIdFilter(@Qualifier(value = "AllIssuesParser") DBParser<Issue> parser, DAO dao) {
+    public IssueByIdFilter issueByIdFilter(@Qualifier(value = "AllIssuesParser") DBParser<Issue> parser, @Qualifier("DAO") DAO dao) {
         return new IssueByIdFilter(parser, dao);
     }
 
     @Bean(name = {"BTIssuesByReplySearchRequest", "IssueByReplyBodyFilter"})
     @Scope(scopeName = "singleton")
     public IssueByReplyBodyFilter issueByReplyBodyFilter(
-            @Qualifier(value = "AllIssuesParser") DBParser<Issue> parser, DAO dao) {
+            @Qualifier(value = "AllIssuesParser") DBParser<Issue> parser, @Qualifier("DAO") DAO dao) {
         return new IssueByReplyBodyFilter(parser, dao);
     }
 
     @Bean(name = {"BTIssuesByNameSearchRequest", "IssueByTitleFilter"})
     @Scope(scopeName = "singleton")
-    public IssueByTitleFilter issueByTitleFilter(@Qualifier(value = "AllIssuesParser") DBParser<Issue> parser, DAO dao) {
+    public IssueByTitleFilter issueByTitleFilter(@Qualifier(value = "AllIssuesParser") DBParser<Issue> parser, @Qualifier("DAO") DAO dao) {
         return new IssueByTitleFilter(parser, dao);
     }
 
     @Bean(name = {"BTProjectsByIdSearchRequest", "ProjectByIdFilter"})
     @Scope(scopeName = "singleton")
     public ProjectByIdFilter projectByIdFilter
-            (@Qualifier(value = "AllProjectsParser") DBParser<Project> parser, DAO dao) {
+            (@Qualifier(value = "AllProjectsParser") DBParser<Project> parser, @Qualifier("DAO") DAO dao) {
         return new ProjectByIdFilter(parser, dao);
     }
 
     @Bean(name = {"BTProjectsByNameSearchRequest", "ProjectByNameFilter"})
     @Scope(scopeName = "singleton")
     public ProjectByNameFilter projectByNameFilter
-            (@Qualifier(value = "AllProjectsParser") DBParser<Project> parser, DAO dao) {
+            (@Qualifier(value = "AllProjectsParser") DBParser<Project> parser, @Qualifier("DAO") DAO dao) {
         return new ProjectByNameFilter(parser, dao);
     }
 
     // Parsers configuration
     @Bean(name = "AllIssuesParser")
     @Scope(scopeName = "singleton")
-    public AllIssuesDBParser allIssuesParser(@Autowired DAO dao, @Autowired Schema schema) {
+    public AllIssuesDBParser allIssuesParser(@Qualifier("DAO") DAO dao, @Autowired Schema schema) {
         return new AllIssuesDBParser(dao, schema);
     }
 
@@ -119,7 +120,7 @@ public class AppConfig {
 
     @Bean(name = "Utils")
     @Scope(scopeName = "singleton")
-    public Utils utils(@Autowired ApplicationContext applicationContext, DAO dao) {
+    public Utils utils(@Autowired ApplicationContext applicationContext, @Qualifier("DAO") DAO dao) {
         return new Utils(applicationContext, dao);
     }
 
