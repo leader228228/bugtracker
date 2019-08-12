@@ -30,7 +30,7 @@
         <moduleSet>
             <useAllReactorProjects>true</useAllReactorProjects>
             <includes>
-                <include>${project.groupId}:module_head:war:</include>
+                <include>${project.groupId}:module_head:jar:</include>
                 <include>${project.groupId}:module_data:*</include>
             </includes>
             <excludes>
