@@ -40,6 +40,7 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 @EnableWebMvc
@@ -129,11 +130,25 @@ public class AppConfig extends AnnotationConfigWebApplicationContext implements 
             }
             return SchemaLoader
                     .builder()
-                    .schemaClient(SchemaClient.classPathAwareClient())
+
                     /*.resolutionScope("classpath://json/schemas/")*/
                     .resolutionScope(AppConfig.class.getResource(
                             "../json/schemas/").toURI())
                     .schemaJson(schemaJson)
+
+                    .schemaClient(new SchemaClient() {
+                        @Override
+                        public InputStream get(String url) {
+                            InputStream is = AppConfig.class.getResourceAsStream("../json/schemas/" + url);
+                            if (is == null) {
+                                throw new RuntimeException("url="+url);
+                            } else {
+                                return is;
+                            }
+                        }
+                    })
+                    .draftV7Support()
+                    /*.schemaClient(SchemaClient.classPathAwareClient())*/
                     .build()
                     .load()
                     .build();

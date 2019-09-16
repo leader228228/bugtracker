@@ -15,7 +15,7 @@
     "action" : {
       "enum": ["search"]
     },
-    "BTSearchRequest" : {"$ref": "classpath://schemas/request/BTSearchRequest.json"}
+    "BTSearchRequest" : {"$ref": "request/BTSearchRequest.json"}
   },
   "required" : ["action"]
 }

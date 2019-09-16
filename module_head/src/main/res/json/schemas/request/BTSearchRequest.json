@@ -16,9 +16,9 @@
     "searchBy": {
       "enum": ["BTProjectsSearchRequest", "BTIssuesSearchRequest", "BTUsersSearchRequest"]
     },
-    "BTProjectsSearchRequest" : {"$ref" : "classpath://schemas/request/search/projects/BTProjectsSearchRequest.json#" },
-    "BTIssuesSearchRequest" : {"$ref": "classpath://schemas/request/search/projects/BTIssuesSearchRequest.json#"} ,
-    "BTUsersSearchRequest" : {"$ref": "classpath://schemas/request/search/projects/BTUsersSearchRequest.json#"}
+    "BTProjectsSearchRequest" : {"$ref" : "search/projects/BTProjectsSearchRequest.json" },
+    "BTIssuesSearchRequest" : {"$ref": "search/issues/BTIssuesSearchRequest.json"} ,
+    "BTUsersSearchRequest" : {"$ref": "search/users/BTUsersSearchRequest.json"}
   },
   "required": ["searchBy"]
 }

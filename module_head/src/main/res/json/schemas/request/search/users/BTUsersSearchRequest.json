@@ -3,7 +3,7 @@
   "type": "object",
   "title": "BTUsersSearchRequest",
   "oneOf": [
-    {"$ref": "classpath://schemas/request/search/users/BTUsersByNameSearchRequest.json"},
-    {"$ref": "classpath://schemas/request/search/users/BTUsersByIdSearchRequest.json"}
+    {"$ref": "BTUsersByNameSearchRequest.json"},
+    {"$ref": "BTUsersByIdSearchRequest.json"}
   ]
 }

@@ -7,7 +7,7 @@
     { "$ref" : "#/definitions/BTProjectsByNameSearchRequest" }
   ],
   "definitions" : {
-    "BTProjectsByIdSearchRequest" : { "$ref" : "classpath://schemas/request/search/projects/BTProjectsByIdSearchRequest.json" },
-    "BTProjectsByNameSearchRequest" : { "$ref": "classpath://schemas/request/search/projects/BTProjectsByNameSearchRequest.json" }
+    "BTProjectsByIdSearchRequest" : { "$ref" : "BTProjectsByIdSearchRequest.json" },
+    "BTProjectsByNameSearchRequest" : { "$ref": "BTProjectsByNameSearchRequest.json" }
   }
 }

@@ -8,8 +8,8 @@
     {"$ref" :  "#/definitions/BTIssuesByReplySearchRequest"}
   ],
   "definitions" : {
-    "BTIssuesByNameSearchRequest" : {"$ref": "classpath://schemas/request/search/issues/BTIssuesByNameSearchRequest.json"},
-    "BTIssuesByIdSearchRequest" : {"$ref": "classpath://schemas/request/search/issues/BTIssuesByIdSearchRequest.json"},
-    "BTIssuesByReplySearchRequest" : {"$ref": "classpath://schemas/request/search/issues/BTIssuesByReplySearchRequest.json"}
+    "BTIssuesByNameSearchRequest" : {"$ref": "BTIssuesByNameSearchRequest.json"},
+    "BTIssuesByIdSearchRequest" : {"$ref": "BTIssuesByIdSearchRequest.json"},
+    "BTIssuesByReplySearchRequest" : {"$ref": "BTIssuesByReplySearchRequest.json"}
   }
 }
