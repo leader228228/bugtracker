@@ -39,7 +39,7 @@ public class Utils {
             "where " +
             "issue_id = ?";
 
-    public Utils(@Autowired ApplicationContext applicationContext, @Autowired @Qualifier(value = "DAO") DAO dao) {
+    public Utils(@Qualifier("appConfig") @Autowired ApplicationContext applicationContext, @Autowired @Qualifier(value = "DAO") DAO dao) {
         this.applicationContext = applicationContext;
         this.dao = dao;
     }

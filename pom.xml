@@ -17,7 +17,7 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
+            <version>4.0.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
         <dependency>
@@ -42,6 +42,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-io</artifactId>
             <version>1.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.9.1</version>
         </dependency>
     </dependencies>
     <build>
@@ -69,5 +74,6 @@
         <data.version>1.0-SNAPSHOT</data.version>
         <assembly.version>1.0-SNAPSHOT</assembly.version>
         <project.dependanciesFolder>lib</project.dependanciesFolder>
+        <project.build.format>ear</project.build.format>
     </properties>
 </project>

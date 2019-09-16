@@ -3,21 +3,14 @@
           xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
     <id>bin</id>
     <formats>
-        <format>ear</format>
+        <format>${project.build.format}</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
-    <!--<fileSets>
-        <fileSet>
-            <includes>
-                <include>${project.build.outputDirectory}</include>
-            </includes>
-        </fileSet>
-    </fileSets>-->
     <dependencySets>
         <dependencySet>
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveDependencies>true</useTransitiveDependencies>
-            <outputDirectory>lib</outputDirectory>
+            <outputDirectory>\lib</outputDirectory>
             <excludes>
                 <exclude>${project.groupId}:module_head:*</exclude>
                 <exclude>${project.groupId}:module_data:*</exclude>
@@ -37,10 +30,34 @@
                 <exclude>${project.groupId}:assembly:*</exclude>
             </excludes>
             <binaries>
-                <outputDirectory>modules</outputDirectory>
+                <outputDirectory>\</outputDirectory>
                 <unpack>false</unpack>
                 <includeDependencies>false</includeDependencies>
             </binaries>
         </moduleSet>
     </moduleSets>
+    <fileSets>
+        <!--<fileSet>
+            <includes>
+                <include>\WEB-INF\**</include>
+            </includes>
+        </fileSet>-->
+        <fileSet>
+            <directory>${project.build.directory}</directory>
+            <includes>
+                <include>\classes\**</include>
+            </includes>
+            <excludes>
+                <exclude>*.ear</exclude>
+            </excludes>
+            <outputDirectory>\WEB-INF</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>\META-INF</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>\META-INF</outputDirectory>
+        </fileSet>
+    </fileSets>
 </assembly>

@@ -7,14 +7,13 @@ import org.json.JSONObject;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 public abstract class Controller extends DispatcherServlet {
 
     public static final JSONObject INVALID_RESPONSE = new JSONObject("{\"error\":\"invalid request\"}");
 
     @Resource(name = "BTRequestSchema")
-    protected static Schema schema;
+    protected Schema schema;
 
     protected boolean isRequestBodyValid(JSONObject requestBody) {
         try {

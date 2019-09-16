@@ -2,11 +2,11 @@ package ua.edu.sumdu.nc.db.creators.issues;
 
 import dao.DAO;
 import entities.bt.Issue;
+import ua.edu.sumdu.nc.Utils;
+import ua.edu.sumdu.nc.db.dbparsers.issues.IssueDBParser;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import ua.edu.sumdu.nc.Utils;
 import ua.edu.sumdu.nc.db.creators.Creator;
-import ua.edu.sumdu.nc.db.dbparsers.issues.IssueDBParser;
 
 import java.sql.Connection;
 import java.sql.Date;

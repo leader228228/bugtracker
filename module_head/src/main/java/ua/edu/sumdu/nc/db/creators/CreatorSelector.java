@@ -3,6 +3,7 @@ package ua.edu.sumdu.nc.db.creators;
 import org.json.JSONObject;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +14,7 @@ public class CreatorSelector {
 
     private ApplicationContext applicationContext;
 
-    public CreatorSelector(@Autowired ApplicationContext applicationContext) {
+    public CreatorSelector(@Qualifier("appConfig") @Autowired ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 

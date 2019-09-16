@@ -1,7 +1,5 @@
 package ua.edu.sumdu.nc.db.dbparsers;
 
-import org.json.JSONObject;
-
 import java.sql.ResultSet;
 import java.util.Collection;
 

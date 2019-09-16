@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.LinkedList;
 
-@Service
+/*@Service*/
 public class AllIssuesDBParser implements IssueDBParser {
     private DAO dao;
     private final Schema schema;

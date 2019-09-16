@@ -1,10 +1,11 @@
 {
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "title": "BTSearchRequest",
   "oneOf": [
-    {"$ref": "classpath://schemas/request/search/projects/BTProjectsSearchRequest.json"},
-    {"$ref": "classpath://schemas/request/search/projects/BTIssuesSearchRequest.json"},
-    {"$ref": "classpath://schemas/request/search/projects/BTUsersSearchRequest.json"}
+    {"$ref" :  "#/definitions/BTProjectsSearchRequest"},
+    {"$ref" :  "#/definitions/BTIssuesSearchRequest"},
+    {"$ref" :  "#/definitions/BTUsersSearchRequest"}
   ],
   "properties": {
     "searchBy": {
@@ -14,7 +15,10 @@
   "definitions": {
     "searchBy": {
       "enum": ["BTProjectsSearchRequest", "BTIssuesSearchRequest", "BTUsersSearchRequest"]
-    }
+    },
+    "BTProjectsSearchRequest" : {"$ref" : "classpath://schemas/request/search/projects/BTProjectsSearchRequest.json#" },
+    "BTIssuesSearchRequest" : {"$ref": "classpath://schemas/request/search/projects/BTIssuesSearchRequest.json#"} ,
+    "BTUsersSearchRequest" : {"$ref": "classpath://schemas/request/search/projects/BTUsersSearchRequest.json#"}
   },
   "required": ["searchBy"]
 }

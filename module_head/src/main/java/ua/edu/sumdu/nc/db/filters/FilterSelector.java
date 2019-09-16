@@ -3,6 +3,7 @@ package ua.edu.sumdu.nc.db.filters;
 import org.json.JSONObject;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +13,7 @@ import java.io.IOException;
 public class FilterSelector {
     private final ApplicationContext applicationContext;
 
-    public FilterSelector(@Autowired ApplicationContext applicationContext) {
+    public FilterSelector(@Qualifier("appConfig") @Autowired ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 

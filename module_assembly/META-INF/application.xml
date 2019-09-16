@@ -1,0 +1,12 @@
+<application xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/application_7.xsd" version="7">
+    <application-name>bugtracker</application-name>
+    <module>
+        <java>module_data-1.0-SNAPSHOT.jar</java>
+    </module>
+    <module>
+        <web>
+            <web-uri>module_head-1.0-SNAPSHOT.war</web-uri>
+            <context-root>bugtracker</context-root>
+        </web>
+    </module>
+</application>

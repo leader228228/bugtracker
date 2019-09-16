@@ -1,13 +1,9 @@
 package ua.edu.sumdu.nc.controllers.search;
 
-import org.json.JSONObject;
+import ua.edu.sumdu.nc.controllers.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ua.edu.sumdu.nc.db.filters.Filter;
-import ua.edu.sumdu.nc.controllers.Controller;
 import ua.edu.sumdu.nc.db.filters.FilterSelector;
-
-import java.util.Collection;
 
 @RestController
 public class SearchController extends Controller {
@@ -18,9 +14,10 @@ public class SearchController extends Controller {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public Object handle(@RequestBody String requestBody) {
-        if (!isRequestBodyValid(requestBody)) {
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public Object handle(/*@RequestBody*/ String requestBody) {
+        return "It works";
+        /*if (!isRequestBodyValid(requestBody)) {
             return INVALID_RESPONSE;
         }
         JSONObject requestBodyJSON = new JSONObject(requestBody);
@@ -32,6 +29,6 @@ public class SearchController extends Controller {
         } catch (Exception e) {
             return new JSONObject().put("error", e.getClass()); // ?
         }
-        return new JSONObject().put("response", collection);
+        return new JSONObject().put("response", collection);*/
     }
 }

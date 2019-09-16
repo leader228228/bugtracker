@@ -1,9 +1,10 @@
 {
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "BTRequest",
   "type": "object",
   "title": "BTRequest",
   "oneOf": [
-    {"$ref": "classpath://schemas/request/BTSearchRequest.json"}
+    {"$ref": "#/definitions/BTSearchRequest"}
   ],
   "properties": {
     "action" : {
@@ -13,7 +14,8 @@
   "definitions": {
     "action" : {
       "enum": ["search"]
-    }
+    },
+    "BTSearchRequest" : {"$ref": "classpath://schemas/request/BTSearchRequest.json"}
   },
   "required" : ["action"]
 }

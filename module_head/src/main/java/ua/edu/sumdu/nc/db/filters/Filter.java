@@ -1,8 +1,6 @@
 package ua.edu.sumdu.nc.db.filters;
 
 import dao.DAO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import ua.edu.sumdu.nc.db.dbparsers.DBParser;
 
 import java.util.Collection;

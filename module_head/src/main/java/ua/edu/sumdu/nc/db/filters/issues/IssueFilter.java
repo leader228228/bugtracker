@@ -2,8 +2,8 @@ package ua.edu.sumdu.nc.db.filters.issues;
 
 import dao.DAO;
 import entities.bt.Issue;
-import ua.edu.sumdu.nc.db.filters.Filter;
 import ua.edu.sumdu.nc.db.dbparsers.DBParser;
+import ua.edu.sumdu.nc.db.filters.Filter;
 
 public abstract class IssueFilter extends Filter<Issue> {
 
