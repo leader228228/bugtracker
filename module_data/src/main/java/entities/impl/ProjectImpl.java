@@ -1,7 +1,9 @@
 package entities.impl;
 
 import entities.bt.Project;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProjectImpl implements Project {
     private long projectId;
     private String name;
