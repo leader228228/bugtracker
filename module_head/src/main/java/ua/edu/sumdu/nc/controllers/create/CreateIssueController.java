@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping(path = "/create")
 public class CreateIssueController extends Controller {
     private ApplicationContext applicationContext;
     private Object response;
@@ -17,7 +18,7 @@ public class CreateIssueController extends Controller {
         this.applicationContext = applicationContext;
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/create/issue")
+    @RequestMapping(method = RequestMethod.POST, path = "/issue")
     @ResponseBody
     public Object handle(@RequestBody String requestBody) throws Exception {
         if (!isRequestBodyValid(requestBody)) {
@@ -28,9 +29,4 @@ public class CreateIssueController extends Controller {
         return response;
     }
 
-    private void prepareRsponse() {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("operations", "creation").put("status", 200).put("issue", issue);
-        response = jsonObject;
-    }
 }

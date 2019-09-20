@@ -5,25 +5,27 @@ import dao.impl.DAOImpl;
 import entities.bt.Issue;
 import entities.bt.Project;
 import entities.impl.IssueImpl;
-import org.json.JSONObject;
-import ua.edu.sumdu.nc.Utils;
-import ua.edu.sumdu.nc.controllers.search.SearchController;
-import ua.edu.sumdu.nc.db.dbparsers.issues.AllIssuesDBParser;
-import ua.edu.sumdu.nc.db.dbparsers.projects.AllProjectsDBParser;
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.loader.SchemaClient;
 import org.everit.json.schema.loader.SchemaLoader;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import ua.edu.sumdu.nc.Utils;
 import ua.edu.sumdu.nc.db.creators.CreatorSelector;
 import ua.edu.sumdu.nc.db.dbparsers.DBParser;
+import ua.edu.sumdu.nc.db.dbparsers.issues.AllIssuesDBParser;
+import ua.edu.sumdu.nc.db.dbparsers.projects.AllProjectsDBParser;
 import ua.edu.sumdu.nc.db.filters.FilterSelector;
 import ua.edu.sumdu.nc.db.filters.issues.IssueByBodyFilter;
 import ua.edu.sumdu.nc.db.filters.issues.IssueByIdFilter;
@@ -35,16 +37,17 @@ import ua.edu.sumdu.nc.db.filters.projects.ProjectByNameFilter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Consumer;
 
-@EnableWebMvc
+
 @Configuration
+@EnableWebMvc
 @ComponentScan(basePackages = "ua")
 public class AppConfig extends AnnotationConfigWebApplicationContext implements WebApplicationInitializer {
 
@@ -182,12 +185,15 @@ public class AppConfig extends AnnotationConfigWebApplicationContext implements 
     }
 
     @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
-        XmlWebApplicationContext appContext = new XmlWebApplicationContext();
-        appContext.setConfigLocation("/WEB-INF/dispatcherServlet-servlet.xml");
-
+    public void onStartup(ServletContext servletContext) {
+        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+        context.register(AppConfig.class);
+        context.scan("config");
+        context.setBeanName("applicationContext");
+        //XmlWebApplicationContext appContext = new XmlWebApplicationContext();
+        //appContext.setConfigLocation("/WEB-INF/dispatcherServlet-servlet.xml");
         ServletRegistration.Dynamic dispatcher =
-                servletContext.addServlet("dispatcherServlet", new DispatcherServlet(appContext));
+                servletContext.addServlet("dispatcherServlet", new DispatcherServlet(context));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/*");
     }
