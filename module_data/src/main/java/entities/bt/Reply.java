@@ -20,30 +20,33 @@ public interface Reply extends Entity {
     void setReplyId(long replyId);
 
     @Override
-    default void updateOrSave() throws SQLException, IOException {
-        try (Connection connection = new DAOImpl().getConnection()) {
-            PreparedStatement preparedStatement;
-            try {
-                preparedStatement = connection.prepareStatement("INSERT INTO BT_REPLIES ("
-                        + "REPLY_ID, BODY, ISSUE_ID, AUTHOR_ID) "
-                        + "VALUES (?, ?, ?, ?);");
-                preparedStatement.setLong(1, getReplyId());
-                preparedStatement.setString(2, getBody());
-                preparedStatement.setLong(3, getIssueId());
-                preparedStatement.setLong(4, getAuthorId());
-                preparedStatement.executeUpdate();
-            } catch (SQLException e) {
-                preparedStatement = connection.prepareStatement("UPDATE BT_REPLIES SET " +
-                        "BODY = ? " +
-                        ", ISSUE_ID = ? " +
-                        ", AUTHOR_ID = ? " +
-                        "WHERE REPLY_ID = ?;");
-                preparedStatement.setString(1, getBody());
-                preparedStatement.setLong(2, getIssueId());
-                preparedStatement.setLong(3, getAuthorId());
-                preparedStatement.setLong(4, getReplyId());
-                preparedStatement.executeUpdate();
-            }
+    default void save() throws SQLException {
+        try (Connection connection = new DAOImpl().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO BT_REPLIES ("
+                 + "REPLY_ID, BODY, ISSUE_ID, AUTHOR_ID) "
+                 + "VALUES (?, ?, ?, ?);")) {
+            preparedStatement.setLong(1, getReplyId());
+            preparedStatement.setString(2, getBody());
+            preparedStatement.setLong(3, getIssueId());
+            preparedStatement.setLong(4, getAuthorId());
+            preparedStatement.executeUpdate();
+        }
+    }
+
+
+    @Override
+    default void update() throws SQLException, IOException {
+        try (Connection connection = new DAOImpl().getConnection();
+            PreparedStatement preparedStatement  = connection.prepareStatement("UPDATE BT_REPLIES SET " +
+                "BODY = ? " +
+                ", ISSUE_ID = ? " +
+                ", AUTHOR_ID = ? " +
+                "WHERE REPLY_ID = ?;")){
+            preparedStatement.setString(1, getBody());
+            preparedStatement.setLong(2, getIssueId());
+            preparedStatement.setLong(3, getAuthorId());
+            preparedStatement.setLong(4, getReplyId());
+            preparedStatement.executeUpdate();
         }
     }
 

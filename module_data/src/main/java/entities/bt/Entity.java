@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 @Component
 public interface Entity {
-    void updateOrSave() throws SQLException, IOException;
-    void delete() throws SQLException, IOException;
+    void update() throws Exception;
+    void save() throws Exception;
+    void delete() throws Exception;
 }

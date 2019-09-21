@@ -23,37 +23,40 @@ public interface Session extends Entity {
     void setSesionId(long sesionId);
 
     @Override
-    default void updateOrSave() throws SQLException, IOException {
-        try (Connection connection = new DAOImpl().getConnection()) {
-            PreparedStatement preparedStatement;
-            try {
-                preparedStatement = connection.prepareStatement("INSERT INTO BT_USER_SESSIONS ("
-                        + "SESSION_ID, USER_ID, FROM_DATE, TILL_DATE, TOKEN) "
-                        + "VALUES (?, ?, ?, ?, ?);");
-                preparedStatement.setLong(1, getSesionId());
-                preparedStatement.setLong(2, getUserId());
-                preparedStatement.setDate(3, getFromDate());
-                preparedStatement.setDate(4, getTillDate());
-                preparedStatement.setString(5, getToken());
-                preparedStatement.executeUpdate();
-            } catch (SQLException e) {
-                preparedStatement = connection.prepareStatement("UPDATE BT_USER_SESSIONS SET " +
-                        "USER_ID = ? " +
-                        ", FROM_DATE = ? " +
-                        ", TILL_DATE = ? " +
-                        ", TOKEN = ? " +
-                        "WHERE SESSION_ID = ?;");
-                preparedStatement.setLong(1, getUserId());
-                preparedStatement.setDate(2, getFromDate());
-                preparedStatement.setDate(3, getTillDate());
-                preparedStatement.setString(4, getToken());
-                preparedStatement.executeUpdate();
-            }
+    default void save() throws SQLException {
+        try (Connection connection = new DAOImpl().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO BT_USER_SESSIONS ("
+                + "SESSION_ID, USER_ID, FROM_DATE, TILL_DATE, TOKEN) "
+                + "VALUES (?, ?, ?, ?, ?);")) {
+            preparedStatement.setLong(1, getSesionId());
+            preparedStatement.setLong(2, getUserId());
+            preparedStatement.setDate(3, getFromDate());
+            preparedStatement.setDate(4, getTillDate());
+            preparedStatement.setString(5, getToken());
+            preparedStatement.executeUpdate();
         }
     }
 
+
     @Override
-    default void delete() throws SQLException, IOException {
+    default void update() throws SQLException {
+        try (Connection connection = new DAOImpl().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE BT_USER_SESSIONS SET " +
+                 "USER_ID = ? " +
+                 ", FROM_DATE = ? " +
+                 ", TILL_DATE = ? " +
+                 ", TOKEN = ? " +
+                 "WHERE SESSION_ID = ?;")) {
+            preparedStatement.setLong(1, getUserId());
+            preparedStatement.setDate(2, getFromDate());
+            preparedStatement.setDate(3, getTillDate());
+            preparedStatement.setString(4, getToken());
+            preparedStatement.executeUpdate();
+            }
+    }
+
+    @Override
+    default void delete() throws SQLException {
         try (Connection connection = new DAOImpl().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "DELETE FROM BT_USER_SESSIONS WHERE SESSION_ID = ?;");
