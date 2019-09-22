@@ -1,16 +1,22 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "object",
-  "title": "BTProjectsByIdSearchRequest",
   "properties": {
-    "userIdFrom": {
+    "searchWhat": {
+      "type": "string",
+      "pattern": "^projects$"
+    },
+    "searchBy": {
+      "type": "string",
+      "pattern": "^projectId$"
+    },
+    "projectIdFrom": {
       "type": "integer",
-      "minimum": 0
+      "minimum": 1
     },
     "projectIdTo": {
       "type": "integer",
-      "minimum": 0
+      "minimum": 1
     }
   },
-  "required": ["projectIdFrom", "projectIdTo"]
+  "required": ["projectIdFrom", "projectIdTo", "searchWhat", "searchBy"],
+  "additionalProperties": false
 }

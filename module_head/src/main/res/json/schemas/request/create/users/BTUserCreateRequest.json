@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "BTUsersCreateRequest",
+  "properties": {
+    "createWhat": {
+      "type": "string",
+      "pattern": "^user$"
+    },
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "login": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
+    }
+  },
+  "required": ["firstName", "lastName", "login", "password"],
+  "additionalProperties": false
+}

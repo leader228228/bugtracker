@@ -3,7 +3,6 @@ package config;
 import dao.DAO;
 import dao.impl.DAOImpl;
 import entities.bt.Issue;
-import entities.bt.Project;
 import entities.impl.IssueImpl;
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.loader.SchemaClient;
@@ -18,24 +17,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import ua.edu.sumdu.nc.Utils;
-import ua.edu.sumdu.nc.db.creators.CreatorSelector;
-import ua.edu.sumdu.nc.db.dbparsers.DBParser;
-import ua.edu.sumdu.nc.db.dbparsers.issues.AllIssuesDBParser;
-import ua.edu.sumdu.nc.db.dbparsers.projects.AllProjectsDBParser;
-import ua.edu.sumdu.nc.db.filters.FilterSelector;
-import ua.edu.sumdu.nc.db.filters.issues.IssueByBodyFilter;
-import ua.edu.sumdu.nc.db.filters.issues.IssueByIdFilter;
-import ua.edu.sumdu.nc.db.filters.issues.IssueByReplyBodyFilter;
-import ua.edu.sumdu.nc.db.filters.issues.IssueByTitleFilter;
-import ua.edu.sumdu.nc.db.filters.projects.ProjectByIdFilter;
-import ua.edu.sumdu.nc.db.filters.projects.ProjectByNameFilter;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
@@ -55,59 +41,6 @@ public class AppConfig extends AnnotationConfigWebApplicationContext implements 
     @Scope(scopeName = "singleton")
     public DAO DAO() {
         return new DAOImpl();
-    }
-
-    // Filters configurations
-    @Bean(name = {"BTIssuesByBodySearchRequest", "IssueByBodyFilter"})
-    @Scope(scopeName = "singleton")
-    public IssueByBodyFilter issueByBodyFilter(@Qualifier(value = "AllIssuesParser") AllIssuesDBParser parser, DAO dao) {
-        return new IssueByBodyFilter(parser, dao);
-    }
-
-    @Bean(name = {"BTIssuesByIdSearchRequest", "IssueByIdFilter"})
-    @Scope(scopeName = "singleton")
-    public IssueByIdFilter issueByIdFilter(@Qualifier(value = "AllIssuesParser") DBParser<Issue> parser, DAO dao) {
-        return new IssueByIdFilter(parser, dao);
-    }
-
-    @Bean(name = {"BTIssuesByReplySearchRequest", "IssueByReplyBodyFilter"})
-    @Scope(scopeName = "singleton")
-    public IssueByReplyBodyFilter issueByReplyBodyFilter(
-            @Qualifier(value = "AllIssuesParser") DBParser<Issue> parser, DAO dao) {
-        return new IssueByReplyBodyFilter(parser, dao);
-    }
-
-    @Bean(name = {"BTIssuesByNameSearchRequest", "IssueByTitleFilter"})
-    @Scope(scopeName = "singleton")
-    public IssueByTitleFilter issueByTitleFilter(@Qualifier(value = "AllIssuesParser") DBParser<Issue> parser, DAO dao) {
-        return new IssueByTitleFilter(parser, dao);
-    }
-
-    @Bean(name = {"BTProjectsByIdSearchRequest", "ProjectByIdFilter"})
-    @Scope(scopeName = "singleton")
-    public ProjectByIdFilter projectByIdFilter
-            (@Qualifier(value = "AllProjectsParser") DBParser<Project> parser, DAO dao) {
-        return new ProjectByIdFilter(parser, dao);
-    }
-
-    @Bean(name = {"BTProjectsByNameSearchRequest", "ProjectByNameFilter"})
-    @Scope(scopeName = "singleton")
-    public ProjectByNameFilter projectByNameFilter
-            (@Qualifier(value = "AllProjectsParser") DBParser<Project> parser, DAO dao) {
-        return new ProjectByNameFilter(parser, dao);
-    }
-
-    // Parsers configuration
-    @Bean(name = "AllIssuesParser")
-    @Scope(scopeName = "singleton")
-    public AllIssuesDBParser allIssuesParser(@Autowired DAO dao, @Autowired Schema schema) {
-        return new AllIssuesDBParser(dao, schema);
-    }
-
-    @Bean(name = "AllProjectsParser")
-    @Scope(scopeName = "singleton")
-    public AllProjectsDBParser allProjectsParser() {
-        return new AllProjectsDBParser();
     }
 
     @Bean(name = "BTRequestSchema")
@@ -131,7 +64,7 @@ public class AppConfig extends AnnotationConfigWebApplicationContext implements 
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            return SchemaLoader
+            /*Schema schema =*/return SchemaLoader
                     .builder()
 
                     /*.resolutionScope("classpath://json/schemas/")*/
@@ -139,15 +72,12 @@ public class AppConfig extends AnnotationConfigWebApplicationContext implements 
                             "../json/schemas/").toURI())
                     .schemaJson(schemaJson)
 
-                    .schemaClient(new SchemaClient() {
-                        @Override
-                        public InputStream get(String url) {
-                            InputStream is = AppConfig.class.getResourceAsStream("../json/schemas/" + url);
-                            if (is == null) {
-                                throw new RuntimeException("url="+url);
-                            } else {
-                                return is;
-                            }
+                    .schemaClient(url -> {
+                        InputStream is = AppConfig.class.getResourceAsStream("../json/schemas/" + url);
+                        if (is == null) {
+                            throw new RuntimeException("url="+url);
+                        } else {
+                            return is;
                         }
                     })
                     .draftV7Support()
@@ -155,6 +85,11 @@ public class AppConfig extends AnnotationConfigWebApplicationContext implements 
                     .build()
                     .load()
                     .build();
+                    /*if (true) { // debug
+                        throw new RuntimeException(schema.toString());
+                    } else {
+                        return schema;
+                    }*/
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -170,18 +105,6 @@ public class AppConfig extends AnnotationConfigWebApplicationContext implements 
     @Scope(scopeName = "singleton")
     public Utils utils(@Qualifier("appConfig") @Autowired ApplicationContext applicationContext, DAO dao) {
         return new Utils(applicationContext, dao);
-    }
-
-    @Bean(name = "FilterSelector")
-    @Scope(scopeName = "singleton")
-    public FilterSelector filterSelector(@Qualifier("appConfig") @Autowired ApplicationContext applicationContext) {
-        return new FilterSelector(applicationContext);
-    }
-
-    @Bean(name = {"CreatorSelector"})
-    @Scope(scopeName = "singleton")
-    public CreatorSelector creatorSelector(@Qualifier("appConfig") @Autowired ApplicationContext applicationContext) {
-        return new CreatorSelector(applicationContext);
     }
 
     @Override

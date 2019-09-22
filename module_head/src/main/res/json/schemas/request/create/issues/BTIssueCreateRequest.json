@@ -1,0 +1,30 @@
+{
+  "properties": {
+    "createWhat": {
+      "pattern": "^issue$"
+    },
+    "projectId": {
+      "type": "integer"
+    },
+    "assigneeId": {
+      "type": "integer"
+    },
+    "body": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "reporterId": {
+      "type": "integer"
+    },
+    "created": {
+      "format": "date-time"
+    },
+    "statusId": {
+      "type": "integer"
+    }
+  },
+  "required": ["projectId", "body", "title", "reporterId", "createWhat", "statusId"],
+  "additionalProperties": false
+}

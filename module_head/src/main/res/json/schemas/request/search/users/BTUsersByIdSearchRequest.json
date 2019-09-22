@@ -1,16 +1,22 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "object",
-  "title": "BTUsersByIdSearchRequest",
   "properties": {
+    "searchWhat": {
+      "type": "string",
+      "pattern": "^users$"
+    },
+    "searchBy": {
+      "type": "string",
+      "pattern": "^userId$"
+    },
     "userIdFrom": {
       "type": "integer",
-      "minimum": 0
+      "minimum": 1
     },
     "userIdTo": {
       "type": "integer",
-      "minimum": 0
+      "minimum": 1
     }
   },
-  "required": ["userIdFrom", "userIdTo"]
+  "required": ["userIdFrom", "userIdTo", "searchWhat", "searchBy"],
+  "additionalProperties": false
 }

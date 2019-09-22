@@ -1,11 +1,18 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "object",
-  "title": "BTIssuesByNameSearchRequest",
   "properties": {
+    "searchWhat": {
+      "type": "string",
+      "pattern": "^issues$"
+    },
+    "searchBy": {
+      "type": "string",
+      "pattern": "^issueName$"
+    },
     "issueName": {
+      "type": "string",
       "format": "regex"
     }
   },
-  "required": ["issueName"]
+  "required": ["issueName", "searchBy", "searchWhat"],
+  "additionalProperties": false
 }

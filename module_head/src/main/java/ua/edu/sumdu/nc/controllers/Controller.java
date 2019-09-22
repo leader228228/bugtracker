@@ -7,25 +7,29 @@ import org.json.JSONObject;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.annotation.Resource;
+import java.util.function.Consumer;
 
 public abstract class Controller extends DispatcherServlet {
 
-    public static final JSONObject INVALID_RESPONSE = new JSONObject("{\"error\":\"invalid request\"}");
+    protected static final String ERROR_RESPONSE_TEMPLATE = "{\"status\": \"error\",\"message\":\"#message#\"}";
+    protected static final String SUCCESS_RESPONSE_TEMPLATE = "{\"status\": \"success\",\"message\":\"#message#\"}";
 
     @Resource(name = "BTRequestSchema")
     protected Schema schema;
 
-    protected boolean isRequestBodyValid(JSONObject requestBody) {
+    protected boolean isRequestBodyValid(Object requestBody) {
         try {
             schema.validate(requestBody);
         } catch (ValidationException | JSONException e) {
+            /*e.getCausingExceptions().forEach(e1 -> { // debug
+                throw new RuntimeException("Schema location(" + e1.getViolatedSchema().toString()+ ")");
+            });
+            StringBuilder stringBuilder = new StringBuilder();
+            e.getAllMessages().forEach(stringBuilder::append);
+            stringBuilder.append(",Request itself(").append(requestBody).append(")");
+            throw new RuntimeException(stringBuilder.toString());*/
             return false;
         }
         return true;
-    }
-
-    protected boolean isRequestBodyValid(String requestBody) {
-        JSONObject jsonObject = new JSONObject(requestBody);
-        return isRequestBodyValid(jsonObject);
     }
 }

@@ -1,0 +1,10 @@
+{
+  "oneOf": [
+    {"$ref": "#/definitions/BTIssuesCreateRequest"},
+    {"$ref": "#/definitions/BTUsersCreateRequest"}
+  ],
+  "definitions": {
+    "BTIssuesCreateRequest": {"$ref": "issues/BTIssueCreateRequest.json"} ,
+    "BTUsersCreateRequest": {"$ref": "users/BTUserCreateRequest.json"}
+  }
+}

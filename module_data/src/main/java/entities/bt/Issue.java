@@ -4,10 +4,7 @@ import dao.impl.DAOImpl;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 @Component
 public interface Issue extends Entity {
@@ -19,8 +16,8 @@ public interface Issue extends Entity {
     String getBody();
     String getTitle();
     void setBody(String body);
-    Date getCreated();
-    void setCreated(Date created);
+    Timestamp getCreated();
+    void setCreated(Timestamp created);
     int getStatusId();
     void setStatusId(int statusId);
     long getProjectId();
@@ -41,7 +38,7 @@ public interface Issue extends Entity {
                 " WHERE ISSUE_ID = ?;")) {
             preparedStatement.setLong(1, getReporterId());
             preparedStatement.setLong(2, getAssigneeId());
-            preparedStatement.setDate(3, getCreated());
+            preparedStatement.setTimestamp(3, getCreated());
             preparedStatement.setInt(4, getStatusId());
             preparedStatement.setLong(5, getProjectId());
             preparedStatement.setString(6, getBody());
@@ -52,7 +49,7 @@ public interface Issue extends Entity {
     }
 
     @Override
-    default void save() throws SQLException, IOException {
+    default void save() throws SQLException {
         try (Connection connection = new DAOImpl().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
                      "INSERT INTO BT_ISSUES("
@@ -61,7 +58,7 @@ public interface Issue extends Entity {
             preparedStatement.setLong(1, getIssueId());
             preparedStatement.setLong(2, getReporterId());
             preparedStatement.setLong(3, getAssigneeId());
-            preparedStatement.setDate(4, getCreated());
+            preparedStatement.setTimestamp(4, getCreated());
             preparedStatement.setInt(5, getStatusId());
             preparedStatement.setLong(6, getProjectId());
             preparedStatement.setString(7, getBody());

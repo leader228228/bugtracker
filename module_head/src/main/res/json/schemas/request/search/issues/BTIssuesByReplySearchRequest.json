@@ -1,11 +1,17 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "object",
-  "title": "BTIssuesByReplySearchRequest",
   "properties": {
+    "searchWhat": {
+      "type": "string",
+      "pattern": "^issues$"
+    },
+    "searchBy": {
+      "type": "string",
+      "pattern": "^replyBody$"
+    },
     "replyBody": {
       "format": "regex"
     }
   },
-  "required": ["replyBody"]
+  "required": ["replyBody", "searchBy", "searchWhat"],
+  "additionalProperties": false
 }

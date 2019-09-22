@@ -1,0 +1,12 @@
+{
+  "anyOf": [
+    {"$ref" : "#/definitions/BTProjectsSearchRequest"},
+    {"$ref" : "#/definitions/BTIssuesSearchRequest"},
+    {"$ref" : "#/definitions/BTUsersSearchRequest"}
+  ],
+  "definitions": {
+    "BTProjectsSearchRequest" : {"$ref" : "projects/BTProjectsSearchRequest.json"},
+    "BTIssuesSearchRequest" : {"$ref": "issues/BTIssuesSearchRequest.json"} ,
+    "BTUsersSearchRequest" : {"$ref": "users/BTUsersSearchRequest.json"}
+  }
+}

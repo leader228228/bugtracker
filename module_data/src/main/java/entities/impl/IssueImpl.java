@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Component
 public class IssueImpl implements Issue {
@@ -13,7 +14,7 @@ public class IssueImpl implements Issue {
     private long assigneeId;
     private String title;
     private String body;
-    private Date created;
+    private Timestamp created;
     private int statusId;
     private long projectId;
 
@@ -93,12 +94,12 @@ public class IssueImpl implements Issue {
     }
 
     @Override
-    public Date getCreated() {
+    public Timestamp getCreated() {
         return created;
     }
 
     @Override
-    public void setCreated(Date created) {
+    public void setCreated(Timestamp created) {
         this.created = created;
     }
 
