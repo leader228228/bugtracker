@@ -3,16 +3,18 @@ package ua.edu.sumdu.nc.controllers;
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.ValidationException;
 import org.json.JSONException;
-
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class Controller {
 
     protected static final String ERROR_RESPONSE_TEMPLATE = "{\"status\": \"error\",\"message\":\"#message#\"}";
     protected static final String SUCCESS_RESPONSE_TEMPLATE = "{\"status\": \"success\",\"message\":\"#message#\"}";
 
-    @Resource(name = "BTRequestSchema")
     protected Schema schema;
+
+    public Controller(@Autowired Schema schema) {
+        this.schema = schema;
+    }
 
     protected boolean isRequestBodyValid(Object requestBody) {
         try {

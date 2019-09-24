@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
@@ -12,7 +13,9 @@ public interface DAO {
     default long getId() throws SQLException {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("select getId() as \"id\" from dual")) {
-            return preparedStatement.executeQuery().getLong("id");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getLong("id");
         }
     }
 }

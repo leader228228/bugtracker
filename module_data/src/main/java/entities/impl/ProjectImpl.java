@@ -1,30 +1,20 @@
 package entities.impl;
 
+import dao.DAO;
+import entities.bt.PersistanceEntity;
 import entities.bt.Project;
-import org.springframework.stereotype.Component;
 
-@Component
-public class ProjectImpl implements Project {
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class ProjectImpl extends PersistanceEntity implements Project {
     private long projectId;
     private String name;
     private long adminId;
 
-    public ProjectImpl() {
-    }
-
-    public ProjectImpl(long projectId) {
-        this.projectId = projectId;
-    }
-
-    public ProjectImpl(long projectId, String name) {
-        this.projectId = projectId;
-        this.name = name;
-    }
-
-    public ProjectImpl(long projectId, String name, long adminId) {
-        this.projectId = projectId;
-        this.name = name;
-        this.adminId = adminId;
+    public ProjectImpl(DAO DAO) {
+        super(DAO);
     }
 
     public void setProjectId(long projectId) {
@@ -51,4 +41,49 @@ public class ProjectImpl implements Project {
         this.adminId = adminId;
     }
 
+    @Override
+    public void save() throws SQLException {
+        try (Connection connection = DAO.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO BT_PROJECTS ("
+                     + "PROJECT_ID, \"name\", ADMIN_ID) "
+                     + "VALUES (?, ?, ?)")) {
+            preparedStatement.setLong(1, getProjectId());
+            preparedStatement.setString(2, getName());
+            preparedStatement.setLong(3, getAdminId());
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    @Override
+    public void update() throws SQLException {
+        try (Connection connection = DAO.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE BT_PROJECTS SET " +
+                     "NAME = ? " +
+                     ", ADMIN_ID = ? " +
+                     "WHERE PROJECT_ID = ?")) {
+            preparedStatement.setString(1, getName());
+            preparedStatement.setLong(2, getAdminId());
+            preparedStatement.setLong(3, getProjectId());
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    @Override
+    public void delete() throws SQLException {
+        try (Connection connection = DAO.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "DELETE FROM BT_PROJECTS WHERE PROJECT_ID = ?");
+            preparedStatement.setLong(1, getProjectId());
+            preparedStatement.execute();
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "ProjectImpl{" +
+                "projectId=" + projectId +
+                ", name='" + name + '\'' +
+                ", adminId=" + adminId +
+                '}';
+    }
 }

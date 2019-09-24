@@ -4,7 +4,7 @@ import dao.DAO;
 import entities.bt.Issue;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggerFactory;
+import org.everit.json.schema.Schema;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +25,14 @@ public class CreateIssueController extends Controller {
     private ApplicationContext applicationContext;
     private Object response;
     private Issue issue;
-    private DAO dao;
+    private DAO DAO;
     private static final int DEFAULT_ISSUE_STATUS_ID = 2; //todo move to property file
     private final Logger logger = Logger.getRootLogger();
 
-    public CreateIssueController(@Qualifier("appConfig") @Autowired ApplicationContext applicationContext, @Autowired DAO dao) {
+    public CreateIssueController(@Qualifier("appConfig") @Autowired ApplicationContext applicationContext, @Autowired DAO DAO, @Autowired Schema schema) {
+        super(schema);
         this.applicationContext = applicationContext;
-        this.dao = dao;
+        this.DAO = DAO;
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/create/issue")
@@ -50,27 +51,29 @@ public class CreateIssueController extends Controller {
         } catch (JSONException e) {
             logger.info("Unspecified assignee id for issue. Request: " + jsonObject.toString());
         }
-        try {
-            issue.save();
-        } catch (SQLException e) {
-            response = ERROR_RESPONSE_TEMPLATE.replaceFirst(
-                "#message#", "Error due to access to database");
-            return response;
-        }
         issue.setReporterId(jsonObject.getLong("reporterId"));
         issue.setBody(jsonObject.getString("body"));
         issue.setTitle(jsonObject.getString("title"));
         try {
             issue.setCreated(convertDateFromJson(jsonObject.getString("created")));
         } catch (JSONException e) {
+            logger.info("Unspecified creation date for issue. Request: " + jsonObject.toString());
             issue.setCreated(new Timestamp(System.currentTimeMillis()));
         }
         try {
             issue.setStatusId(jsonObject.getInt("statusId"));
         } catch (JSONException e) {
+            logger.info("Unspecified status id for issue. Request: " + jsonObject.toString());
             issue.setStatusId(DEFAULT_ISSUE_STATUS_ID);
         }
-        issue.setIssueId(dao.getId());
+        issue.setIssueId(DAO.getId());
+        try {
+            issue.save();
+        } catch (SQLException e) {
+            response = ERROR_RESPONSE_TEMPLATE.replaceFirst(
+                    "#message#", "Error due to access to database\n\r" + /*todo remove*/ e.getMessage() + "issue :\n\r" + issue.toString());
+            return response;
+        }
         response = SUCCESS_RESPONSE_TEMPLATE.replaceFirst("#message#",
                 "The issue has been successfully created. issueId = " + issue.getIssueId());
         return response;

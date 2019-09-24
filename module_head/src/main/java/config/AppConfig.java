@@ -2,19 +2,16 @@ package config;
 
 import dao.DAO;
 import dao.impl.DAOImpl;
-import entities.bt.Issue;
-import entities.impl.IssueImpl;
+import entities.bt.*;
+import entities.impl.*;
 import org.everit.json.schema.Schema;
-import org.everit.json.schema.loader.SchemaClient;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.*;
+import org.springframework.core.env.Environment;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -35,12 +32,32 @@ import java.util.List;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "ua")
+@PropertySource("classpath:/application.properties")
 public class AppConfig extends AnnotationConfigWebApplicationContext implements WebApplicationInitializer {
+
+    @Autowired
+    private Environment env;
+
+    public AppConfig() {
+    }
+
+    public Environment getEnv() {
+        return env;
+    }
+
+    public void setEnv(Environment env) {
+        this.env = env;
+    }
 
     @Bean(name = "DAO")
     @Scope(scopeName = "singleton")
-    public DAO DAO() {
-        return new DAOImpl();
+    public DAO DAO() throws ClassNotFoundException {
+        Class.forName(env.getProperty("db.connection.driver"));
+        return new DAOImpl(
+                env.getProperty("db.connection.url"),
+                env.getProperty("db.connection.user"),
+                env.getProperty("db.connection.password")
+        );
     }
 
     @Bean(name = "BTRequestSchema")
@@ -66,6 +83,8 @@ public class AppConfig extends AnnotationConfigWebApplicationContext implements 
             }
             /*Schema schema =*/return SchemaLoader
                     .builder()
+                    .useDefaults(true)
+                    .draftV7Support()
 
                     /*.resolutionScope("classpath://json/schemas/")*/
                     .resolutionScope(AppConfig.class.getResource(
@@ -97,8 +116,32 @@ public class AppConfig extends AnnotationConfigWebApplicationContext implements 
 
     @Bean(name = "Issue")
     @Scope(scopeName = "prototype")
-    public Issue issue() {
-        return new IssueImpl();
+    public Issue issue(@Autowired DAO DAO) {
+        return new IssueImpl(DAO);
+    }
+
+    @Bean(name = "Reply")
+    @Scope(scopeName = "prototype")
+    public Reply reply(@Autowired DAO DAO) {
+        return new ReplyImpl(DAO);
+    }
+
+    @Bean(name = "Project")
+    @Scope(scopeName = "prototype")
+    public Project project(@Autowired DAO DAO) {
+        return new ProjectImpl(DAO);
+    }
+
+    @Bean(name = "User")
+    @Scope(scopeName = "prototype")
+    public User user(DAO DAO) {
+        return new UserImpl(DAO);
+    }
+
+    @Bean(name = "IssueStatus")
+    @Scope(scopeName = "prototype")
+    public IssueStatus issueStatus(@Autowired DAO DAO) {
+        return new IssueStatusImpl(DAO);
     }
 
     @Bean(name = "Utils")

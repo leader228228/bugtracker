@@ -9,9 +9,19 @@ import java.sql.SQLException;
 
 @Component
 public class DAOImpl implements DAO {
+    private final String URL;
+    private final String user;
+    private final String password;
+
+    public DAOImpl(String URL, String user, String password) {
+        this.URL = URL;
+        this.user = user;
+        this.password = password;
+    }
+
     // TODO REPLACE CONNECTION CONFIGURATION WITH PROPERTIES
     @Override
     public Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "SYSTEM", "A1q2w3e4r5t");
+        return DriverManager.getConnection(URL, user, password);
     }
 }

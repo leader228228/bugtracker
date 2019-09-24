@@ -7,7 +7,9 @@
       "type": "integer"
     },
     "assigneeId": {
-      "type": "integer"
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
     },
     "body": {
       "type": "string"
@@ -16,13 +18,16 @@
       "type": "string"
     },
     "reporterId": {
-      "type": "integer"
+      "type": "integer",
+      "minimum": 0
     },
     "created": {
       "format": "date-time"
     },
     "statusId": {
-      "type": "integer"
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
     }
   },
   "required": ["projectId", "body", "title", "reporterId", "createWhat", "statusId"],
