@@ -3,13 +3,10 @@ package ua.edu.sumdu.nc.controllers;
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.ValidationException;
 import org.json.JSONException;
-import org.json.JSONObject;
-import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.annotation.Resource;
-import java.util.function.Consumer;
 
-public abstract class Controller extends DispatcherServlet {
+public abstract class Controller {
 
     protected static final String ERROR_RESPONSE_TEMPLATE = "{\"status\": \"error\",\"message\":\"#message#\"}";
     protected static final String SUCCESS_RESPONSE_TEMPLATE = "{\"status\": \"success\",\"message\":\"#message#\"}";

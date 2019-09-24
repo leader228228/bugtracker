@@ -3,6 +3,8 @@ package ua.edu.sumdu.nc.controllers.create;
 import dao.DAO;
 import entities.bt.Issue;
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggerFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ public class CreateIssueController extends Controller {
     private Issue issue;
     private DAO dao;
     private static final int DEFAULT_ISSUE_STATUS_ID = 2; //todo move to property file
+    private final Logger logger = Logger.getRootLogger();
 
     public CreateIssueController(@Qualifier("appConfig") @Autowired ApplicationContext applicationContext, @Autowired DAO dao) {
         this.applicationContext = applicationContext;
