@@ -85,7 +85,6 @@ public class AppConfig extends AnnotationConfigWebApplicationContext implements 
                     .builder()
                     .useDefaults(true)
                     .draftV7Support()
-
                     /*.resolutionScope("classpath://json/schemas/")*/
                     .resolutionScope(AppConfig.class.getResource(
                             "../json/schemas/").toURI())

@@ -1,0 +1,12 @@
+{
+  "properties": {
+    "createWhat": {
+      "pattern": "^project$"
+    },
+    "projectName": {
+      "type": "string"
+    }
+  },
+  "required": ["projectName", "createWhat"],
+  "additionalProperties": false
+}

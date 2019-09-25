@@ -11,7 +11,6 @@ import java.sql.SQLException;
 public class ProjectImpl extends PersistanceEntity implements Project {
     private long projectId;
     private String name;
-    private long adminId;
 
     public ProjectImpl(DAO DAO) {
         super(DAO);
@@ -33,23 +32,14 @@ public class ProjectImpl extends PersistanceEntity implements Project {
         this.name = name;
     }
 
-    public long getAdminId() {
-        return adminId;
-    }
-
-    public void setAdminId(long adminId) {
-        this.adminId = adminId;
-    }
-
     @Override
     public void save() throws SQLException {
         try (Connection connection = DAO.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO BT_PROJECTS ("
                      + "PROJECT_ID, \"name\", ADMIN_ID) "
-                     + "VALUES (?, ?, ?)")) {
+                     + "VALUES (?, ?)")) {
             preparedStatement.setLong(1, getProjectId());
             preparedStatement.setString(2, getName());
-            preparedStatement.setLong(3, getAdminId());
             preparedStatement.executeUpdate();
         }
     }
@@ -59,11 +49,9 @@ public class ProjectImpl extends PersistanceEntity implements Project {
         try (Connection connection = DAO.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("UPDATE BT_PROJECTS SET " +
                      "NAME = ? " +
-                     ", ADMIN_ID = ? " +
                      "WHERE PROJECT_ID = ?")) {
             preparedStatement.setString(1, getName());
-            preparedStatement.setLong(2, getAdminId());
-            preparedStatement.setLong(3, getProjectId());
+            preparedStatement.setLong(2, getProjectId());
             preparedStatement.executeUpdate();
         }
     }
@@ -83,7 +71,6 @@ public class ProjectImpl extends PersistanceEntity implements Project {
         return "ProjectImpl{" +
                 "projectId=" + projectId +
                 ", name='" + name + '\'' +
-                ", adminId=" + adminId +
                 '}';
     }
 }

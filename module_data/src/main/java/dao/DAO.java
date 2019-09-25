@@ -12,7 +12,8 @@ public interface DAO {
     Connection getConnection() throws SQLException;
     default long getId() throws SQLException {
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("select getId() as \"id\" from dual")) {
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                     "select getId() as \"id\" from dual")) {
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             return resultSet.getLong("id");

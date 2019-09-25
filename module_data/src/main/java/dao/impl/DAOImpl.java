@@ -19,7 +19,6 @@ public class DAOImpl implements DAO {
         this.password = password;
     }
 
-    // TODO REPLACE CONNECTION CONFIGURATION WITH PROPERTIES
     @Override
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, user, password);

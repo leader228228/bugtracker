@@ -1,7 +1,9 @@
 package entities.bt;
 
+import java.sql.SQLException;
+
 public interface Entity {
-    void update() throws Exception;
-    void save() throws Exception;
-    void delete() throws Exception;
+    void update() throws SQLException;
+    void save() throws SQLException;
+    void delete() throws SQLException;
 }

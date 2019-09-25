@@ -21,9 +21,6 @@
       "type": "integer",
       "minimum": 0
     },
-    "created": {
-      "format": "date-time"
-    },
     "statusId": {
       "type": "integer",
       "minimum": 0,

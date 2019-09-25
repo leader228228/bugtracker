@@ -1,10 +1,8 @@
 package entities.bt;
 
 public interface Project extends Entity {
-    long getProjectId();
     String getName();
     void setName(String name);
-    long getAdminId();
-    void setAdminId(long adminId);
+    long getProjectId();
     void setProjectId(long projectId);
 }

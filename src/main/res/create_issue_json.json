@@ -1,0 +1,7 @@
+{
+	"createWhat": "issue",
+	"projectId": 2,
+	"body": "Test body",
+	"title": "Test title",
+	"reporterId" : 3
+}
