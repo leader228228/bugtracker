@@ -1,6 +1,0 @@
-{
-  "oneOf": [
-    {"$ref": "BTUsersByNameSearchRequest.json"},
-    {"$ref": "BTUsersByIdSearchRequest.json"}
-  ]
-}

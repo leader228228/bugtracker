@@ -48,6 +48,16 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.9.9.1</version>
         </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${javax.validation.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${org.hibernate.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -86,5 +96,7 @@
         <assembly.version>1.0-SNAPSHOT</assembly.version>
         <project.dependanciesFolder>lib</project.dependanciesFolder>
         <project.build.format>ear</project.build.format>
+        <javax.validation.version>1.1.0.Final</javax.validation.version>
+        <org.hibernate.version>5.1.0.Final</org.hibernate.version>
     </properties>
 </project>
