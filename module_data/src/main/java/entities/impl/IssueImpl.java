@@ -11,7 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-@Component
 public class IssueImpl extends PersistanceEntity implements Issue {
     private long issueId;
     private long reporterId;
@@ -22,7 +21,6 @@ public class IssueImpl extends PersistanceEntity implements Issue {
     private int statusId;
     private long projectId;
 
-    @Autowired
     public IssueImpl(DAO DAO) {
         super(DAO);
     }

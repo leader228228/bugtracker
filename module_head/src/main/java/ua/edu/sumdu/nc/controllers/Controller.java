@@ -1,67 +1,56 @@
 package ua.edu.sumdu.nc.controllers;
 
 import dao.DAO;
-import entities.bt.PersistanceEntity;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.everit.json.schema.Schema;
-import org.everit.json.schema.ValidationException;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import ua.edu.sumdu.nc.validation.BTRequest;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public abstract class Controller {
-    protected ApplicationContext applicationContext;
-    protected dao.DAO DAO;
-    protected Object response;
-    protected static final String ERROR_RESPONSE_TEMPLATE = "{\"status\": \"error\",\"message\":\"#message#\"}";
-    protected static final String SUCCESS_RESPONSE_TEMPLATE = "{\"status\": \"success\",\"message\":\"#message#\"}";
+public abstract class Controller<T extends BTRequest> {
     protected static final Logger logger = Logger.getRootLogger();
-    protected Schema schema;
+    protected DAO DAO;
 
-    public Controller(
-            @Autowired Schema schema,
-            @Autowired DAO DAO,
-            @Autowired ApplicationContext applicationContext) {
-        this.schema = schema;
+    public Controller(@Autowired DAO DAO) {
         this.DAO = DAO;
-        this.applicationContext = applicationContext;
     }
 
-    protected boolean isRequestBodyValid(Object requestBody) {
-        try {
-            schema.validate(requestBody);
-        } catch (ValidationException /*| JSONException*/ e) {
-            //logger.error("Invalid request", e);
-            /*e.getCausingExceptions().forEach(e1 -> { // debug
-                throw new RuntimeException("Schema location(" + e1.getViolatedSchema().toString()+ ")");
-            });*/
-            StringBuilder stringBuilder = new StringBuilder();
-            e.getAllMessages().forEach(stringBuilder::append);
-            stringBuilder.append(",Request itself(").append(e.getViolatedSchema()).append(")");
-            throw new RuntimeException(stringBuilder.toString(),e);
-            //return false;
+    public abstract Object handle(T request);
+    protected static final String RESP_JSON_TEMPL = "{\"status\":\"#status#\",\"messages\":[#messages#]}";
+
+    protected static String getCommonErrorResponse(String...messages) {
+        return RESP_JSON_TEMPL
+                .replaceFirst("#status#", "error")
+                .replaceFirst("#messages#", wrapAndJoin(messages));
+    }
+
+    protected static String getCommonSuccessResponse(String...messages) {
+        return RESP_JSON_TEMPL
+                .replaceFirst("#status#", "success")
+                .replaceFirst("#messages#", wrapAndJoin(messages));
+    }
+
+    private static String wrapAndJoin(String...strings) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (strings.length != 0) {
+            stringBuilder = new StringBuilder("\"");
+            stringBuilder.append(String.join("\", \"", strings)).append("\"");
         }
-        return true;
+        return stringBuilder.toString();
     }
 
-    protected String getRequestBodyAsString(HttpServletRequest httpServletRequest) throws IOException {
-        return IOUtils.toString(httpServletRequest.getInputStream());
-    }
-
-    protected JSONObject getRequest(HttpServletRequest httpServletRequest) throws IOException {
-        return new JSONObject(getRequestBodyAsString(httpServletRequest));
-    }
-
-    protected String getErrorResponseMessage(String errorMessage) {
-        return ERROR_RESPONSE_TEMPLATE.replaceFirst("#message#", errorMessage);
-    }
-
-    protected String getSuccessResponseMessage(String successMessage) {
-        return SUCCESS_RESPONSE_TEMPLATE.replaceFirst("#message#", successMessage);
+    protected String getInvalidInputResponse(BindingResult bindingResult) {
+        String [] errorMessages = new String[]{};
+        if (bindingResult.hasErrors()) {
+            List<String> list = new ArrayList<>(bindingResult.getAllErrors().size());
+            for (ObjectError objectError : bindingResult.getAllErrors()) {
+                list.add(objectError.getCode());
+            }
+            errorMessages = list.toArray(new String[0]);
+        }
+        return getCommonErrorResponse(errorMessages);
     }
 }

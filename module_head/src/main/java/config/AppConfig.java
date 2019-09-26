@@ -4,36 +4,35 @@ import dao.DAO;
 import dao.impl.DAOImpl;
 import entities.bt.*;
 import entities.impl.*;
-import org.everit.json.schema.Schema;
-import org.everit.json.schema.loader.SchemaLoader;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.env.Environment;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ua.edu.sumdu.nc.Utils;
+import ua.edu.sumdu.nc.converters.RequestConverterFactory;
+import ua.edu.sumdu.nc.converters.create.issues.CreateIssueRequestConverter;
+import ua.edu.sumdu.nc.validation.BTRequest;
+import ua.edu.sumdu.nc.validation.create.issues.CreateIssueRequest;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
-import java.io.BufferedInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "ua")
 @PropertySource("classpath:/application.properties")
-public class AppConfig extends AnnotationConfigWebApplicationContext implements WebApplicationInitializer {
+public class AppConfig extends AnnotationConfigWebApplicationContext implements WebApplicationInitializer, WebMvcConfigurer {
 
     @Autowired
     private Environment env;
@@ -58,59 +57,6 @@ public class AppConfig extends AnnotationConfigWebApplicationContext implements 
                 env.getProperty("db.connection.user"),
                 env.getProperty("db.connection.password")
         );
-    }
-
-    @Bean(name = "BTRequestSchema")
-    @Scope(scopeName = "singleton")
-    public Schema schema() {
-        try {
-            JSONObject schemaJson;
-            try (BufferedInputStream stream = new BufferedInputStream(AppConfig.class.getResourceAsStream(
-                    "../json/schemas/BTRequest.json"))) {
-                StringBuilder stringBuilder = new StringBuilder();
-                int readByte;
-                List<Character> buffer = new LinkedList<>();
-                while ((readByte = stream.read()) != -1) {
-                    buffer.add((char) readByte);
-                }
-                buffer.forEach(stringBuilder::append);
-                schemaJson = new JSONObject(stringBuilder.toString());
-            } catch (FileNotFoundException e) {
-                throw new IllegalStateException("Can not find root schema. Expected location:" + AppConfig.class.getResource(
-                        "../json/schemas/BTRequest.json").toURI());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            /*Schema schema =*/return SchemaLoader
-                    .builder()
-                    .useDefaults(true)
-                    .draftV7Support()
-                    /*.resolutionScope("classpath://json/schemas/")*/
-                    .resolutionScope(AppConfig.class.getResource(
-                            "../json/schemas/").toURI())
-                    .schemaJson(schemaJson)
-
-                    .schemaClient(url -> {
-                        InputStream is = AppConfig.class.getResourceAsStream("../json/schemas/" + url);
-                        if (is == null) {
-                            throw new RuntimeException("url="+url);
-                        } else {
-                            return is;
-                        }
-                    })
-                    .draftV7Support()
-                    /*.schemaClient(SchemaClient.classPathAwareClient())*/
-                    .build()
-                    .load()
-                    .build();
-                    /*if (true) { // debug
-                        throw new RuntimeException(schema.toString());
-                    } else {
-                        return schema;
-                    }*/
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Bean(name = "Issue")
@@ -161,5 +107,12 @@ public class AppConfig extends AnnotationConfigWebApplicationContext implements 
                 servletContext.addServlet("dispatcherServlet", new DispatcherServlet(context));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/*");
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        Map<Class<? extends BTRequest>, Converter<String, BTRequest>> map = new HashMap<>();
+        map.put(CreateIssueRequest.class, new CreateIssueRequestConverter());
+        registry.addConverterFactory(new RequestConverterFactory(map));
     }
 }
