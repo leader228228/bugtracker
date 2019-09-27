@@ -3,6 +3,7 @@ package ua.edu.sumdu.nc.controllers;
 import dao.DAO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import ua.edu.sumdu.nc.validation.BTRequest;
@@ -13,9 +14,11 @@ import java.util.List;
 public abstract class Controller<T extends BTRequest> {
     protected static final Logger logger = Logger.getRootLogger();
     protected DAO DAO;
+    protected ApplicationContext appCtx;
 
-    public Controller(@Autowired DAO DAO) {
-        this.DAO = DAO;
+    public Controller(@Autowired ApplicationContext appCtx) {
+        this.appCtx = appCtx;
+        DAO = appCtx.getBean("DAO", DAO.class);
     }
 
     public abstract Object handle(T request);

@@ -11,9 +11,6 @@ import java.io.UncheckedIOException;
 public class CreateIssueRequestConverter implements CreateRequestConverter {
     @Override
     public CreateRequest convert(String source) {
-        if (true) {
-            throw new RuntimeException(source);
-        }
         try {
             return new ObjectMapper().readValue(source, CreateIssueRequest.class);
         } catch (IOException e) {

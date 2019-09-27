@@ -21,11 +21,8 @@ import java.time.LocalDateTime;
 @RestController
 public class CreateIssueController extends Controller<CreateIssueRequest> {
 
-    private final ApplicationContext appCtx;
-
-    public CreateIssueController(@Qualifier(value = "appConfig") ApplicationContext appCtx, @Autowired DAO DAO) {
-        super(DAO);
-        this.appCtx = appCtx;
+    public CreateIssueController(@Qualifier(value = "appConfig") ApplicationContext appCtx) {
+        super(appCtx);
     }
 
     @Override
@@ -47,17 +44,17 @@ public class CreateIssueController extends Controller<CreateIssueRequest> {
         try {
             issue.save();
         } catch (SQLException e) {
-            logger.error("Unknown error while saving an issue, request=(" + request + ")", e);
-            return getCommonErrorResponse("Error due to access to database");
+            logger.error("Unknown error while saving the issue, request=(" + request + ")", e);
+            return getCommonErrorResponse("Error due to access to database: ", e.getClass().toString());
         }
-        return getCommonSuccessResponse("Issue has been created", issue.toString());
+        return getCommonSuccessResponse("The issue has been created: ", issue.toString());
     }
 
     @RequestMapping(
-            path = "/create/issue",
-            method = RequestMethod.POST,
-            produces = "application/json",
-            consumes = "application/json"
+        path = "/create/issue",
+        method = RequestMethod.POST,
+        consumes = "application/x-www-form-urlencoded",
+        produces = "application/json"
     )
     public Object delegateMethod(@Valid @RequestBody CreateIssueRequest request, BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {

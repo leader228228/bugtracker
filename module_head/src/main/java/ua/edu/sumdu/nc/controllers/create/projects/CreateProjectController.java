@@ -1,0 +1,52 @@
+package ua.edu.sumdu.nc.controllers.create.projects;
+
+import dao.DAO;
+import entities.bt.Project;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import ua.edu.sumdu.nc.controllers.Controller;
+import ua.edu.sumdu.nc.validation.create.projects.CreateProjectRequest;
+
+import javax.validation.Valid;
+import java.sql.SQLException;
+
+@RestController
+public class CreateProjectController extends Controller<ua.edu.sumdu.nc.validation.create.projects.CreateProjectRequest> {
+
+    public CreateProjectController(@Qualifier(value = "appConfig") ApplicationContext appCtx) {
+        super(appCtx);
+    }
+
+    @Override
+    public Object handle(CreateProjectRequest request) {
+        Project project = appCtx.getBean("Project", Project.class);
+        project.setName(request.getName());
+        try {
+            project.setProjectId(DAO.getId());
+            project.save();
+        } catch (SQLException e) {
+            logger.error("Unknown error while saving the project, request=(" + request + ")", e);
+            return getCommonErrorResponse("Error due to access to database: ", e.getClass().toString());
+        }
+        return getCommonSuccessResponse("The project has been created: ", project.toString());
+    }
+
+    @RequestMapping(
+        path = "/create/project",
+        method = RequestMethod.POST,
+        consumes = "application/x-www-form-urlencoded",
+        produces = "application/json"
+    )
+    public Object delegateMethod(@Valid @RequestParam(name = "request") CreateProjectRequest request, BindingResult bindingResult) {
+        if (!bindingResult.hasErrors()) {
+            return handle(request);
+        }
+        return getInvalidInputResponse(bindingResult);
+    }
+}
