@@ -1,8 +1,6 @@
 package ua.edu.sumdu.nc.converters.create;
 
-import org.springframework.core.convert.converter.Converter;
-import ua.edu.sumdu.nc.validation.BTRequest;
+import ua.edu.sumdu.nc.converters.BTConverter;
 
-public interface CreateRequestConverter extends Converter<String, BTRequest> {
-
+public interface CreateRequestConverter extends BTConverter {
 }

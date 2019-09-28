@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import java.sql.SQLException;
 
 @RestController
-public class CreateProjectController extends Controller<ua.edu.sumdu.nc.validation.create.projects.CreateProjectRequest> {
+public class CreateProjectController extends Controller<CreateProjectRequest> {
 
     public CreateProjectController(@Qualifier(value = "appConfig") ApplicationContext appCtx) {
         super(appCtx);

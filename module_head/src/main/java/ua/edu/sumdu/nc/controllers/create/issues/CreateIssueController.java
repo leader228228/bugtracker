@@ -58,6 +58,5 @@ public class CreateIssueController extends Controller<CreateIssueRequest> {
         }
         logger.error("Invalid request: " + request.toString());
         return getInvalidRequestResponse(bindingResult);
-        //return getCommonErrorResponse(request.toString()); // debug
     }
 }

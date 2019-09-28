@@ -2,14 +2,15 @@ package ua.edu.sumdu.nc.validation.create.issues;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 import ua.edu.sumdu.nc.validation.create.CreateRequest;
 
-import javax.validation.constraints.Max;
-
-
+@Data
+@NoArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class CreateIssueRequest implements CreateRequest {
     @Range(min = 1)
@@ -36,64 +37,4 @@ public class CreateIssueRequest implements CreateRequest {
     @JsonProperty(required = true)
     @Range(min = 1)
     private long projectId;
-
-    public long getReporterId() {
-        return reporterId;
-    }
-
-    public void setReporterId(long reporterId) {
-        this.reporterId = reporterId;
-    }
-
-    public long getAssigneeId() {
-        return assigneeId;
-    }
-
-    public void setAssigneeId(long assigneeId) {
-        this.assigneeId = assigneeId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
-
-    public int getStatusId() {
-        return statusId;
-    }
-
-    public void setStatusId(int statusId) {
-        this.statusId = statusId;
-    }
-
-    public long getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(long projectId) {
-        this.projectId = projectId;
-    }
-
-    @Override
-    public String toString() {
-        return "CreateIssueRequest{" +
-                "reporterId=" + reporterId +
-                ", assigneeId=" + assigneeId +
-                ", title='" + title + '\'' +
-                ", body='" + body + '\'' +
-                ", statusId=" + statusId +
-                ", projectId=" + projectId +
-                '}';
-    }
 }
