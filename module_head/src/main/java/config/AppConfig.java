@@ -19,8 +19,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ua.edu.sumdu.nc.Utils;
 import ua.edu.sumdu.nc.converters.RequestConverterFactory;
 import ua.edu.sumdu.nc.converters.create.issues.CreateIssueRequestConverter;
+import ua.edu.sumdu.nc.converters.create.projects.CreateProjectRequestConverter;
+import ua.edu.sumdu.nc.converters.create.users.CreateUserRequestConverter;
 import ua.edu.sumdu.nc.validation.BTRequest;
 import ua.edu.sumdu.nc.validation.create.issues.CreateIssueRequest;
+import ua.edu.sumdu.nc.validation.create.projects.CreateProjectRequest;
+import ua.edu.sumdu.nc.validation.create.users.CreateUserRequest;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
@@ -113,6 +117,8 @@ public class AppConfig extends AnnotationConfigWebApplicationContext implements 
     public void addFormatters(FormatterRegistry registry) {
         Map<Class<? extends BTRequest>, Converter<String, BTRequest>> map = new HashMap<>();
         map.put(CreateIssueRequest.class, new CreateIssueRequestConverter());
+        map.put(CreateProjectRequest.class, new CreateProjectRequestConverter());
+        map.put(CreateUserRequest.class, new CreateUserRequestConverter());
         registry.addConverterFactory(new RequestConverterFactory(map));
     }
 }

@@ -35,9 +35,9 @@ public class ProjectImpl extends PersistanceEntity implements Project {
     @Override
     public void save() throws SQLException {
         try (Connection connection = DAO.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO BT_PROJECTS ("
-                     + "PROJECT_ID, \"name\", ADMIN_ID) "
-                     + "VALUES (?, ?)")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO BT_PROJECTS("
+                 + "PROJECT_ID, name) "
+                 + "VALUES (?, ?)")) {
             preparedStatement.setLong(1, getProjectId());
             preparedStatement.setString(2, getName());
             preparedStatement.executeUpdate();

@@ -1,23 +1,19 @@
 package ua.edu.sumdu.nc.controllers.create.issues;
 
-import dao.DAO;
 import entities.bt.Issue;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import ua.edu.sumdu.nc.controllers.Controller;
 import ua.edu.sumdu.nc.validation.create.issues.CreateIssueRequest;
 
-import javax.validation.Valid;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+@Validated
 @RestController
 public class CreateIssueController extends Controller<CreateIssueRequest> {
 
@@ -47,20 +43,21 @@ public class CreateIssueController extends Controller<CreateIssueRequest> {
             logger.error("Unknown error while saving the issue, request=(" + request + ")", e);
             return getCommonErrorResponse("Error due to access to database: ", e.getClass().toString());
         }
-        return getCommonSuccessResponse("The issue has been created: ", issue.toString());
+        return getCommonSuccessResponse("The issue id = " + issue.getIssueId() + " has been created");
     }
 
     @RequestMapping(
         path = "/create/issue",
         method = RequestMethod.POST,
-        consumes = "application/x-www-form-urlencoded",
+        consumes = "application/json",
         produces = "application/json"
     )
-    public Object delegateMethod(@Valid @RequestBody CreateIssueRequest request, BindingResult bindingResult) {
+    public Object delegateMethod(@RequestBody CreateIssueRequest request, BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
             return handle(request);
         }
-        return getInvalidInputResponse(bindingResult);
+        logger.error("Invalid request: " + request.toString());
+        return getInvalidRequestResponse(bindingResult);
         //return getCommonErrorResponse(request.toString()); // debug
     }
 }

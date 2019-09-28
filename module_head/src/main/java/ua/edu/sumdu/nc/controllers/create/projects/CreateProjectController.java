@@ -1,15 +1,10 @@
 package ua.edu.sumdu.nc.controllers.create.projects;
 
-import dao.DAO;
 import entities.bt.Project;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ua.edu.sumdu.nc.controllers.Controller;
 import ua.edu.sumdu.nc.validation.create.projects.CreateProjectRequest;
 
@@ -34,19 +29,20 @@ public class CreateProjectController extends Controller<ua.edu.sumdu.nc.validati
             logger.error("Unknown error while saving the project, request=(" + request + ")", e);
             return getCommonErrorResponse("Error due to access to database: ", e.getClass().toString());
         }
-        return getCommonSuccessResponse("The project has been created: ", project.toString());
+        return getCommonSuccessResponse("The project id = " + project.getProjectId() + " has been created");
     }
 
     @RequestMapping(
         path = "/create/project",
         method = RequestMethod.POST,
-        consumes = "application/x-www-form-urlencoded",
+        consumes = "application/json",
         produces = "application/json"
     )
-    public Object delegateMethod(@Valid @RequestParam(name = "request") CreateProjectRequest request, BindingResult bindingResult) {
+    public Object delegateMethod(@Valid @RequestBody CreateProjectRequest request, BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
             return handle(request);
         }
-        return getInvalidInputResponse(bindingResult);
+        logger.error("Invalid request: " + request.toString());
+        return getInvalidRequestResponse(bindingResult);
     }
 }

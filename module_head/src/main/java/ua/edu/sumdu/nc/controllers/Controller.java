@@ -45,7 +45,7 @@ public abstract class Controller<T extends BTRequest> {
         return stringBuilder.toString();
     }
 
-    protected String getInvalidInputResponse(BindingResult bindingResult) {
+    protected String getInvalidRequestResponse(BindingResult bindingResult) {
         String [] errorMessages = new String[]{};
         if (bindingResult.hasErrors()) {
             List<String> list = new ArrayList<>(bindingResult.getAllErrors().size());
