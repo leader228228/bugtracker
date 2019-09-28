@@ -149,7 +149,7 @@ public class IssueImpl extends PersistanceEntity implements Issue {
     public void delete() throws SQLException {
         try (Connection connection = DAO.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "DELETE FROM BT_ISSUES WHERE ISSUE_ID = ?;");
+                    "DELETE FROM BT_ISSUES WHERE ISSUE_ID = ?");
             preparedStatement.setLong(1, getIssueId());
             preparedStatement.execute();
         }

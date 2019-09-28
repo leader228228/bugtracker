@@ -20,11 +20,21 @@ import ua.edu.sumdu.nc.Utils;
 import ua.edu.sumdu.nc.converters.RequestConverterFactory;
 import ua.edu.sumdu.nc.converters.create.issues.CreateIssueRequestConverter;
 import ua.edu.sumdu.nc.converters.create.projects.CreateProjectRequestConverter;
+import ua.edu.sumdu.nc.converters.create.replies.CreateReplyRequestConverter;
 import ua.edu.sumdu.nc.converters.create.users.CreateUserRequestConverter;
+import ua.edu.sumdu.nc.converters.delete.issues.DeleteIssueRequestConverter;
+import ua.edu.sumdu.nc.converters.delete.projects.DeleteProjectRequestConverter;
+import ua.edu.sumdu.nc.converters.delete.replies.DeleteReplyRequestConverter;
+import ua.edu.sumdu.nc.converters.delete.users.DeleteUserRequestConverter;
 import ua.edu.sumdu.nc.validation.BTRequest;
 import ua.edu.sumdu.nc.validation.create.issues.CreateIssueRequest;
 import ua.edu.sumdu.nc.validation.create.projects.CreateProjectRequest;
+import ua.edu.sumdu.nc.validation.create.replies.CreateReplyRequest;
 import ua.edu.sumdu.nc.validation.create.users.CreateUserRequest;
+import ua.edu.sumdu.nc.validation.delete.issues.DeleteIssueRequest;
+import ua.edu.sumdu.nc.validation.delete.projects.DeleteProjectRequest;
+import ua.edu.sumdu.nc.validation.delete.replies.DeleteReplyRequest;
+import ua.edu.sumdu.nc.validation.delete.users.DeleteUserRequest;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
@@ -119,6 +129,13 @@ public class AppConfig extends AnnotationConfigWebApplicationContext implements 
         map.put(CreateIssueRequest.class, new CreateIssueRequestConverter());
         map.put(CreateProjectRequest.class, new CreateProjectRequestConverter());
         map.put(CreateUserRequest.class, new CreateUserRequestConverter());
+        map.put(CreateReplyRequest.class, new CreateReplyRequestConverter());
+
+        map.put(DeleteIssueRequest.class, new DeleteIssueRequestConverter());
+        map.put(DeleteProjectRequest.class, new DeleteProjectRequestConverter());
+        map.put(DeleteUserRequest.class, new DeleteUserRequestConverter());
+        map.put(DeleteReplyRequest.class, new DeleteReplyRequestConverter());
+
         registry.addConverterFactory(new RequestConverterFactory(map));
     }
 }

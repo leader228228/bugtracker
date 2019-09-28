@@ -29,6 +29,7 @@ public class CreateReplyController extends Controller<CreateReplyRequest> {
     reply.setIssueId(request.getIssueId());
     try {
       reply.setReplyId(DAO.getId());
+      reply.save();
     } catch (Exception e) {
       logger.error("Unknown error while saving the reply, request=(" + request + ")", e);
       return getCommonErrorResponse("Error due to access to database: ", e.getClass().toString());
@@ -37,7 +38,7 @@ public class CreateReplyController extends Controller<CreateReplyRequest> {
   }
 
   @RequestMapping(
-          path = "/create/project",
+          path = "/create/reply",
           method = RequestMethod.POST,
           consumes = "application/json",
           produces = "application/json"
