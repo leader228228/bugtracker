@@ -46,7 +46,7 @@ public class DeleteIssueController extends Controller<DeleteIssueRequest> {
             consumes = "application/json",
             produces = "application/json"
     )
-    public Object delegateMethod(@RequestBody DeleteIssueRequest request, BindingResult bindingResult) {
+    public Object proxyMethod(@RequestBody DeleteIssueRequest request, BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
             return handle(request);
         }
