@@ -78,7 +78,7 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
     }
 
     private String arrayToString(int [] arr) {
-        if (arr == null) {
+        if (arr == null || arr.length == 0) {
             return "null";
         }
         StringBuilder stringBuilder = new StringBuilder();
@@ -89,7 +89,7 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
     }
 
     private String arrayToString(long [] arr) {
-        if (arr == null) {
+        if (arr == null || arr.length == 0) {
             return "null";
         }
         StringBuilder stringBuilder = new StringBuilder();
@@ -100,7 +100,7 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
     }
 
     private String arrayToString(Timestamp [] arr) {
-        if (arr == null) {
+        if (arr == null || arr.length == 0) {
             return "null";
         }
         StringBuilder stringBuilder = new StringBuilder();
