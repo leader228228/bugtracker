@@ -2,6 +2,8 @@ package ua.edu.sumdu.nc;
 
 import dao.DAO;
 import entities.bt.Issue;
+import entities.bt.Reply;
+import entities.bt.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -56,5 +58,24 @@ public class Utils {
         issue.setCreated(resultSet.getTimestamp("created"));
         issue.setStatusId(resultSet.getInt("status_id"));
         return issue;
+    }
+
+    public User readUser(ResultSet resultSet) throws SQLException {
+        User user = applicationContext.getBean("User",User.class);
+        user.setUserId(resultSet.getLong("user_id"));
+        user.setLogin(resultSet.getString("login"));
+        user.setPassword(resultSet.getString("password"));
+        user.setFirstName(resultSet.getString("first_name"));
+        user.setLastName(resultSet.getString("last_name"));
+        return user;
+    }
+
+    public Reply readReply(ResultSet resultSet) throws SQLException {
+        Reply reply = applicationContext.getBean("Reply",Reply.class);
+        reply.setAuthorId(resultSet.getLong("author_id"));
+        reply.setBody(resultSet.getString("body"));
+        reply.setIssueId(resultSet.getLong("issue_id"));
+        reply.setReplyId(resultSet.getLong("reply_id"));
+        return reply;
     }
 }

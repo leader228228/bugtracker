@@ -77,39 +77,6 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
         return preparedStatement;
     }
 
-    private String arrayToString(int [] arr) {
-        if (arr == null || arr.length == 0) {
-            return "null";
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i : arr) {
-            stringBuilder.append(i).append(",");
-        }
-        return stringBuilder.substring(0, stringBuilder.length() - 1);
-    }
-
-    private String arrayToString(long [] arr) {
-        if (arr == null || arr.length == 0) {
-            return "null";
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        for (long l : arr) {
-            stringBuilder.append(l).append(",");
-        }
-        return stringBuilder.substring(0, stringBuilder.length() - 1);
-    }
-
-    private String arrayToString(Timestamp [] arr) {
-        if (arr == null || arr.length == 0) {
-            return "null";
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Timestamp t : arr) {
-            stringBuilder.append("'").append(t.toString()).append("'").append(",");
-        }
-        return stringBuilder.substring(0, stringBuilder.length() - 1);
-    }
-
     @RequestMapping(
         path = "/search/issue",
         method = RequestMethod.POST,

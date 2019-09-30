@@ -1,5 +1,6 @@
 package entities.impl;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dao.DAO;
 import entities.bt.PersistanceEntity;
 import entities.bt.User;
