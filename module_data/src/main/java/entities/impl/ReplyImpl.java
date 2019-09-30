@@ -6,6 +6,7 @@ import entities.bt.Reply;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -15,6 +16,7 @@ public class ReplyImpl extends PersistanceEntity implements Reply {
     private String body;
     private long issueId;
     private long authorId;
+    private Date created;
 
     public ReplyImpl(DAO DAO) {
         super(DAO);
@@ -68,7 +70,6 @@ public class ReplyImpl extends PersistanceEntity implements Reply {
         }
     }
 
-
     @Override
     public void update() throws SQLException {
         try (Connection connection = DAO.getConnection();
@@ -83,6 +84,16 @@ public class ReplyImpl extends PersistanceEntity implements Reply {
             preparedStatement.setLong(4, getReplyId());
             preparedStatement.executeUpdate();
         }
+    }
+
+    @Override
+    public Date getCreated() {
+        return created;
+    }
+
+    @Override
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
     @Override

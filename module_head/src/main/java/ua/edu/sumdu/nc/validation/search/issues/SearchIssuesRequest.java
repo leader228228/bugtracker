@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ua.edu.sumdu.nc.validation.search.SearchRequest;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Data
@@ -18,5 +19,6 @@ public class SearchIssuesRequest implements SearchRequest {
     private String bodyRegexp;
     private int [] statusId;
     private long [] projectIds;
-    private Timestamp [] created;
+    private Date from;
+    private Date to;
 }

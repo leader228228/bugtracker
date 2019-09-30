@@ -55,7 +55,7 @@ public class Utils {
         issue.setBody(resultSet.getString("body"));
         issue.setTitle(resultSet.getString("title"));
         issue.setAssigneeId(resultSet.getLong("assignee_id"));
-        issue.setCreated(resultSet.getTimestamp("created"));
+        issue.setCreated(resultSet.getDate("created"));
         issue.setStatusId(resultSet.getInt("status_id"));
         return issue;
     }
@@ -76,6 +76,7 @@ public class Utils {
         reply.setBody(resultSet.getString("body"));
         reply.setIssueId(resultSet.getLong("issue_id"));
         reply.setReplyId(resultSet.getLong("reply_id"));
+        reply.setCreated(resultSet.getDate("created"));
         return reply;
     }
 }

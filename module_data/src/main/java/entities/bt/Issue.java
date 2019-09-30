@@ -1,6 +1,6 @@
 package entities.bt;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 
 public interface Issue extends Entity {
     long getIssueId();
@@ -11,8 +11,8 @@ public interface Issue extends Entity {
     String getBody();
     String getTitle();
     void setBody(String body);
-    Timestamp getCreated();
-    void setCreated(Timestamp created);
+    Date getCreated();
+    void setCreated(Date created);
     int getStatusId();
     void setStatusId(int statusId);
     long getProjectId();

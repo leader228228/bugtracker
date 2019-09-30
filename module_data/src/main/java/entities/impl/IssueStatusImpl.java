@@ -40,9 +40,8 @@ public class IssueStatusImpl extends PersistanceEntity implements IssueStatus {
     @Override
     public void save() throws SQLException {
         try (Connection connection = DAO.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO BT_ISSUE_STATUSES ("
-                     + "STATUS_ID, VALUE) "
-                     + "VALUES (?, ?)")) {
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                 "INSERT INTO BT_ISSUE_STATUSES (STATUS_ID, VALUE) VALUES (?, ?)")) {
             preparedStatement.setLong(1, getStatusId());
             preparedStatement.setString(2, getValue());
             preparedStatement.executeUpdate();
@@ -52,15 +51,13 @@ public class IssueStatusImpl extends PersistanceEntity implements IssueStatus {
     @Override
     public void update() throws SQLException {
         try (Connection connection = DAO.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE BT_ISSUE_STATUSES SET " +
-                     "VALUE = ? " +
-                     "WHERE STATUS_ID = ?;")) {
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                 "UPDATE BT_ISSUE_STATUSES SET VALUE = ? WHERE STATUS_ID = ?;")) {
             preparedStatement.setString(1, getValue());
             preparedStatement.setInt(2, getStatusId());
             preparedStatement.executeUpdate();
         }
     }
-
 
     @Override
     public void delete() throws SQLException {

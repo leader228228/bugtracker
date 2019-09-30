@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ua.edu.sumdu.nc.controllers.Controller;
 import ua.edu.sumdu.nc.validation.create.issues.CreateIssueRequest;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -31,7 +32,7 @@ public class CreateIssueController extends Controller<CreateIssueRequest> {
             logger.error("Unknown error while setting a new id to issue, request=(" + request + ")", e);
             return getCommonErrorResponse("Error due to access to database");
         }
-        issue.setCreated(Timestamp.valueOf(LocalDateTime.now()));
+        issue.setCreated(new Date(System.currentTimeMillis()));
         issue.setTitle(request.getTitle());
         issue.setAssigneeId(request.getAssigneeId());
         issue.setBody(request.getBody());

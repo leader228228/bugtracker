@@ -42,7 +42,7 @@ public class IssueSearcher {
           issue.setBody(resultSet.getString("body"));
           issue.setTitle(resultSet.getString("title"));
           issue.setAssigneeId(resultSet.getLong("assignee_id"));
-          issue.setCreated(resultSet.getTimestamp("created"));
+          issue.setCreated(resultSet.getDate("created"));
           issue.setStatusId(resultSet.getInt("status_id"));
           resultSet.close();
           return issue;

@@ -2,7 +2,6 @@ package ua.edu.sumdu.nc.controllers.search.replies;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import entities.bt.Issue;
 import entities.bt.Reply;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ua.edu.sumdu.nc.Utils;
 import ua.edu.sumdu.nc.controllers.Controller;
-import ua.edu.sumdu.nc.validation.search.issues.SearchIssuesRequest;
 import ua.edu.sumdu.nc.validation.search.replies.SearchRepliesRequest;
 
 import javax.validation.Valid;
@@ -68,10 +66,18 @@ public class SearchReplyController extends Controller<SearchRepliesRequest> {
             "(reply_id in (" + arrayToString(request.getReplyIds()) + ") or (1 = " + (request.getReplyIds() == null ? 1 : 2) + ")) " +
             " and (author_id in (" + arrayToString(request.getAuthorIds()) + ") or (1 = " + (request.getAuthorIds() == null ? 1 : 2) + ")) " +
             " and (issue_id in (" + arrayToString(request.getIssueIds()) + ") or (1 = " + (request.getIssueIds() == null ? 1 : 2) + ")) " +
-            " and regexp_like(\"body\", ?) ";
+            " and regexp_like(\"body\", ?) " +
+            " and (created >= to_date(?, ?) or (1 = " + (request.getFrom() == null ? 1 : 2) + ")) " +
+            " and (created <= to_date(?, ?) or (1 = " + (request.getTo() == null ? 1 : 2) + ")) ";
+
+        logger.fatal("QWE" + query);
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         /*Булевая алгебра + костыль {*/
         preparedStatement.setString(1, request.getBodyRegexp() == null ? ".*" : request.getBodyRegexp());
+        preparedStatement.setDate(2, request.getFrom());
+        preparedStatement.setString(3, DATE_FORMAT);
+        preparedStatement.setDate(4, request.getTo());
+        preparedStatement.setString(5, DATE_FORMAT);
         return preparedStatement;
     }
 

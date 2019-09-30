@@ -8,7 +8,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import ua.edu.sumdu.nc.validation.BTRequest;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +15,7 @@ public abstract class Controller<T extends BTRequest> {
     protected static final Logger logger = Logger.getRootLogger();
     protected DAO DAO;
     protected ApplicationContext appCtx;
-
+    protected String DATE_FORMAT = "YYYY-MM-DD"; // todo move to properties
     public Controller(@Autowired ApplicationContext appCtx) {
         this.appCtx = appCtx;
         DAO = appCtx.getBean("DAO", DAO.class);
@@ -76,17 +75,6 @@ public abstract class Controller<T extends BTRequest> {
         StringBuilder stringBuilder = new StringBuilder();
         for (long l : arr) {
             stringBuilder.append(l).append(",");
-        }
-        return stringBuilder.substring(0, stringBuilder.length() - 1);
-    }
-
-    protected String arrayToString(Timestamp[] arr) {
-        if (arr == null || arr.length == 0) {
-            return "null";
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Timestamp t : arr) {
-            stringBuilder.append("'").append(t.toString()).append("'").append(",");
         }
         return stringBuilder.substring(0, stringBuilder.length() - 1);
     }

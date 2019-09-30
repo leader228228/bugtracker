@@ -1,5 +1,7 @@
 package entities.bt;
 
+import java.sql.Date;
+
 public interface Reply extends Entity {
     long getReplyId();
     String getBody();
@@ -9,4 +11,6 @@ public interface Reply extends Entity {
     long getAuthorId();
     void setAuthorId(long authorId);
     void setReplyId(long replyId);
+    Date getCreated();
+    void setCreated(Date created);
 }

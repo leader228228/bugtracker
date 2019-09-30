@@ -3,13 +3,11 @@ package entities.impl;
 import dao.DAO;
 import entities.bt.Issue;
 import entities.bt.PersistanceEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 
 public class IssueImpl extends PersistanceEntity implements Issue {
     private long issueId;
@@ -17,7 +15,7 @@ public class IssueImpl extends PersistanceEntity implements Issue {
     private long assigneeId;
     private String title;
     private String body;
-    private Timestamp created;
+    private Date created;
     private int statusId;
     private long projectId;
 
@@ -69,12 +67,12 @@ public class IssueImpl extends PersistanceEntity implements Issue {
     }
 
     @Override
-    public Timestamp getCreated() {
+    public Date getCreated() {
         return created;
     }
 
     @Override
-    public void setCreated(Timestamp created) {
+    public void setCreated(Date created) {
         this.created = created;
     }
 
@@ -116,7 +114,7 @@ public class IssueImpl extends PersistanceEntity implements Issue {
                      " WHERE ISSUE_ID = ?")) {
             preparedStatement.setLong(1, getReporterId());
             preparedStatement.setLong(2, getAssigneeId());
-            preparedStatement.setTimestamp(3, getCreated());
+            preparedStatement.setDate(3, getCreated());
             preparedStatement.setInt(4, getStatusId());
             preparedStatement.setLong(5, getProjectId());
             preparedStatement.setString(6, getBody());
@@ -136,7 +134,7 @@ public class IssueImpl extends PersistanceEntity implements Issue {
             preparedStatement.setLong(1, getIssueId());
             preparedStatement.setLong(2, getReporterId());
             preparedStatement.setLong(3, getAssigneeId());
-            preparedStatement.setTimestamp(4, getCreated());
+            preparedStatement.setDate(4, getCreated());
             preparedStatement.setInt(5, getStatusId());
             preparedStatement.setLong(6, getProjectId());
             preparedStatement.setString(7, getBody());
