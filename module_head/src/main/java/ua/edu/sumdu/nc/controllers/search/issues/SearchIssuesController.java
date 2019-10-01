@@ -59,27 +59,26 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
     }
 
     private PreparedStatement getPreparedStatementFor(SearchIssuesRequest request, Connection connection) throws SQLException {
-        String query = "select * from bt_issues where " +
-            "(issue_id in (" + arrayToString(request.getIssueIds()) + ") or (1 = " + (request.getIssueIds() == null ? 1 : 2) + ")) " +
-            " and (reporter_id in (" + arrayToString(request.getReporterIds()) + ") or (1 = " + (request.getReporterIds() == null ? 1 : 2) + ")) " +
-            " and (assignee_id in (" + arrayToString(request.getAssigneeIds()) + ") or (1 = " + (request.getAssigneeIds() == null ? 1 : 2) + ")) " +
-            " and (status_id in (" + arrayToString(request.getStatusId()) + ") or (1 = " + (request.getStatusId() == null ? 1 : 2) + ")) " +
-            " and (project_id in (" + arrayToString(request.getProjectIds()) + ") or (1 = " + (request.getProjectIds() == null ? 1 : 2) + ")) " +
-            " and regexp_like(\"body\", ?) " +
-            " and regexp_like(title, ?) " +
-            " and (created >= to_date(?, ?) or (1 = " + (request.getFrom() == null ? 1 : 2) + ")) " +
-            " and (created <= to_date(?, ?) or (1 = " + (request.getTo() == null ? 1 : 2) + ")) ";
-        logger.fatal("QUERy={" + query + "}");
+        String query =
+            "select * from bt_issues i left join bt_replies r on i.issue_id = r.issue_id where " +
+            "(i.issue_id in (" + arrayToString(request.getIssueIds()) + ") or (1 = " + (request.getIssueIds() == null ? 1 : 2) + ")) " +
+            " and (i.reporter_id in (" + arrayToString(request.getReporterIds()) + ") or (1 = " + (request.getReporterIds() == null ? 1 : 2) + ")) " +
+            " and (i.assignee_id in (" + arrayToString(request.getAssigneeIds()) + ") or (1 = " + (request.getAssigneeIds() == null ? 1 : 2) + ")) " +
+            " and (i.status_id in (" + arrayToString(request.getStatusId()) + ") or (1 = " + (request.getStatusId() == null ? 1 : 2) + ")) " +
+            " and (i.project_id in (" + arrayToString(request.getProjectIds()) + ") or (1 = " + (request.getProjectIds() == null ? 1 : 2) + ")) " +
+            " and regexp_like(i.\"body\", ?) " +
+            " and regexp_like(i.title, ?) " +
+            " and (i.created >= ? or (1 = " + (request.getFrom() == null ? 1 : 2) + ")) " +
+            " and (i.created <= ? or (1 = " + (request.getTo() == null ? 1 : 2) + ")) " +
+            " and regexp_like(r.\"body\", ?) ";
+        logger.fatal("query={" + query + "}");
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         /*Булевая алгебра + костыль {*/
-
         preparedStatement.setString(1, request.getBodyRegexp() == null ? ".*" : request.getBodyRegexp());
         preparedStatement.setString(2, request.getTitleRegexp() == null ? ".*" : request.getTitleRegexp());
         preparedStatement.setDate(3, request.getFrom());
-        preparedStatement.setString(4, DATE_FORMAT);
-        preparedStatement.setDate(5, request.getTo());
-        preparedStatement.setString(6, DATE_FORMAT);
-
+        preparedStatement.setDate(4, request.getTo());
+        preparedStatement.setString(5, request.getReplyBodyRegexp() == null ? ".*" : request.getReplyBodyRegexp());
         return preparedStatement;
     }
 

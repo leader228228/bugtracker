@@ -15,7 +15,6 @@ public abstract class Controller<T extends BTRequest> {
     protected static final Logger logger = Logger.getRootLogger();
     protected DAO DAO;
     protected ApplicationContext appCtx;
-    protected String DATE_FORMAT = "YYYY-MM-DD"; // todo move to properties
     public Controller(@Autowired ApplicationContext appCtx) {
         this.appCtx = appCtx;
         DAO = appCtx.getBean("DAO", DAO.class);

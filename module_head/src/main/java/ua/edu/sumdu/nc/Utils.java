@@ -19,22 +19,9 @@ import java.sql.SQLException;
 @Scope(scopeName = "singleton")
 public class Utils {
     private ApplicationContext applicationContext;
-    private DAO DAO;
-    public static final String QUERY_GET_NEXT_ID = "select getId() id from dual";
 
-    public Utils(
-        @Qualifier("appConfig") ApplicationContext applicationContext,
-        @Qualifier(value = "DAO") DAO DAO
-        ) {
+    public Utils(@Qualifier("appConfig") ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
-        this.DAO = DAO;
-    }
-
-    public long getId() throws SQLException {
-        try (Connection connection = DAO.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_NEXT_ID);
-            return preparedStatement.executeQuery().getLong("id");
-        }
     }
 
     /**

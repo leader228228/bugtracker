@@ -21,4 +21,5 @@ public class SearchIssuesRequest implements SearchRequest {
     private long [] projectIds;
     private Date from;
     private Date to;
+    private String replyBodyRegexp;
 }

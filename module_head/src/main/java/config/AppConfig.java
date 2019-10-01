@@ -46,12 +46,14 @@ import java.util.Map;
 @EnableWebMvc
 @ComponentScan(basePackages = "ua")
 @PropertySource("classpath:/application.properties")
-public class AppConfig extends AnnotationConfigWebApplicationContext implements WebApplicationInitializer, WebMvcConfigurer {
+public class AppConfig
+    extends AnnotationConfigWebApplicationContext
+    implements WebApplicationInitializer, WebMvcConfigurer {
 
-    @Autowired
     private Environment env;
 
-    public AppConfig() {
+    public AppConfig(Environment env) {
+        this.env = env;
     }
 
     public Environment getEnv() {
@@ -105,8 +107,8 @@ public class AppConfig extends AnnotationConfigWebApplicationContext implements 
 
     @Bean(name = "Utils")
     @Scope(scopeName = "singleton")
-    public Utils utils(@Qualifier("appConfig") @Autowired ApplicationContext applicationContext, DAO dao) {
-        return new Utils(applicationContext, dao);
+    public Utils utils(@Qualifier("appConfig") ApplicationContext applicationContext) {
+        return new Utils(applicationContext);
     }
 
     @Override

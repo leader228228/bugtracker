@@ -67,17 +67,17 @@ public class SearchReplyController extends Controller<SearchRepliesRequest> {
             " and (author_id in (" + arrayToString(request.getAuthorIds()) + ") or (1 = " + (request.getAuthorIds() == null ? 1 : 2) + ")) " +
             " and (issue_id in (" + arrayToString(request.getIssueIds()) + ") or (1 = " + (request.getIssueIds() == null ? 1 : 2) + ")) " +
             " and regexp_like(\"body\", ?) " +
-            " and (created >= to_date(?, ?) or (1 = " + (request.getFrom() == null ? 1 : 2) + ")) " +
-            " and (created <= to_date(?, ?) or (1 = " + (request.getTo() == null ? 1 : 2) + ")) ";
-
-        logger.fatal("QWE" + query);
+            " and (created >= ? or (1 = " + (request.getFrom() == null ? 1 : 2) + ")) " +
+            " and (created <= ? or (1 = " + (request.getTo() == null ? 1 : 2) + ")) ";
+        logger.debug("QWE" + query);
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         /*Булевая алгебра + костыль {*/
         preparedStatement.setString(1, request.getBodyRegexp() == null ? ".*" : request.getBodyRegexp());
         preparedStatement.setDate(2, request.getFrom());
-        preparedStatement.setString(3, DATE_FORMAT);
-        preparedStatement.setDate(4, request.getTo());
-        preparedStatement.setString(5, DATE_FORMAT);
+        preparedStatement.setDate(3, request.getTo());
+        logger.debug("PREPARED STATEMENT FOR SEARCH ISSUE: " + preparedStatement.toString());
+        logger.debug("FROM: " + request.getFrom());
+        logger.debug("TO: " + request.getTo());
         return preparedStatement;
     }
 
