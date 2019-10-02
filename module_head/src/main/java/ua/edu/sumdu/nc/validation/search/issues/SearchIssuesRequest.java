@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import ua.edu.sumdu.nc.validation.search.SearchRequest;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor

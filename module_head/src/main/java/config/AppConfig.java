@@ -26,6 +26,11 @@ import ua.edu.sumdu.nc.converters.delete.issues.DeleteIssueRequestConverter;
 import ua.edu.sumdu.nc.converters.delete.projects.DeleteProjectRequestConverter;
 import ua.edu.sumdu.nc.converters.delete.replies.DeleteReplyRequestConverter;
 import ua.edu.sumdu.nc.converters.delete.users.DeleteUserRequestConverter;
+import ua.edu.sumdu.nc.converters.search.issues.IssueSearchRequestConverter;
+import ua.edu.sumdu.nc.converters.search.replies.ReplySearchRequestConverter;
+import ua.edu.sumdu.nc.converters.search.users.UserSearchRequestConverter;
+import ua.edu.sumdu.nc.converters.update.issues.IssueUpdateRequestConverter;
+import ua.edu.sumdu.nc.converters.update.replies.ReplyUpdateRequestConverter;
 import ua.edu.sumdu.nc.validation.BTRequest;
 import ua.edu.sumdu.nc.validation.create.issues.CreateIssueRequest;
 import ua.edu.sumdu.nc.validation.create.projects.CreateProjectRequest;
@@ -35,6 +40,11 @@ import ua.edu.sumdu.nc.validation.delete.issues.DeleteIssueRequest;
 import ua.edu.sumdu.nc.validation.delete.projects.DeleteProjectRequest;
 import ua.edu.sumdu.nc.validation.delete.replies.DeleteReplyRequest;
 import ua.edu.sumdu.nc.validation.delete.users.DeleteUserRequest;
+import ua.edu.sumdu.nc.validation.search.issues.SearchIssuesRequest;
+import ua.edu.sumdu.nc.validation.search.replies.SearchRepliesRequest;
+import ua.edu.sumdu.nc.validation.search.users.SearchUsersRequest;
+import ua.edu.sumdu.nc.validation.update.issues.UpdateIssueRequest;
+import ua.edu.sumdu.nc.validation.update.replies.UpdateReplyRequest;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
@@ -137,6 +147,13 @@ public class AppConfig
         map.put(DeleteProjectRequest.class, new DeleteProjectRequestConverter());
         map.put(DeleteUserRequest.class, new DeleteUserRequestConverter());
         map.put(DeleteReplyRequest.class, new DeleteReplyRequestConverter());
+
+        map.put(SearchIssuesRequest.class, new IssueSearchRequestConverter());
+        map.put(SearchRepliesRequest.class, new ReplySearchRequestConverter());
+        map.put(SearchUsersRequest.class, new UserSearchRequestConverter());
+
+        map.put(UpdateIssueRequest.class, new IssueUpdateRequestConverter());
+        map.put(UpdateReplyRequest.class, new ReplyUpdateRequestConverter());
 
         registry.addConverterFactory(new RequestConverterFactory(map));
     }
