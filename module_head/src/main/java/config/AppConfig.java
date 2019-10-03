@@ -59,10 +59,10 @@ import java.util.Map;
 public class AppConfig
     extends AnnotationConfigWebApplicationContext
     implements WebApplicationInitializer, WebMvcConfigurer {
-
+    @Autowired
     private Environment env;
 
-    public AppConfig(Environment env) {
+    public AppConfig() {
         this.env = env;
     }
 

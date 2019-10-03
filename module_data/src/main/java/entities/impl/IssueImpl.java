@@ -109,7 +109,7 @@ public class IssueImpl extends PersistanceEntity implements Issue {
                      ", CREATED = ?" +
                      ", STATUS_ID = ?" +
                      ", PROJECT_ID = ?" +
-                     ", BODY = ?" +
+                     ", \"body\" = ?" +
                      ", TITLE = ?" +
                      " WHERE ISSUE_ID = ?")) {
             preparedStatement.setLong(1, getReporterId());

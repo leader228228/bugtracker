@@ -60,7 +60,7 @@ public class ReplyImpl extends PersistanceEntity implements Reply {
     public void save() throws SQLException {
         try (Connection connection = DAO.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO BT_REPLIES ("
-                     + "REPLY_ID, BODY, ISSUE_ID, AUTHOR_ID) "
+                     + "REPLY_ID, \"body\", ISSUE_ID, AUTHOR_ID) "
                      + "VALUES (?, ?, ?, ?)")) {
             preparedStatement.setLong(1, getReplyId());
             preparedStatement.setString(2, getBody());

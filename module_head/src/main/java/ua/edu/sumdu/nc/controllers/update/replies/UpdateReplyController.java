@@ -42,7 +42,7 @@ public class UpdateReplyController extends Controller<UpdateReplyRequest> {
     }
 
     @RequestMapping(
-        path = "/update/issue",
+        path = "/update/reply",
         method = RequestMethod.POST,
         consumes = "application/json",
         produces = "application/json"
