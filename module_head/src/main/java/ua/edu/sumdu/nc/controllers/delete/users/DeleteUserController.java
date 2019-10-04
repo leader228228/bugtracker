@@ -4,10 +4,7 @@ import entities.bt.User;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ua.edu.sumdu.nc.controllers.Controller;
 import ua.edu.sumdu.nc.searchers.users.UserSearcher;
 import ua.edu.sumdu.nc.validation.delete.users.DeleteUserRequest;
@@ -23,17 +20,8 @@ public class DeleteUserController extends Controller<DeleteUserRequest> {
 
     @Override
     public Object handle(DeleteUserRequest request) {
-        UserSearcher replySearcher = appCtx.getBean("UserSearcher", UserSearcher.class);
-        User user = replySearcher.getUserByID(request.getUserId());
         try {
-            if (user != null) {
-                user.delete();
-                logger.info("User (ID = " + request.getUserId() + ") has been successfully deleted. Request = (" + request + ")");
-                return getCommonSuccessResponse(
-                    "User (ID = " + request.getUserId() + ") has been successfully deleted");
-            }
-            logger.error("Can not find user (ID = " + request.getUserId() + ")");
-            return getCommonErrorResponse("Can not find user (ID = " + request.getUserId() + ")");
+            return deleteUser(request.getUserId());
         } catch (Exception e) {
             logger.error("Error during user deletion. Request = (" + request + ")", e);
             return getCommonErrorResponse("Error during user deletion (ID = " + request.getUserId() + ")");
@@ -52,5 +40,29 @@ public class DeleteUserController extends Controller<DeleteUserRequest> {
         }
         logger.error("Invalid request: " + request.toString());
         return getInvalidRequestResponse(bindingResult);
+    }
+
+    private Object deleteUser(long userId) throws Exception {
+        UserSearcher replySearcher = appCtx.getBean("UserSearcher", UserSearcher.class);
+        User user = replySearcher.getUserByID(userId);
+        if (user != null) {
+            user.delete();
+            logger.info("User (id = " + userId + ") has been successfully deleted");
+            return getCommonSuccessResponse(
+                "User (id = " + userId + ") has been successfully deleted");
+        }
+        logger.error("Can not find user (id = " + userId + ")");
+        return getCommonErrorResponse("Can not find user (id = " + userId + ")");
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/delete/user/{id}", produces = "application/json")
+    public Object proxyMethod(@PathVariable(value = "id") long userId) {
+        try {
+            return deleteUser(userId);
+        } catch (Exception e) {
+            logger.error("Unknown error while deleting the user (id = " + userId + ")", e);
+            return getCommonErrorResponse(
+                "Unknown error while deleting the user (id = " + userId + ")");
+        }
     }
 }
