@@ -32,11 +32,11 @@ public class DeleteIssueController extends Controller<DeleteIssueRequest> {
             Issue issue = findIssueById(issueId);
             if (issue != null) {
                 issue.delete();
-                logger.info("Issue (ID = " + issueId + ") has been successfully deleted");
+                logger.info("Issue (id = " + issueId + ") has been successfully deleted");
                 return getCommonSuccessResponse(
-                    "Issue (ID = " + issueId + ") has been successfully deleted");
+                    "Issue (id = " + issueId + ") has been successfully deleted");
             }
-            logger.error("Can not find issue. Request = (" + issueId + ")");
+            logger.error("Can not find issue (id = " + issueId + ")");
             return getCommonErrorResponse("Can not find issue (ID = " + issueId + ")");
         } catch (Exception e) {
             logger.error("Error while issue deletion (ID = " + issueId + ")", e);
