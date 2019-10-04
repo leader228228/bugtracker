@@ -1,6 +1,5 @@
 package ua.edu.sumdu.nc.controllers.delete.projects;
 
-import entities.bt.Issue;
 import entities.bt.Project;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -8,11 +7,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ua.edu.sumdu.nc.controllers.Controller;
 import ua.edu.sumdu.nc.searchers.projects.ProjectSearcher;
-import ua.edu.sumdu.nc.validation.create.projects.CreateProjectRequest;
 import ua.edu.sumdu.nc.validation.delete.projects.DeleteProjectRequest;
 
 import javax.validation.Valid;
-import java.sql.SQLException;
 
 @RestController
 public class DeleteProjectController extends Controller<DeleteProjectRequest> {
