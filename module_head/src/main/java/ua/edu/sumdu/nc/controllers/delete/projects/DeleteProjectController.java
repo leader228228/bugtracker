@@ -5,10 +5,7 @@ import entities.bt.Project;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ua.edu.sumdu.nc.controllers.Controller;
 import ua.edu.sumdu.nc.searchers.projects.ProjectSearcher;
 import ua.edu.sumdu.nc.validation.create.projects.CreateProjectRequest;
@@ -26,26 +23,33 @@ public class DeleteProjectController extends Controller<DeleteProjectRequest> {
 
     @Override
     public Object handle(DeleteProjectRequest request) {
-        Project project = appCtx.getBean("ProjectSearcher", ProjectSearcher.class)
-            .getProjectByID(request.getProjectId());
-        if (project != null) {
-            try {
-                project.delete();
-                logger.info(
-                    "Project (ID = "
-                    + request.getProjectId()
-                    + ") has been successfully deleted. Request = ("
-                    + request + ")");
-                return getCommonSuccessResponse(
-                    "Project (ID = " + request.getProjectId() + ") has been successfully deleted");
-            } catch (Exception e) {
-                logger.error("Unknown error while deleting the project. Request = (" + request + ")", e);
-                return getCommonErrorResponse(
-                    "Unknown error while deleting the project (ID = " + request.getProjectId() + ")");
-            }
+        try {
+            return deleteProject(request.getProjectId());
+        } catch (Exception e) {
+            logger.error("Unknown error while deleting the project. Request = (" + request + ")", e);
+            return getCommonErrorResponse(
+                "Unknown error while deleting the project (id = " + request.getProjectId() + ")");
         }
-        logger.error("Unable to find project. Request = (" + request + ")");
-        return getCommonErrorResponse("Unable to find project (ID = " + request.getProjectId() + ")");
+    }
+
+    private Project findProjectById(long projectId) {
+        return appCtx.getBean("ProjectSearcher", ProjectSearcher.class)
+            .getProjectByID(projectId);
+    }
+
+    private Object deleteProject(long projectId) throws Exception {
+        Project project = findProjectById(projectId);
+        if (project != null) {
+            project.delete();
+            logger.info(
+                "Project (id = "
+                    + projectId
+                    + ") has been successfully deleted");
+            return getCommonSuccessResponse(
+                "Project (id = " + projectId + ") has been successfully deleted");
+        }
+        logger.error("Unable to find project (id = " + projectId + ")");
+        return getCommonErrorResponse("Unable to find project (id = " + projectId + ")");
     }
 
     @RequestMapping(
@@ -61,5 +65,16 @@ public class DeleteProjectController extends Controller<DeleteProjectRequest> {
         }
         logger.error("Invalid request: " + request.toString());
         return getInvalidRequestResponse(bindingResult);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/delete/project/{id}", produces = "application/json")
+    public Object proxyMethod(@PathVariable(value = "id") long projectId) {
+        try {
+            return deleteProject(projectId);
+        } catch (Exception e) {
+            logger.error("Unknown error while deleting the project (id = " + projectId + ")", e);
+            return getCommonErrorResponse(
+                "Unknown error while deleting the project (id = " + projectId + ")");
+        }
     }
 }
