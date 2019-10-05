@@ -168,7 +168,7 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
 
     @Override
     protected Class<? extends Entity> getClassForMarshalling() {
-        return IssueImpl.class;
+        return appCtx.getBean("Issue", Issue.class).getClass();
     }
 
     private String marshallIssueToJSON(Issue issue) throws IOException {
