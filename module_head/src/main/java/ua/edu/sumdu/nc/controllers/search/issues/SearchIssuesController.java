@@ -16,10 +16,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 public class SearchIssuesController extends Controller<SearchIssuesRequest> {
@@ -130,10 +127,18 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
         return '%' + escapePattern(string) + '%';
     }
 
-    @GetMapping(path = "/search/issue/title/{title}", produces = "application/json")
-    public Object proxyMethod(@PathVariable(name = "title") String title) {
+    private boolean checkByWhat(String byWhat) {
+        Set<String> supportedFileds = new HashSet<String>(Arrays.asList("body", "title"));
+        return supportedFileds.contains(byWhat);
+    }
 
-        String selectQuery = "select * from bt_issues where \"body\" like ? escape ?";
+    @GetMapping(path = "/search/issue/{byWhat}/{string}", produces = "application/json")
+    public Object proxyMethod(@PathVariable(name = "string") String title, @PathVariable(name = "byWhat") String byWhat) {
+        if (!checkByWhat(byWhat)) {
+            logger.error("The attempt to search issues by unknown field (" + byWhat + ") failed");
+            return getCommonErrorResponse("Can not recognize field " + byWhat);
+        }
+        String selectQuery = "select * from bt_issues where lower(" + (byWhat.equals("body") ? "\"body\"" : "title") + ") like lower(?) escape ?";
         try (Connection connection = DAO.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
             String pattern = getPattern(title);
