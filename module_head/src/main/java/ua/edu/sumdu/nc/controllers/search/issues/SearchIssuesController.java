@@ -13,8 +13,11 @@ import ua.edu.sumdu.nc.searchers.issues.IssueSearcher;
 import ua.edu.sumdu.nc.validation.search.issues.SearchIssuesRequest;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -77,7 +80,10 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
         preparedStatement.setString(2, request.getTitleRegexp() == null ? ".*" : request.getTitleRegexp());
         preparedStatement.setDate(3, request.getFrom());
         preparedStatement.setDate(4, request.getTo());
-        preparedStatement.setString(5, request.getReplyBodyRegexp() == null ? ".*" : request.getReplyBodyRegexp());
+        preparedStatement.setString(
+            5,
+            request.getReplyBodyRegexp() == null ? ".*" : request.getReplyBodyRegexp()
+        );
         return preparedStatement;
     }
 
@@ -95,7 +101,7 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
         return getInvalidRequestResponse(bindingResult);
     }
 
-    @GetMapping(path = "/search/issue/{id}" ,produces = "application/json")
+    @GetMapping(path = "/search/issue/id/{id}" ,produces = "application/json")
     public Object proxyMethod(@PathVariable(name = "id") long issueId) {
         IssueSearcher issueSearcher = appCtx.getBean("IssueSearcher", IssueSearcher.class);
         Issue issue = issueSearcher.getIssueByID(issueId);
@@ -114,5 +120,58 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
             return getCommonErrorResponse("Issue found", "Error occurred during it processing");
         }
         return getCommonSuccessResponse("Issue found", stringWriter.toString());
+    }
+
+    private String escapePattern(String string) {
+        return string.replaceAll("%", escapeChar + "%").replaceAll("\\\\", "" + escapeChar + escapeChar).replaceAll("_", escapeChar + "_");
+    }
+
+    private String getPattern(String string) {
+        return '%' + escapePattern(string) + '%';
+    }
+
+    @GetMapping(path = "/search/issue/title/{title}", produces = "application/json")
+    public Object proxyMethod(@PathVariable(name = "title") String title) {
+
+        String selectQuery = "select * from bt_issues where \"body\" like ? escape ?";
+        try (Connection connection = DAO.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+            String pattern = getPattern(title);
+            preparedStatement.setString(1, pattern);
+            preparedStatement.setString(2, String.valueOf(escapeChar));
+            List<Issue> issues = new LinkedList<>();
+            Utils utils = appCtx.getBean("Utils", Utils.class);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    issues.add(utils.readIssue(resultSet));
+                }
+            }
+            logger.error(issues.size() + " issues found");
+            return getCommonSuccessResponse(marshallIssuesToJSON(issues).toArray(new String[0]));
+        } catch (SQLException | IOException e) {
+            logger.error("Exception during issue searching", e);
+            return getCommonErrorResponse("Error during issue searching");
+        }
+    }
+
+    private String marshallIssueToJSON(Issue issue) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectWriter objectWriter = objectMapper.writerFor(Issue.class);
+        StringWriter stringWriter = new StringWriter();
+        objectWriter.writeValue(stringWriter, issue);
+        return stringWriter.toString();
+    }
+
+    private Collection<String> marshallIssuesToJSON(Collection<Issue> issues) throws IOException {
+        List<String> result = new ArrayList<>(issues.size());
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectWriter objectWriter = objectMapper.writerFor(Issue.class);
+        StringWriter stringWriter = new StringWriter();
+        for (Issue i : issues) {
+            objectWriter.writeValue(stringWriter, i);
+            result.add(stringWriter.toString());
+            stringWriter.flush();
+        }
+        return result;
     }
 }

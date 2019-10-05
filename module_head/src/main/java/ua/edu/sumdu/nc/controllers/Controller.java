@@ -15,6 +15,7 @@ public abstract class Controller<T extends BTRequest> {
     protected static final Logger logger = Logger.getRootLogger();
     protected DAO DAO;
     protected ApplicationContext appCtx;
+    protected char escapeChar = '\\';
     public Controller(ApplicationContext appCtx) {
         this.appCtx = appCtx;
         DAO = appCtx.getBean("DAO", DAO.class);
