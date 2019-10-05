@@ -1,14 +1,19 @@
 package ua.edu.sumdu.nc.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import dao.DAO;
+import entities.bt.Entity;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import ua.edu.sumdu.nc.validation.BTRequest;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public abstract class Controller<T extends BTRequest> {
@@ -16,9 +21,27 @@ public abstract class Controller<T extends BTRequest> {
     protected DAO DAO;
     protected ApplicationContext appCtx;
     protected char escapeChar = '\\';
+
     public Controller(ApplicationContext appCtx) {
         this.appCtx = appCtx;
         DAO = appCtx.getBean("DAO", DAO.class);
+    }
+
+    protected Class<? extends Entity> getClassForMarshalling() {
+        throw new UnsupportedOperationException();
+    }
+
+    protected Collection<String> marshallEntitiesToJSON(Collection<? extends Entity> entities) throws IOException {
+        List<String> result = new ArrayList<>(entities.size());
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectWriter objectWriter = objectMapper.writerFor(getClassForMarshalling());
+        StringWriter stringWriter = new StringWriter();
+        for (Entity e : entities) {
+            objectWriter.writeValue(stringWriter, e);
+            result.add(stringWriter.toString());
+            stringWriter.flush();
+        }
+        return result;
     }
 
     public abstract Object handle(T request);

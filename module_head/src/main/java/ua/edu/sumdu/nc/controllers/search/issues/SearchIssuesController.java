@@ -2,7 +2,9 @@ package ua.edu.sumdu.nc.controllers.search.issues;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import entities.bt.Entity;
 import entities.bt.Issue;
+import entities.impl.IssueImpl;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.validation.BindingResult;
@@ -158,11 +160,16 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
                 }
             }
             logger.error(issues.size() + " issues found");
-            return getCommonSuccessResponse(marshallIssuesToJSON(issues).toArray(new String[0]));
+            return getCommonSuccessResponse(marshallEntitiesToJSON(issues).toArray(new String[0]));
         } catch (SQLException | IOException e) {
             logger.error("Exception during issue searching", e);
             return getCommonErrorResponse("Error during issue searching");
         }
+    }
+
+    @Override
+    protected Class<? extends Entity> getClassForMarshalling() {
+        return IssueImpl.class;
     }
 
     private String marshallIssueToJSON(Issue issue) throws IOException {
@@ -173,16 +180,5 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
         return stringWriter.toString();
     }
 
-    private Collection<String> marshallIssuesToJSON(Collection<Issue> issues) throws IOException {
-        List<String> result = new ArrayList<>(issues.size());
-        ObjectMapper objectMapper = new ObjectMapper();
-        ObjectWriter objectWriter = objectMapper.writerFor(Issue.class);
-        StringWriter stringWriter = new StringWriter();
-        for (Issue i : issues) {
-            objectWriter.writeValue(stringWriter, i);
-            result.add(stringWriter.toString());
-            stringWriter.flush();
-        }
-        return result;
-    }
+
 }
