@@ -6,12 +6,10 @@ import entities.bt.Issue;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ua.edu.sumdu.nc.Utils;
 import ua.edu.sumdu.nc.controllers.Controller;
+import ua.edu.sumdu.nc.searchers.issues.IssueSearcher;
 import ua.edu.sumdu.nc.validation.search.issues.SearchIssuesRequest;
 
 import javax.validation.Valid;
@@ -58,7 +56,8 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
         }
     }
 
-    private PreparedStatement getPreparedStatementFor(SearchIssuesRequest request, Connection connection) throws SQLException {
+    private PreparedStatement getPreparedStatementFor(SearchIssuesRequest request, Connection connection)
+        throws SQLException {
         String query =
             "select * from bt_issues i left join bt_replies r on i.issue_id = r.issue_id where " +
             "(i.issue_id in (" + arrayToString(request.getIssueIds()) + ") or (1 = " + (request.getIssueIds() == null ? 1 : 2) + ")) " +
@@ -94,5 +93,26 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
         }
         logger.error("Invalid request: " + request.toString());
         return getInvalidRequestResponse(bindingResult);
+    }
+
+    @GetMapping(path = "/search/issue/{id}" ,produces = "application/json")
+    public Object proxyMethod(@PathVariable(name = "id") long issueId) {
+        IssueSearcher issueSearcher = appCtx.getBean("IssueSearcher", IssueSearcher.class);
+        Issue issue = issueSearcher.getIssueByID(issueId);
+        if (issue == null) {
+            logger.info("Can not find issue (id = " + issueId + ")");
+            return getCommonErrorResponse("Can not find issue (id = " + issueId + ")");
+        }
+        logger.info("Issue (id = " + issueId + ") has been found");
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectWriter objectWriter = objectMapper.writerFor(Issue.class);
+        StringWriter stringWriter = new StringWriter();
+        try {
+            objectWriter.writeValue(stringWriter, issue);
+        } catch (Exception e) {
+            logger.error("Error during marshalling issue to json", e);
+            return getCommonErrorResponse("Issue found", "Error occurred during it processing");
+        }
+        return getCommonSuccessResponse("Issue found", stringWriter.toString());
     }
 }
