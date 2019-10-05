@@ -33,7 +33,6 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
             PreparedStatement preparedStatement = getPreparedStatementFor(request, connection);
             ResultSet resultSet = preparedStatement.executeQuery()
         ) {
-            Utils utils = appCtx.getBean("Utils", Utils.class);
             List<Issue> issues = new LinkedList<>();
             List<String> _issues = new LinkedList<>();
             ObjectMapper objectMapper = new ObjectMapper();

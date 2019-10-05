@@ -36,7 +36,6 @@ public class SearchUsersController extends Controller<SearchUsersRequest> {
             PreparedStatement preparedStatement = getPreparedStatementFor(request, connection);
             ResultSet resultSet = preparedStatement.executeQuery()
         ) {
-            Utils utils = appCtx.getBean("Utils", Utils.class);
             List<User> users = new LinkedList<>();
             List<String> _users = new LinkedList<>();
             ObjectMapper objectMapper = new ObjectMapper();

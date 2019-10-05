@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import ua.edu.sumdu.nc.Utils;
 import ua.edu.sumdu.nc.validation.BTRequest;
 
 import java.io.IOException;
@@ -20,11 +21,13 @@ public abstract class Controller<T extends BTRequest> {
     protected static final Logger logger = Logger.getRootLogger();
     protected DAO DAO;
     protected ApplicationContext appCtx;
+    protected Utils utils;
     protected char escapeChar = '\\';
 
     public Controller(ApplicationContext appCtx) {
         this.appCtx = appCtx;
         DAO = appCtx.getBean("DAO", DAO.class);
+        utils = appCtx.getBean("Utils", Utils.class);
     }
 
     protected Class<? extends Entity> getClassForMarshalling() {
