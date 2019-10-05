@@ -120,7 +120,10 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
     }
 
     private String escapePattern(String string) {
-        return string.replaceAll("%", escapeChar + "%").replaceAll("\\\\", "" + escapeChar + escapeChar).replaceAll("_", escapeChar + "_");
+        return string
+            .replaceAll("%",escapeChar + "%")
+            .replaceAll("\\\\", "" + escapeChar + escapeChar)
+            .replaceAll("_", escapeChar + "_");
     }
 
     private String getPattern(String string) {
@@ -133,12 +136,15 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
     }
 
     @GetMapping(path = "/search/issue/{byWhat}/{string}", produces = "application/json")
-    public Object proxyMethod(@PathVariable(name = "string") String title, @PathVariable(name = "byWhat") String byWhat) {
+    public Object proxyMethod(
+        @PathVariable(name = "string") String title,
+        @PathVariable(name = "byWhat") String byWhat) {
         if (!checkByWhat(byWhat)) {
             logger.error("The attempt to search issues by unknown field (" + byWhat + ") failed");
             return getCommonErrorResponse("Can not recognize field " + byWhat);
         }
-        String selectQuery = "select * from bt_issues where lower(" + (byWhat.equals("body") ? "\"body\"" : "title") + ") like lower(?) escape ?";
+        String selectQuery =
+            "select * from bt_issues where lower(" + byWhat + ") like lower(?) escape ?";
         try (Connection connection = DAO.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
             String pattern = getPattern(title);
