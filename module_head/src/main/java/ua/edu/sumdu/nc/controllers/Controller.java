@@ -48,7 +48,7 @@ public abstract class Controller<T extends BTRequest> {
     }
 
     public abstract Object handle(T request);
-    protected static final String RESP_JSON_TEMPL = "{\"status\":\"#status#\",\"messages\":[#messages#]}";
+    private static final String RESP_JSON_TEMPL = "{\"status\":\"#status#\",\"messages\":[#messages#]}";
 
     protected static String getCommonErrorResponse(String...messages) {
         return RESP_JSON_TEMPL

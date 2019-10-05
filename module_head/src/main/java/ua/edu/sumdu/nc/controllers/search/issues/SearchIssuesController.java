@@ -178,6 +178,4 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
         objectWriter.writeValue(stringWriter, issue);
         return stringWriter.toString();
     }
-
-
 }
