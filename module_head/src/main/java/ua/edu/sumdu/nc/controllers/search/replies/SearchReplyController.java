@@ -3,7 +3,6 @@ package ua.edu.sumdu.nc.controllers.search.replies;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import entities.bt.Entity;
-import entities.bt.Issue;
 import entities.bt.Reply;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
