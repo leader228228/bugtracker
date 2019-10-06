@@ -13,7 +13,6 @@ import ua.edu.sumdu.nc.validation.BTRequest;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -73,7 +72,6 @@ public abstract class Controller<T extends BTRequest> {
     }
 
     protected static String getCommonSuccessResponse(String...messages) {
-        logger.debug("getCommonSuccessResponse " + String.join("[|||||]", messages));
         return RESP_JSON_TEMPL
                 .replaceFirst("#status#", "success")
                 .replaceFirst("#messages#", wrapAndJoin(messages));

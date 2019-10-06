@@ -156,6 +156,32 @@ public class SearchReplyController extends Controller<SearchRepliesRequest> {
         }
     }
 
+    @GetMapping(
+        path = "/search/reply/body/{body}",
+        produces = "application/json"
+    )
+    public Object searchRepliesByBody(@PathVariable(name = "body") String body) {
+        String query = "select * from bt_replies where lower(\"body\") like lower(?) escape ?";
+        try (
+            Connection connection = DAO.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
+            preparedStatement.setString(1, getPatternContains(body));
+            preparedStatement.setString(2, String.valueOf(escapeChar));
+            Collection<Reply> replies = (Collection<Reply>) executeAndParse(preparedStatement);
+            logger.info(replies.size() + " replies found during searching by body");
+            return getCommonSuccessResponse(marshallEntitiesToJSON(replies).toArray(new String[0]));
+        } catch (SQLException | IOException e) {
+            logger.error("Unknown error occurred during replies search", e);
+            return getCommonErrorResponse("Unknown error occurred during replies search");
+        }
+    }
+
+    @Override
+    protected Entity readEntity(ResultSet resultSet) throws SQLException {
+        return appCtx.getBean("Utils", Utils.class).readReply(resultSet);
+    }
+
     @Override
     protected Class<? extends Entity> getClassForMarshalling() {
         return appCtx.getBean("Reply", Reply.class).getClass();
