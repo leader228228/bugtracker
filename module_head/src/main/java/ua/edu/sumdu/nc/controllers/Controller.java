@@ -22,7 +22,7 @@ public abstract class Controller<T extends BTRequest> {
     protected DAO DAO;
     protected ApplicationContext appCtx;
     protected Utils utils;
-    protected char escapeChar = '\\';
+    protected char escapeChar = '&';
 
     public Controller(ApplicationContext appCtx) {
         this.appCtx = appCtx;

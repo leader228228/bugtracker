@@ -123,7 +123,7 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
     private String escapePattern(String string) {
         return string
             .replaceAll("%",escapeChar + "%")
-            .replaceAll("\\\\", "" + escapeChar + escapeChar)
+            .replaceAll(String.valueOf(escapeChar), "" + escapeChar + escapeChar)
             .replaceAll("_", escapeChar + "_");
     }
 
