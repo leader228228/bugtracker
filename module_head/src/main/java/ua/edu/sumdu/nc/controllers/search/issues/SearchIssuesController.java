@@ -119,13 +119,6 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
         return getCommonSuccessResponse("Issue found", stringWriter.toString());
     }
 
-    private String escapeRegexChars(String string) {
-        return string
-            .replaceAll("%",escapeChar + "%")
-            .replaceAll(String.valueOf(escapeChar), "" + escapeChar + escapeChar)
-            .replaceAll("_", escapeChar + "_");
-    }
-
     private String getPattern(String string) {
         return '%' + escapeRegexChars(string) + '%';
     }

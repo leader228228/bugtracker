@@ -34,6 +34,13 @@ public abstract class Controller<T extends BTRequest> {
         throw new UnsupportedOperationException();
     }
 
+    protected String escapeRegexChars(String string) {
+        return string
+            .replaceAll("%",escapeChar + "%")
+            .replaceAll(String.valueOf(escapeChar), "" + escapeChar + escapeChar)
+            .replaceAll("_", escapeChar + "_");
+    }
+
     protected Collection<String> marshallEntitiesToJSON(Collection<? extends Entity> entities) throws IOException {
         List<String> result = new ArrayList<>(entities.size());
         ObjectMapper objectMapper = new ObjectMapper();
