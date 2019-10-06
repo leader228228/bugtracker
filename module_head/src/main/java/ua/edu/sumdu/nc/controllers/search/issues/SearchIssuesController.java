@@ -162,12 +162,4 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
     protected Class<? extends Entity> getClassForMarshalling() {
         return appCtx.getBean("Issue", Issue.class).getClass();
     }
-
-    private String marshallIssueToJSON(Issue issue) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        ObjectWriter objectWriter = objectMapper.writerFor(Issue.class);
-        StringWriter stringWriter = new StringWriter();
-        objectWriter.writeValue(stringWriter, issue);
-        return stringWriter.toString();
-    }
 }
