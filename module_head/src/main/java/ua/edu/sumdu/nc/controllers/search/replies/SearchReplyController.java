@@ -3,6 +3,7 @@ package ua.edu.sumdu.nc.controllers.search.replies;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import entities.bt.Entity;
+import entities.bt.Issue;
 import entities.bt.Reply;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -130,6 +131,30 @@ public class SearchReplyController extends Controller<SearchRepliesRequest> {
             logger.error("Error occurred during reply searching", e);
             return getCommonErrorResponse("Error occurred during reply searching");
         }
+    }
+
+    @GetMapping(
+        path = "/search/reply/author/{author}",
+        produces = "application/json"
+    )
+    public Object proxyMethod(@PathVariable(name = "author") String author) {
+        String query = "select r.* from bt_replies r left join bt_users u on r.author_id = u.user_id " +
+            "where lower(u.first_name || ' ' || u.last_name) like lower(?)";
+        try (Connection connection = DAO.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, '%' + escapeRegexChars(author) + '%');
+            List<Reply> replies = new LinkedList<>();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    replies.add(utils.readReply(resultSet));
+                }
+            }
+            logger.info(replies.size() + " replies found");
+            return getCommonSuccessResponse(marshallEntitiesToJSON(replies).toArray(new String[0]));
+        } catch (SQLException | IOException e) {
+            logger.error("Error while searching replies by author", e);
+            return getCommonErrorResponse("Error occurred");
+        }
+
     }
 
     @Override

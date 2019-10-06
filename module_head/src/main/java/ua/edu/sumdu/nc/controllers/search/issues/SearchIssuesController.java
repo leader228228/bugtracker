@@ -124,7 +124,7 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
     }
 
     private boolean checkByWhat(String byWhat) {
-        Set<String> supportedFileds = new HashSet<String>(Arrays.asList("body", "title"));
+        Set<String> supportedFileds = new HashSet<>(Arrays.asList("body", "title"));
         return supportedFileds.contains(byWhat);
     }
 
