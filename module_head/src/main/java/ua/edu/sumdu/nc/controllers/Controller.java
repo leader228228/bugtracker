@@ -39,6 +39,10 @@ public abstract class Controller<T extends BTRequest> {
         throw new UnsupportedOperationException();
     }
 
+    protected String getPatternContains(String string) {
+        return '%' + escapeRegexChars(string) + '%';
+    }
+
     protected String escapeRegexChars(String string) {
         return string
             .replaceAll("%",escapeChar + "%")

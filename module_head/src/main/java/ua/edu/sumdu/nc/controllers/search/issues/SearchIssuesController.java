@@ -21,6 +21,7 @@ import java.util.*;
 
 @RestController
 public class SearchIssuesController extends Controller<SearchIssuesRequest> {
+
     public SearchIssuesController(@Qualifier(value = "appConfig") ApplicationContext appCtx) {
         super(appCtx);
     }
@@ -119,13 +120,9 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
         return getCommonSuccessResponse("Issue found", stringWriter.toString());
     }
 
-    private String getPattern(String string) {
-        return '%' + escapeRegexChars(string) + '%';
-    }
-
     private boolean checkByWhat(String byWhat) {
-        Set<String> supportedFileds = new HashSet<>(Arrays.asList("body", "title"));
-        return supportedFileds.contains(byWhat);
+        Set<String> supportedFields = new HashSet<>(Arrays.asList("body", "title"));
+        return supportedFields.contains(byWhat);
     }
 
     @GetMapping(path = "/search/issue/{byWhat}/{string}", produces = "application/json")
@@ -140,7 +137,7 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
             "select * from bt_issues where lower(" + byWhat + ") like lower(?) escape ?";
         try (Connection connection = DAO.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
-            String pattern = getPattern(title);
+            String pattern = getPatternContains(title);
             preparedStatement.setString(1, pattern);
             preparedStatement.setString(2, String.valueOf(escapeChar));
             List<Issue> issues = new LinkedList<>();

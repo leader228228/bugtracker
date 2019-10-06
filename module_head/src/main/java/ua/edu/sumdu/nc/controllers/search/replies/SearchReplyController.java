@@ -140,7 +140,7 @@ public class SearchReplyController extends Controller<SearchRepliesRequest> {
         String query = "select r.* from bt_replies r left join bt_users u on r.author_id = u.user_id " +
             "where lower(u.first_name || ' ' || u.last_name) like lower(?) escape ?";
         try (Connection connection = DAO.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, '%' + escapeRegexChars(author) + '%');
+            preparedStatement.setString(1, getPatternContains(author));
             preparedStatement.setString(2, String.valueOf(escapeChar));
             List<Reply> replies = new LinkedList<>();
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
