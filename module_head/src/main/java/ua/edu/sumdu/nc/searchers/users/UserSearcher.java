@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import ua.edu.sumdu.nc.Utils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,12 +39,7 @@ public class UserSearcher {
                 if (resultSet.next()) {
                     User user = appCtx.getBean("User", User.class);
                     if (user != null) {
-                        user.setUserId(resultSet.getLong("user_id"));
-                        user.setPassword(resultSet.getString("password"));
-                        user.setLogin(resultSet.getString("login"));
-                        user.setLastName(resultSet.getString("last_name"));
-                        user.setFirstName(resultSet.getString("first_name"));
-                        return user;
+                        return appCtx.getBean("Utils", Utils.class).readUser(resultSet);
                     }
                 }
                 logger.error("Can not find user (user_id = " + userID + ")");

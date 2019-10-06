@@ -13,8 +13,13 @@ import ua.edu.sumdu.nc.validation.BTRequest;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 public abstract class Controller<T extends BTRequest> {
@@ -49,7 +54,7 @@ public abstract class Controller<T extends BTRequest> {
         for (Entity e : entities) {
             objectWriter.writeValue(stringWriter, e);
             result.add(stringWriter.toString());
-            stringWriter.flush();
+            stringWriter = new StringWriter();
         }
         return result;
     }
@@ -64,6 +69,7 @@ public abstract class Controller<T extends BTRequest> {
     }
 
     protected static String getCommonSuccessResponse(String...messages) {
+        logger.debug("getCommonSuccessResponse " + String.join("[|||||]", messages));
         return RESP_JSON_TEMPL
                 .replaceFirst("#status#", "success")
                 .replaceFirst("#messages#", wrapAndJoin(messages));
@@ -110,5 +116,19 @@ public abstract class Controller<T extends BTRequest> {
             stringBuilder.append(l).append(",");
         }
         return stringBuilder.substring(0, stringBuilder.length() - 1);
+    }
+
+    protected Entity readEntity(ResultSet resultSet) throws SQLException {
+        throw new UnsupportedOperationException();
+    }
+
+    protected Collection<? extends Entity> executeAndParse(PreparedStatement preparedStatement) throws SQLException {
+        Collection<Entity> entities = new LinkedList<>();
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                entities.add(readEntity(resultSet));
+            }
+            return entities;
+        }
     }
 }
