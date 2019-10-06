@@ -46,7 +46,7 @@ public class SearchUsersController extends Controller<SearchUsersRequest> {
             StringWriter stringWriter = new StringWriter();
             for (User user : users) {
                 objectWriter.writeValue(stringWriter,
-                    Collections.singletonList(createUserViewsForRespose(Collections.singletonList(user))).get(0));
+                    Collections.singletonList(createUserViewsForResponse(Collections.singletonList(user))).get(0));
                 _users.add(stringWriter.toString());
                 stringWriter.flush();
             }
@@ -107,7 +107,7 @@ public class SearchUsersController extends Controller<SearchUsersRequest> {
             preparedStatement.setString(1, '%' + escapeRegexChars(name) + '%');
             preparedStatement.setString(2, String.valueOf(escapeChar));
             Collection<User> userViews =
-                createUserViewsForRespose((Collection<User>) executeAndParse(preparedStatement));
+                createUserViewsForResponse((Collection<User>) executeAndParse(preparedStatement));
             logger.info(userViews.size() + " users found");
             return getCommonSuccessResponse(marshallEntitiesToJSON(userViews).toArray(new String[0]));
         } catch (SQLException | IOException e) {
@@ -207,7 +207,7 @@ public class SearchUsersController extends Controller<SearchUsersRequest> {
         }
     }
 
-    private Collection<User> createUserViewsForRespose(Collection<User> users) {
+    private Collection<User> createUserViewsForResponse(Collection<User> users) {
         Collection<User> _users = new ArrayList<>(users.size());
         for (User user : users) {
             _users.add(new UserView(user));

@@ -63,16 +63,16 @@ public abstract class Controller<T extends BTRequest> {
     }
 
     public abstract Object handle(T request);
-    private static final String RESP_JSON_TEMPL = "{\"status\":\"#status#\",\"messages\":[#messages#]}";
+    private static final String RESPONSE_JSON_TEMPLATE = "{\"status\":\"#status#\",\"messages\":[#messages#]}";
 
     protected static String getCommonErrorResponse(String...messages) {
-        return RESP_JSON_TEMPL
+        return RESPONSE_JSON_TEMPLATE
                 .replaceFirst("#status#", "error")
                 .replaceFirst("#messages#", wrapAndJoin(messages));
     }
 
     protected static String getCommonSuccessResponse(String...messages) {
-        return RESP_JSON_TEMPL
+        return RESPONSE_JSON_TEMPLATE
                 .replaceFirst("#status#", "success")
                 .replaceFirst("#messages#", wrapAndJoin(messages));
     }

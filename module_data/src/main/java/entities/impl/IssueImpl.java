@@ -2,14 +2,14 @@ package entities.impl;
 
 import dao.DAO;
 import entities.bt.Issue;
-import entities.bt.PersistanceEntity;
+import entities.bt.PersistenceEntity;
 
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class IssueImpl extends PersistanceEntity implements Issue {
+public class IssueImpl extends PersistenceEntity implements Issue {
     private long issueId;
     private long reporterId;
     private long assigneeId;

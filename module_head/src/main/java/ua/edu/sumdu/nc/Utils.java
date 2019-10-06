@@ -1,17 +1,13 @@
 package ua.edu.sumdu.nc;
 
-import dao.DAO;
 import entities.bt.Issue;
 import entities.bt.Reply;
 import entities.bt.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

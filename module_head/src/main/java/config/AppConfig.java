@@ -63,7 +63,6 @@ public class AppConfig
     private Environment env;
 
     public AppConfig() {
-        this.env = env;
     }
 
     public Environment getEnv() {

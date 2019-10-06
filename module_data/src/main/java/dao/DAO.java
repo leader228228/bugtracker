@@ -1,7 +1,5 @@
 package dao;
 
-import entities.bt.Entity;
-import entities.bt.Issue;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;

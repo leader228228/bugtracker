@@ -2,9 +2,9 @@ package entities.bt;
 
 import dao.DAO;
 
-public abstract class PersistanceEntity {
+public abstract class PersistenceEntity {
     protected DAO DAO;
-    public PersistanceEntity(DAO DAO) {
+    public PersistenceEntity(DAO DAO) {
         this.DAO = DAO;
     }
 }

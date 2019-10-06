@@ -2,10 +2,7 @@ package ua.edu.sumdu.nc.validation.create.users;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Data;
-import lombok.Generated;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
 import ua.edu.sumdu.nc.validation.BTRequest;
