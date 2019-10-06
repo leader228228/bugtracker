@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import entities.bt.Entity;
 import entities.bt.Issue;
-import entities.impl.IssueImpl;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.validation.BindingResult;
@@ -120,7 +119,7 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
         return getCommonSuccessResponse("Issue found", stringWriter.toString());
     }
 
-    private String escapePattern(String string) {
+    private String escapeRegexChars(String string) {
         return string
             .replaceAll("%",escapeChar + "%")
             .replaceAll(String.valueOf(escapeChar), "" + escapeChar + escapeChar)
@@ -128,7 +127,7 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
     }
 
     private String getPattern(String string) {
-        return '%' + escapePattern(string) + '%';
+        return '%' + escapeRegexChars(string) + '%';
     }
 
     private boolean checkByWhat(String byWhat) {
