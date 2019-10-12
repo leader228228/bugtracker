@@ -1,12 +1,13 @@
 package ua.edu.sumdu.nc.controllers.delete.projects;
 
+import dao.DAO;
 import entities.bt.Project;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ua.edu.sumdu.nc.Utils;
 import ua.edu.sumdu.nc.controllers.Controller;
-import ua.edu.sumdu.nc.searchers.projects.ProjectSearcher;
 import ua.edu.sumdu.nc.validation.delete.projects.DeleteProjectRequest;
 
 import javax.validation.Valid;
@@ -14,8 +15,8 @@ import javax.validation.Valid;
 @RestController
 public class DeleteProjectController extends Controller<DeleteProjectRequest> {
 
-    public DeleteProjectController(@Qualifier(value = "appConfig") ApplicationContext appCtx) {
-        super(appCtx);
+    public DeleteProjectController(@Qualifier(value = "appConfig") ApplicationContext appCtx, DAO DAO, Utils utils) {
+        super(appCtx, DAO, utils);
     }
 
     @Override
@@ -30,8 +31,7 @@ public class DeleteProjectController extends Controller<DeleteProjectRequest> {
     }
 
     private Project findProjectById(long projectId) {
-        return appCtx.getBean("ProjectSearcher", ProjectSearcher.class)
-            .getProjectByID(projectId);
+        return utils.getProjectSearcher().getProjectByID(projectId);
     }
 
     private Object deleteProject(long projectId) throws Exception {

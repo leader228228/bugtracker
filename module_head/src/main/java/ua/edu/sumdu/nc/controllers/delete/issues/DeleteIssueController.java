@@ -1,21 +1,22 @@
 package ua.edu.sumdu.nc.controllers.delete.issues;
 
+import dao.DAO;
 import entities.bt.Issue;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ua.edu.sumdu.nc.Utils;
 import ua.edu.sumdu.nc.controllers.Controller;
-import ua.edu.sumdu.nc.searchers.issues.IssueSearcher;
 import ua.edu.sumdu.nc.validation.delete.issues.DeleteIssueRequest;
 
 @Validated
 @RestController
 public class DeleteIssueController extends Controller<DeleteIssueRequest> {
 
-    public DeleteIssueController(@Qualifier(value = "appConfig") ApplicationContext appCtx) {
-        super(appCtx);
+    public DeleteIssueController(@Qualifier(value = "appConfig") ApplicationContext appCtx, DAO DAO, Utils utils) {
+        super(appCtx, DAO, utils);
     }
 
     @Override
@@ -24,7 +25,7 @@ public class DeleteIssueController extends Controller<DeleteIssueRequest> {
     }
 
     private Issue findIssueById(long issueId) {
-        return appCtx.getBean("IssueSearcher", IssueSearcher.class).getIssueByID(issueId);
+        return utils.getIssueSearcher().getIssueByID(issueId);
     }
 
     private Object deleteIssue(long issueId) {

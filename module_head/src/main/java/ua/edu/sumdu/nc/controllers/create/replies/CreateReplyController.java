@@ -1,5 +1,6 @@
 package ua.edu.sumdu.nc.controllers.create.replies;
 
+import dao.DAO;
 import entities.bt.Reply;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ua.edu.sumdu.nc.Utils;
 import ua.edu.sumdu.nc.controllers.Controller;
 import ua.edu.sumdu.nc.validation.create.replies.CreateReplyRequest;
 
@@ -15,13 +17,14 @@ import javax.validation.Valid;
 
 @RestController
 public class CreateReplyController extends Controller<CreateReplyRequest> {
-    public CreateReplyController(@Qualifier(value = "appConfig")ApplicationContext appCtx) {
-        super(appCtx);
+
+    public CreateReplyController(@Qualifier(value = "appConfig") ApplicationContext appCtx, DAO DAO, Utils utils) {
+        super(appCtx, DAO, utils);
     }
 
     @Override
     public Object handle(CreateReplyRequest request) {
-        Reply reply = appCtx.getBean("Reply", Reply.class);
+        Reply reply = utils.getReply();
         reply.setAuthorId(request.getAuthorId());
         reply.setBody(request.getBody());
         reply.setIssueId(request.getIssueId());

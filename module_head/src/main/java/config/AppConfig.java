@@ -51,7 +51,6 @@ import javax.servlet.ServletRegistration;
 import java.util.HashMap;
 import java.util.Map;
 
-
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "ua")

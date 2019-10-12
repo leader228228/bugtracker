@@ -1,10 +1,15 @@
 package ua.edu.sumdu.nc.controllers.create.projects;
 
+import dao.DAO;
 import entities.bt.Project;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import ua.edu.sumdu.nc.Utils;
 import ua.edu.sumdu.nc.controllers.Controller;
 import ua.edu.sumdu.nc.validation.create.projects.CreateProjectRequest;
 
@@ -14,13 +19,13 @@ import java.sql.SQLException;
 @RestController
 public class CreateProjectController extends Controller<CreateProjectRequest> {
 
-    public CreateProjectController(@Qualifier(value = "appConfig") ApplicationContext appCtx) {
-        super(appCtx);
+    public CreateProjectController(@Qualifier(value = "appConfig") ApplicationContext appCtx, DAO DAO, Utils utils) {
+        super(appCtx, DAO, utils);
     }
 
     @Override
     public Object handle(CreateProjectRequest request) {
-        Project project = appCtx.getBean("Project", Project.class);
+        Project project = utils.getProject();
         project.setName(request.getName());
         try {
             project.setProjectId(DAO.getId());

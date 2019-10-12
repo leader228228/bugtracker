@@ -3,12 +3,17 @@ package ua.edu.sumdu.nc.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import dao.DAO;
-import entities.bt.Entity;
+import entities.bt.*;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.ApplicationContext;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import ua.edu.sumdu.nc.Utils;
+import ua.edu.sumdu.nc.searchers.issues.IssueSearcher;
+import ua.edu.sumdu.nc.searchers.projects.ProjectSearcher;
+import ua.edu.sumdu.nc.searchers.replies.ReplySearcher;
+import ua.edu.sumdu.nc.searchers.users.UserSearcher;
 import ua.edu.sumdu.nc.validation.BTRequest;
 
 import java.io.IOException;
@@ -21,6 +26,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+/** @noinspection WeakerAccess*/
 public abstract class Controller<T extends BTRequest> {
     protected static final Logger logger = Logger.getRootLogger();
     protected DAO DAO;
@@ -28,10 +34,10 @@ public abstract class Controller<T extends BTRequest> {
     protected Utils utils;
     protected char escapeChar = '&';
 
-    public Controller(ApplicationContext appCtx) {
+    public Controller(ApplicationContext appCtx, DAO DAO, Utils utils) {
         this.appCtx = appCtx;
-        DAO = appCtx.getBean("DAO", DAO.class);
-        utils = appCtx.getBean("Utils", Utils.class);
+        this.DAO = DAO;
+        this.utils = utils;
     }
 
     protected Class<? extends Entity> getClassForMarshalling() {

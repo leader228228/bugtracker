@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ua.edu.sumdu.nc.Utils;
 import ua.edu.sumdu.nc.controllers.Controller;
 import ua.edu.sumdu.nc.searchers.replies.ReplySearcher;
 import ua.edu.sumdu.nc.validation.delete.replies.DeleteReplyRequest;
@@ -13,8 +14,9 @@ import javax.validation.Valid;
 
 @RestController
 public class DeleteReplyController extends Controller<DeleteReplyRequest> {
-    public DeleteReplyController(@Qualifier(value = "appConfig")ApplicationContext appCtx) {
-      super(appCtx);
+
+    public DeleteReplyController(@Qualifier(value = "appConfig") ApplicationContext appCtx, dao.DAO DAO, Utils utils) {
+        super(appCtx, DAO, utils);
     }
 
     @Override
@@ -42,7 +44,7 @@ public class DeleteReplyController extends Controller<DeleteReplyRequest> {
     }
 
     private Object deleteReply(long replyId) throws Exception {
-        ReplySearcher replySearcher = appCtx.getBean("ReplySearcher", ReplySearcher.class);
+        ReplySearcher replySearcher = utils.getReplySearcher();
         Reply reply = replySearcher.getReplyByID(replyId);
         if (reply != null) {
             reply.delete();

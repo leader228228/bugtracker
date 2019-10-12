@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ua.edu.sumdu.nc.Utils;
 import ua.edu.sumdu.nc.controllers.Controller;
 import ua.edu.sumdu.nc.searchers.users.UserSearcher;
 import ua.edu.sumdu.nc.validation.delete.users.DeleteUserRequest;
@@ -14,8 +15,8 @@ import javax.validation.Valid;
 @RestController
 public class DeleteUserController extends Controller<DeleteUserRequest> {
 
-    public DeleteUserController(@Qualifier(value = "appConfig") ApplicationContext appCtx) {
-        super(appCtx);
+    public DeleteUserController(@Qualifier(value = "appConfig")ApplicationContext appCtx, dao.DAO DAO, Utils utils) {
+        super(appCtx, DAO, utils);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class DeleteUserController extends Controller<DeleteUserRequest> {
     }
 
     private Object deleteUser(long userId) throws Exception {
-        UserSearcher replySearcher = appCtx.getBean("UserSearcher", UserSearcher.class);
+        UserSearcher replySearcher = utils.getUserSearcher();
         User user = replySearcher.getUserByID(userId);
         if (user != null) {
             user.delete();

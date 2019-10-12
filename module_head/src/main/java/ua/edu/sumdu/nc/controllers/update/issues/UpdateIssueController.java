@@ -1,5 +1,6 @@
 package ua.edu.sumdu.nc.controllers.update.issues;
 
+import dao.DAO;
 import entities.bt.Issue;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -8,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ua.edu.sumdu.nc.Utils;
 import ua.edu.sumdu.nc.controllers.Controller;
-import ua.edu.sumdu.nc.searchers.issues.IssueSearcher;
 import ua.edu.sumdu.nc.validation.update.issues.UpdateIssueRequest;
 
 import javax.validation.Valid;
@@ -17,13 +18,13 @@ import javax.validation.Valid;
 @RestController
 public class UpdateIssueController extends Controller<UpdateIssueRequest> {
 
-    public UpdateIssueController(@Qualifier(value = "appConfig") ApplicationContext appCtx) {
-        super(appCtx);
+    public UpdateIssueController(@Qualifier(value = "appConfig") ApplicationContext appCtx, DAO DAO, Utils utils) {
+        super(appCtx, DAO, utils);
     }
 
     @Override
     public Object handle(UpdateIssueRequest request) {
-        Issue issue = appCtx.getBean("IssueSearcher", IssueSearcher.class).getIssueByID(request.getIssueId());
+        Issue issue = utils.getIssueSearcher().getIssueByID(request.getIssueId());
         if (request.getAssigneeId() != null) {
             issue.setAssigneeId(request.getAssigneeId());
             logger.info("New assignee_id for issue (issue_id = "

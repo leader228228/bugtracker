@@ -1,5 +1,6 @@
 package ua.edu.sumdu.nc.controllers.create.issues;
 
+import dao.DAO;
 import entities.bt.Issue;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ua.edu.sumdu.nc.Utils;
 import ua.edu.sumdu.nc.controllers.Controller;
 import ua.edu.sumdu.nc.validation.create.issues.CreateIssueRequest;
 
@@ -19,13 +21,13 @@ import java.sql.SQLException;
 @RestController
 public class CreateIssueController extends Controller<CreateIssueRequest> {
 
-    public CreateIssueController(@Qualifier(value = "appConfig") ApplicationContext appCtx) {
-        super(appCtx);
+    public CreateIssueController(@Qualifier(value = "appConfig") ApplicationContext appCtx, DAO DAO, Utils utils) {
+        super(appCtx, DAO, utils);
     }
 
     @Override
     public Object handle(CreateIssueRequest request) {
-        Issue issue = appCtx.getBean( "Issue", Issue.class);
+        Issue issue = utils.getIssue();
         issue.setStatusId(request.getStatusId());
         try {
             issue.setIssueId(DAO.getId());

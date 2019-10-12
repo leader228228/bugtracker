@@ -2,6 +2,7 @@ package ua.edu.sumdu.nc.controllers.search.replies;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import dao.DAO;
 import entities.bt.Entity;
 import entities.bt.Reply;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,8 +24,9 @@ import java.util.*;
 
 @RestController
 public class SearchReplyController extends Controller<SearchRepliesRequest> {
-    public SearchReplyController(@Qualifier(value = "appConfig") ApplicationContext appCtx) {
-        super(appCtx);
+
+    public SearchReplyController(@Qualifier(value = "appConfig") ApplicationContext appCtx, DAO DAO, Utils utils) {
+        super(appCtx, DAO, utils);
     }
 
     @Override
@@ -34,7 +36,6 @@ public class SearchReplyController extends Controller<SearchRepliesRequest> {
             PreparedStatement preparedStatement = getPreparedStatementFor(request, connection);
             ResultSet resultSet = preparedStatement.executeQuery()
         ) {
-            Utils utils = appCtx.getBean("Utils", Utils.class);
             List<Reply> replies = new LinkedList<>();
             List<String> _replies = new LinkedList<>();
             ObjectMapper objectMapper = new ObjectMapper();
@@ -59,7 +60,8 @@ public class SearchReplyController extends Controller<SearchRepliesRequest> {
         }
     }
 
-    private PreparedStatement getPreparedStatementFor(SearchRepliesRequest request, Connection connection) throws SQLException {
+    private PreparedStatement getPreparedStatementFor(SearchRepliesRequest request, Connection connection)
+        throws SQLException {
         String query = "select * from bt_replies where " +
             "(reply_id in (" + arrayToString(request.getReplyIds()) + ") or (1 = " + (request.getReplyIds() == null ? 1 : 2) + ")) " +
             " and (author_id in (" + arrayToString(request.getAuthorIds()) + ") or (1 = " + (request.getAuthorIds() == null ? 1 : 2) + ")) " +
@@ -139,7 +141,10 @@ public class SearchReplyController extends Controller<SearchRepliesRequest> {
     public Object proxyMethod(@PathVariable(name = "author") String author) {
         String query = "select r.* from bt_replies r left join bt_users u on r.author_id = u.user_id " +
             "where lower(u.first_name || ' ' || u.last_name) like lower(?) escape ?";
-        try (Connection connection = DAO.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (
+            Connection connection = DAO.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
             preparedStatement.setString(1, getPatternContains(author));
             preparedStatement.setString(2, String.valueOf(escapeChar));
             List<Reply> replies = new LinkedList<>();
@@ -168,6 +173,7 @@ public class SearchReplyController extends Controller<SearchRepliesRequest> {
         ) {
             preparedStatement.setString(1, getPatternContains(body));
             preparedStatement.setString(2, String.valueOf(escapeChar));
+            //noinspection unchecked
             Collection<Reply> replies = (Collection<Reply>) executeAndParse(preparedStatement);
             logger.info(replies.size() + " replies found during searching by body");
             return getCommonSuccessResponse(marshallEntitiesToJSON(replies).toArray(new String[0]));
@@ -179,11 +185,11 @@ public class SearchReplyController extends Controller<SearchRepliesRequest> {
 
     @Override
     protected Entity readEntity(ResultSet resultSet) throws SQLException {
-        return appCtx.getBean("Utils", Utils.class).readReply(resultSet);
+        return utils.readReply(resultSet);
     }
 
     @Override
     protected Class<? extends Entity> getClassForMarshalling() {
-        return appCtx.getBean("Reply", Reply.class).getClass();
+        return utils.getReply().getClass();
     }
 }

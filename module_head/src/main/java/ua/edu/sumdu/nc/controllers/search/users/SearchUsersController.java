@@ -3,6 +3,7 @@ package ua.edu.sumdu.nc.controllers.search.users;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import dao.DAO;
 import entities.bt.Entity;
 import entities.bt.User;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,8 +25,9 @@ import java.util.*;
 
 @RestController
 public class SearchUsersController extends Controller<SearchUsersRequest> {
-    public SearchUsersController(@Qualifier(value = "appConfig") ApplicationContext appCtx) {
-        super(appCtx);
+
+    public SearchUsersController(@Qualifier(value = "appConfig") ApplicationContext appCtx, DAO DAO, Utils utils) {
+        super(appCtx, DAO, utils);
     }
 
     @Override
@@ -68,7 +70,7 @@ public class SearchUsersController extends Controller<SearchUsersRequest> {
             " and regexp_like(last_name, ?) ";
         logger.fatal("QUERy={" + query + "}");
         PreparedStatement preparedStatement = connection.prepareStatement(query);
-        /*Булевая алгебра + костыль {*/
+        /*Булевая алгебра + костыль*/
         preparedStatement.setString(
             1,
             request.getFirstNameRegexp() == null ? ".*" : request.getFirstNameRegexp()
@@ -118,13 +120,12 @@ public class SearchUsersController extends Controller<SearchUsersRequest> {
 
     @Override
     protected Class<? extends Entity> getClassForMarshalling() {
-        //return appCtx.getBean("User", User.class).getClass();
         return UserView.class;
     }
 
     @Override
     protected Entity readEntity(ResultSet resultSet) throws SQLException {
-        return appCtx.getBean("Utils", Utils.class).readUser(resultSet);
+        return utils.readUser(resultSet);
     }
 
     private static class UserView implements User {
@@ -192,17 +193,17 @@ public class SearchUsersController extends Controller<SearchUsersRequest> {
         }
 
         @Override
-        public void update() throws SQLException {
+        public void update() {
             throw new UnsupportedOperationException("Can not update this user view");
         }
 
         @Override
-        public void save() throws SQLException {
+        public void save() {
             throw new UnsupportedOperationException("Can not save this user view");
         }
 
         @Override
-        public void delete() throws SQLException {
+        public void delete() {
             throw new UnsupportedOperationException("Can not delete this user view");
         }
     }

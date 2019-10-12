@@ -2,6 +2,7 @@ package ua.edu.sumdu.nc.controllers.search.issues;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import dao.DAO;
 import entities.bt.Entity;
 import entities.bt.Issue;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,8 +23,8 @@ import java.util.*;
 @RestController
 public class SearchIssuesController extends Controller<SearchIssuesRequest> {
 
-    public SearchIssuesController(@Qualifier(value = "appConfig") ApplicationContext appCtx) {
-        super(appCtx);
+    public SearchIssuesController(@Qualifier(value = "appConfig") ApplicationContext appCtx, DAO DAO, Utils utils) {
+        super(appCtx, DAO, utils);
     }
 
     @Override
@@ -73,7 +74,7 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
             " and regexp_like(r.\"body\", ?) ";
         logger.fatal("query={" + query + "}");
         PreparedStatement preparedStatement = connection.prepareStatement(query);
-        /*Булевая алгебра + костыль {*/
+        /*Булевая алгебра + костыль*/
         preparedStatement.setString(1, request.getBodyRegexp() == null ? ".*" : request.getBodyRegexp());
         preparedStatement.setString(2, request.getTitleRegexp() == null ? ".*" : request.getTitleRegexp());
         preparedStatement.setDate(3, request.getFrom());
@@ -99,9 +100,9 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
         return getInvalidRequestResponse(bindingResult);
     }
 
-    @GetMapping(path = "/search/issue/id/{id}" ,produces = "application/json")
+    @GetMapping(path = "/search/issue/id/{id}", produces = "application/json")
     public Object proxyMethod(@PathVariable(name = "id") long issueId) {
-        IssueSearcher issueSearcher = appCtx.getBean("IssueSearcher", IssueSearcher.class);
+        IssueSearcher issueSearcher = utils.getIssueSearcher();
         Issue issue = issueSearcher.getIssueByID(issueId);
         if (issue == null) {
             logger.info("Can not find issue (id = " + issueId + ")");
@@ -141,7 +142,6 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
             preparedStatement.setString(1, pattern);
             preparedStatement.setString(2, String.valueOf(escapeChar));
             List<Issue> issues = new LinkedList<>();
-            Utils utils = appCtx.getBean("Utils", Utils.class);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     issues.add(utils.readIssue(resultSet));
@@ -157,6 +157,6 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
 
     @Override
     protected Class<? extends Entity> getClassForMarshalling() {
-        return appCtx.getBean("Issue", Issue.class).getClass();
+        return utils.getIssue().getClass();
     }
 }
