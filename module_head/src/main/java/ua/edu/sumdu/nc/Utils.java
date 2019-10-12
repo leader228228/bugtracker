@@ -37,7 +37,7 @@ public class Utils {
      * !NOTE the method expects that you have invoked {@code ResultSet.next()} method before
      * */
     public Issue readIssue(ResultSet resultSet) throws SQLException {
-        Issue issue = appCtx.getBean("Issue", Issue.class);
+        Issue issue = getIssue();
         issue.setIssueId(resultSet.getLong("issue_id"));
         issue.setReporterId(resultSet.getLong("reporter_id"));
         issue.setProjectId(resultSet.getLong("project_id"));
@@ -50,7 +50,7 @@ public class Utils {
     }
 
     public User readUser(ResultSet resultSet) throws SQLException {
-        User user = appCtx.getBean("User",User.class);
+        User user = getUser();
         user.setUserId(resultSet.getLong("user_id"));
         user.setLogin(resultSet.getString("login"));
         user.setPassword(resultSet.getString("password"));
@@ -60,7 +60,7 @@ public class Utils {
     }
 
     public Reply readReply(ResultSet resultSet) throws SQLException {
-        Reply reply = appCtx.getBean("Reply",Reply.class);
+        Reply reply = getReply();
         reply.setAuthorId(resultSet.getLong("author_id"));
         reply.setBody(resultSet.getString("body"));
         reply.setIssueId(resultSet.getLong("issue_id"));
