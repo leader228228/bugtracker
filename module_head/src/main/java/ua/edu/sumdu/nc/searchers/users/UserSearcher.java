@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-import ua.edu.sumdu.nc.Utils;
+import ua.edu.sumdu.nc.controllers.Utils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

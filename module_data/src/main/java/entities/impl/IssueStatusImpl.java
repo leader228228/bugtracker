@@ -1,8 +1,6 @@
 package entities.impl;
 
-import dao.DAO;
 import entities.bt.IssueStatus;
-import entities.bt.PersistenceEntity;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
@@ -10,12 +8,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 @Component
-public class IssueStatusImpl extends PersistenceEntity implements IssueStatus {
+public class IssueStatusImpl implements IssueStatus {
     private int statusId;
     private String value;
 
-    public IssueStatusImpl(DAO DAO) {
-        super(DAO);
+    public IssueStatusImpl() {
     }
 
     public void setStatusId(int statusId) {

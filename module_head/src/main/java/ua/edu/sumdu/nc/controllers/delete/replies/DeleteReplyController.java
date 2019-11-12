@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ua.edu.sumdu.nc.Utils;
+import ua.edu.sumdu.nc.controllers.Utils;
 import ua.edu.sumdu.nc.controllers.Controller;
 import ua.edu.sumdu.nc.searchers.replies.ReplySearcher;
 import ua.edu.sumdu.nc.validation.delete.replies.DeleteReplyRequest;

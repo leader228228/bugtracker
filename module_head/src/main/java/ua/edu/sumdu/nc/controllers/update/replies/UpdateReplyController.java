@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ua.edu.sumdu.nc.Utils;
+import ua.edu.sumdu.nc.controllers.Utils;
 import ua.edu.sumdu.nc.controllers.Controller;
-import ua.edu.sumdu.nc.searchers.replies.ReplySearcher;
 import ua.edu.sumdu.nc.validation.update.replies.UpdateReplyRequest;
 
 import javax.validation.Valid;

@@ -1,7 +1,6 @@
 package entities.impl;
 
 import dao.DAO;
-import entities.bt.PersistenceEntity;
 import entities.bt.User;
 import org.springframework.stereotype.Component;
 
@@ -10,15 +9,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 @Component
-public class UserImpl extends PersistenceEntity implements User {
+public class UserImpl implements User {
     private long userId;
     private String firstName;
     private String lastName;
     private String login;
     private String password;
 
-    public UserImpl(DAO DAO) {
-        super(DAO);
+    public UserImpl() {
     }
 
     public void setUserId(long userId) {

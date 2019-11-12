@@ -19,7 +19,7 @@ public class CreateIssueRequest implements CreateRequest {
 
     @Range(min = 0)
     @JsonProperty(defaultValue = "0")
-    private long assigneeId;
+    private Long assigneeId;
 
     @JsonProperty(required = true)
     @NotBlank
@@ -30,9 +30,8 @@ public class CreateIssueRequest implements CreateRequest {
     @Length(max = 4000, message = "{request.create.issue.error.toLongBodyMessage}")
     private String body;
 
-    @JsonProperty(defaultValue = "0")
     @Range(min = 1)
-    private int statusId;
+    private Integer statusId;
 
     @JsonProperty(required = true)
     @Range(min = 1)

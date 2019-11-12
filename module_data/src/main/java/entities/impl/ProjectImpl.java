@@ -1,19 +1,16 @@
 package entities.impl;
 
-import dao.DAO;
-import entities.bt.PersistenceEntity;
 import entities.bt.Project;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class ProjectImpl extends PersistenceEntity implements Project {
+public class ProjectImpl implements Project {
     private long projectId;
     private String name;
 
-    public ProjectImpl(DAO DAO) {
-        super(DAO);
+    public ProjectImpl() {
     }
 
     public void setProjectId(long projectId) {

@@ -1,7 +1,5 @@
 package entities.impl;
 
-import dao.DAO;
-import entities.bt.PersistenceEntity;
 import entities.bt.Reply;
 import org.springframework.stereotype.Component;
 
@@ -11,15 +9,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 @Component
-public class ReplyImpl extends PersistenceEntity implements Reply {
+public class ReplyImpl implements Reply {
     private long replyId;
     private String body;
     private long issueId;
     private long authorId;
     private Date created;
 
-    public ReplyImpl(DAO DAO) {
-        super(DAO);
+    public ReplyImpl() {
     }
 
     public void setReplyId(long replyId) {

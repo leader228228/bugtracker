@@ -5,11 +5,9 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import dao.DAO;
 import entities.bt.Entity;
 import entities.bt.Issue;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ua.edu.sumdu.nc.Utils;
+import ua.edu.sumdu.nc.controllers.Utils;
 import ua.edu.sumdu.nc.controllers.Controller;
 import ua.edu.sumdu.nc.searchers.issues.IssueSearcher;
 import ua.edu.sumdu.nc.validation.search.issues.SearchIssuesRequest;
@@ -23,8 +21,8 @@ import java.util.*;
 @RestController
 public class SearchIssuesController extends Controller<SearchIssuesRequest> {
 
-    public SearchIssuesController(@Qualifier(value = "appConfig") ApplicationContext appCtx, DAO DAO, Utils utils) {
-        super(appCtx, DAO, utils);
+    public SearchIssuesController(Utils utils) {
+        super(utils);
     }
 
     @Override
@@ -58,7 +56,7 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
         }
     }
 
-    private PreparedStatement getPreparedStatementFor(SearchIssuesRequest request, Connection connection)
+    /*private PreparedStatement getPreparedStatementFor(SearchIssuesRequest request, Connection connection)
         throws SQLException {
         String query =
             "select * from bt_issues i left join bt_replies r on i.issue_id = r.issue_id where " +
@@ -74,7 +72,7 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
             " and regexp_like(r.\"body\", ?) ";
         logger.fatal("query={" + query + "}");
         PreparedStatement preparedStatement = connection.prepareStatement(query);
-        /*Булевая алгебра + костыль*/
+        *//*Булевая алгебра + костыль*//*
         preparedStatement.setString(1, request.getBodyRegexp() == null ? ".*" : request.getBodyRegexp());
         preparedStatement.setString(2, request.getTitleRegexp() == null ? ".*" : request.getTitleRegexp());
         preparedStatement.setDate(3, request.getFrom());
@@ -84,7 +82,7 @@ public class SearchIssuesController extends Controller<SearchIssuesRequest> {
             request.getReplyBodyRegexp() == null ? ".*" : request.getReplyBodyRegexp()
         );
         return preparedStatement;
-    }
+    }*/
 
     @RequestMapping(
         path = "/search/issue",
