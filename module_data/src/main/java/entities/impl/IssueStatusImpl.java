@@ -3,10 +3,6 @@ package entities.impl;
 import entities.bt.IssueStatus;
 import org.springframework.stereotype.Component;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 @Component
 public class IssueStatusImpl implements IssueStatus {
     private int statusId;
@@ -32,38 +28,6 @@ public class IssueStatusImpl implements IssueStatus {
     @Override
     public void setValue(String newValue) {
         value = newValue;
-    }
-
-    @Override
-    public void save() throws SQLException {
-        try (Connection connection = DAO.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(
-                 "insert into bt_issue_statuses (status_id, value) values (?, ?)")) {
-            preparedStatement.setLong(1, getStatusId());
-            preparedStatement.setString(2, getValue());
-            preparedStatement.executeUpdate();
-        }
-    }
-
-    @Override
-    public void update() throws SQLException {
-        try (Connection connection = DAO.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(
-                 "update bt_issue_statuses set value = ? where status_id = ?")) {
-            preparedStatement.setString(1, getValue());
-            preparedStatement.setInt(2, getStatusId());
-            preparedStatement.executeUpdate();
-        }
-    }
-
-    @Override
-    public void delete() throws SQLException {
-        try (Connection connection = DAO.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "delete from bt_issue_statuses where issue_id = ?");
-            preparedStatement.setInt(1, getStatusId());
-            preparedStatement.execute();
-        }
     }
 
     @Override

@@ -1,4 +1,4 @@
-package ua.edu.sumdu.nc.services;
+package ua.edu.sumdu.nc.services.issues;
 
 import entities.bt.Issue;
 import org.apache.log4j.Logger;
@@ -159,8 +159,8 @@ public class IssueService {
         if (reportersIDs.length == 0) {
             return getAll();
         }
-        String reporterIDs = Arrays.toString(reportersIDs);
-        String getIssues = "select * from bt_issues where assignee_id in (" + reporterIDs.substring(1, reporterIDs.length() - 1) + ")";
+        String _reportersIDs = Arrays.toString(reportersIDs);
+        String getIssues = "select * from bt_issues where assignee_id in (" + _reportersIDs.substring(1, _reportersIDs.length() - 1) + ")";
         Collection<Issue> issues = new ArrayList<>();
         try(Connection connection = dataSource.getConnection();
             ResultSet resultSet = connection.prepareStatement(getIssues).executeQuery()) {

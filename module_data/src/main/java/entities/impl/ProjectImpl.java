@@ -13,11 +13,11 @@ public class ProjectImpl implements Project {
     public ProjectImpl() {
     }
 
-    public void setProjectId(long projectId) {
+    public void setProjectID(long projectId) {
         this.projectId = projectId;
     }
 
-    public long getProjectId() {
+    public long getProjectID() {
         return projectId;
     }
 
@@ -35,7 +35,7 @@ public class ProjectImpl implements Project {
              PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO BT_PROJECTS("
                  + "PROJECT_ID, name) "
                  + "VALUES (?, ?)")) {
-            preparedStatement.setLong(1, getProjectId());
+            preparedStatement.setLong(1, getProjectID());
             preparedStatement.setString(2, getName());
             preparedStatement.executeUpdate();
         }
@@ -48,7 +48,7 @@ public class ProjectImpl implements Project {
                      "NAME = ? " +
                      "WHERE PROJECT_ID = ?")) {
             preparedStatement.setString(1, getName());
-            preparedStatement.setLong(2, getProjectId());
+            preparedStatement.setLong(2, getProjectID());
             preparedStatement.executeUpdate();
         }
     }
@@ -58,7 +58,7 @@ public class ProjectImpl implements Project {
         try (Connection connection = DAO.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "DELETE FROM BT_PROJECTS WHERE PROJECT_ID = ?");
-            preparedStatement.setLong(1, getProjectId());
+            preparedStatement.setLong(1, getProjectID());
             preparedStatement.execute();
         }
     }

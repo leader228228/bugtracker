@@ -1,11 +1,9 @@
 package ua.edu.sumdu.nc.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import entities.bt.Entity;
-import entities.bt.Issue;
-import entities.bt.Reply;
-import entities.bt.User;
+import entities.bt.*;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -69,18 +67,6 @@ public class Utils {
         return stringBuilder.toString();
     }
 
-    public static String getInvalidRequestResponse(BindingResult bindingResult) {
-        String [] errorMessages = new String[]{};
-        if (bindingResult.hasErrors()) {
-            List<String> list = new ArrayList<>(bindingResult.getAllErrors().size());
-            for (ObjectError objectError : bindingResult.getAllErrors()) {
-                list.add(objectError.getCode());
-            }
-            errorMessages = list.toArray(new String[0]);
-        }
-        return getCommonErrorResponse(errorMessages);
-    }
-
     /**
      *  Reads an issue from {@code resultSet}
      *
@@ -104,6 +90,18 @@ public class Utils {
         return issue;
     }
 
+    public static String getInvalidRequestResponse(BindingResult bindingResult) {
+        String [] errorMessages = new String[]{};
+        if (bindingResult.hasErrors()) {
+            List<String> list = new ArrayList<>(bindingResult.getAllErrors().size());
+            for (ObjectError objectError : bindingResult.getAllErrors()) {
+                list.add(objectError.getCode());
+            }
+            errorMessages = list.toArray(new String[0]);
+        }
+        return getCommonErrorResponse(errorMessages);
+    }
+
     public static User readUser(ResultSet resultSet) throws SQLException {
         User user = EntityFactory.get(User.class);
         user.setUserId(resultSet.getLong("user_id"));
@@ -114,6 +112,13 @@ public class Utils {
         return user;
     }
 
+    public static Project readProject(ResultSet resultSet) throws SQLException {
+        Project project = EntityFactory.get(Project.class);
+        project.setName(resultSet.getString("name"));
+        project.setProjectID(resultSet.getInt("project_id"));
+        return project;
+    }
+
     public static Reply readReply(ResultSet resultSet) throws SQLException {
         Reply reply = EntityFactory.get(Reply.class);
         reply.setAuthorId(resultSet.getLong("author_id"));
@@ -122,5 +127,11 @@ public class Utils {
         reply.setReplyId(resultSet.getLong("reply_id"));
         reply.setCreated(resultSet.getDate("created"));
         return reply;
+    }
+
+    public static String buildForResponse(Collection<? extends Entity> issues) throws JsonProcessingException {
+        return new ObjectMapper().writer().writeValueAsString(new Object() {
+            public Collection<? extends Entity> _issues = issues;
+        });
     }
 }

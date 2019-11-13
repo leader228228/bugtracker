@@ -28,13 +28,13 @@ public class CreateProjectController extends Controller<CreateProjectRequest> {
         Project project = utils.getProject();
         project.setName(request.getName());
         try {
-            project.setProjectId(DAO.getId());
+            project.setProjectID(DAO.getId());
             project.save();
         } catch (SQLException e) {
             logger.error("Unknown error while saving the project, request=(" + request + ")", e);
             return getCommonErrorResponse("Error due to access to database: ", e.getClass().toString());
         }
-        return getCommonSuccessResponse("The project id = " + project.getProjectId() + " has been created");
+        return getCommonSuccessResponse("The project id = " + project.getProjectID() + " has been created");
     }
 
     @RequestMapping(

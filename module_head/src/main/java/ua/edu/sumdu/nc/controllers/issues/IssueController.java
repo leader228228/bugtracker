@@ -1,30 +1,30 @@
 package ua.edu.sumdu.nc.controllers.issues;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.bt.Issue;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ua.edu.sumdu.nc.services.IssueService;
 import ua.edu.sumdu.nc.controllers.Utils;
+import ua.edu.sumdu.nc.services.issues.IssueService;
 import ua.edu.sumdu.nc.validation.create.issues.CreateIssueRequest;
 import ua.edu.sumdu.nc.validation.update.issues.UpdateIssueRequest;
 
 import java.sql.SQLException;
-import java.util.Collection;
 
 @Validated
 @RestController(value = "/issues")
 public class IssueController {
 
     private Logger logger = Logger.getRootLogger();
-    @Autowired
+
     private IssueService issueService;
+
+    public IssueController(IssueService issueService) {
+        this.issueService = issueService;
+    }
 
     @RequestMapping(
         path = "/create",
@@ -109,23 +109,12 @@ public class IssueController {
             );
         }
         try {
-            return new ResponseEntity<>(buildForResponse(issueService.getIssues(issueIDs)), HttpStatus.OK);
-        } catch (SQLException e) {
+            return new ResponseEntity<>(Utils.buildForResponse(issueService.getIssues(issueIDs)), HttpStatus.OK);
+        } catch (Exception e) {
             logger.error(e);
             return new ResponseEntity<>(Utils.getCommonErrorResponse(e.getMessage()),
                 HttpStatus.INTERNAL_SERVER_ERROR
             );
-        }
-    }
-
-    private String buildForResponse(Collection<Issue> issues) {
-        try {
-            return new ObjectMapper().writer().writeValueAsString(new Object() {
-                public Collection<Issue> _issues = issues;
-            });
-        } catch (JsonProcessingException e) {
-            logger.error(e);
-            throw new RuntimeException(e);
         }
     }
 
@@ -136,7 +125,7 @@ public class IssueController {
     )
     public ResponseEntity<String> searchIssuesByText(@PathVariable(name = "text") String text) {
         try {
-            return new ResponseEntity<>(buildForResponse(issueService.getIssues(text)), HttpStatus.OK);
+            return new ResponseEntity<>(Utils.buildForResponse(issueService.getIssues(text)), HttpStatus.OK);
         } catch (Exception e) {
             logger.error(e);
             return new ResponseEntity<>(Utils.getCommonErrorResponse(e.getMessage()),
@@ -152,7 +141,7 @@ public class IssueController {
     )
     public ResponseEntity<String> searchIssuesByReporters(@PathVariable(name = "reporter_ids") long [] reporterIDs) {
         try {
-            return new ResponseEntity<>(buildForResponse(issueService.getIssuesByReporters(reporterIDs)), HttpStatus.OK);
+            return new ResponseEntity<>(Utils.buildForResponse(issueService.getIssuesByReporters(reporterIDs)), HttpStatus.OK);
         } catch (Exception e) {
             logger.error(e);
             return new ResponseEntity<>(Utils.getCommonErrorResponse(e.getMessage()),
@@ -168,7 +157,10 @@ public class IssueController {
     )
     public ResponseEntity<String> searchIssuesByAssignees(@PathVariable(name = "assignee_ids") long [] assigneeIDs) {
         try {
-            return new ResponseEntity<>(buildForResponse(issueService.getIssuesByAssignees(assigneeIDs)), HttpStatus.OK);
+            return new ResponseEntity<>(
+                Utils.buildForResponse(issueService.getIssuesByAssignees(assigneeIDs)),
+                HttpStatus.OK
+            );
         } catch (Exception e) {
             logger.error(e);
             return new ResponseEntity<>(Utils.getCommonErrorResponse(e.getMessage()),
