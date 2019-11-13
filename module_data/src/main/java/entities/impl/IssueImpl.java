@@ -24,7 +24,7 @@ public class IssueImpl implements Issue {
     }
 
     @Override
-    public long getIssueId() {
+    public long getIssueID() {
         return issueId;
     }
 

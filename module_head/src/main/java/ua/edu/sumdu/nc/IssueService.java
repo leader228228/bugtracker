@@ -27,7 +27,7 @@ public class IssueService {
                 + "ISSUE_ID, REPORTER_ID, ASSIGNEE_ID, CREATED, STATUS_ID, PROJECT_ID, \"body\", TITLE)"
                 + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
         ) {
-            preparedStatement.setLong(1, issue.getIssueId());
+            preparedStatement.setLong(1, issue.getIssueID());
             preparedStatement.setLong(2, issue.getReporterId());
             preparedStatement.setLong(3, issue.getAssigneeId());
             preparedStatement.setDate(4, issue.getCreated());
@@ -57,17 +57,28 @@ public class IssueService {
             preparedStatement.setLong(5, issue.getProjectId());
             preparedStatement.setString(6, issue.getBody());
             preparedStatement.setString(7, issue.getTitle());
-            preparedStatement.setLong(8, issue.getIssueId());
+            preparedStatement.setLong(8, issue.getIssueID());
             preparedStatement.executeUpdate();
         }
     }
 
     public void deleteIssue(Issue issue) throws SQLException {
+        deleteIssue(issue.getIssueID());
+    }
+
+    public boolean deleteIssue(long issueID) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
                 "DELETE FROM BT_ISSUES WHERE ISSUE_ID = ?");
-            preparedStatement.setLong(1, issue.getIssueId());
-            preparedStatement.execute();
+            preparedStatement.setLong(1, issueID);
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 1) {
+                return true;
+            } else if (affectedRows == 0) {
+                throw new SQLException("Can not find the issue (issue_id = " + issueID + ")");
+            } else {
+                throw new SQLException("Unexpected affected rows count. Expected 1, got " + affectedRows);
+            }
         }
     }
 

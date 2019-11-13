@@ -1,24 +1,23 @@
 package ua.edu.sumdu.nc.controllers;
 
-import entities.bt.Issue;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ua.edu.sumdu.nc.IssueService;
 import ua.edu.sumdu.nc.validation.create.issues.CreateIssueRequest;
-
-import javax.sql.DataSource;
-import java.sql.Date;
-import java.sql.SQLException;
+import ua.edu.sumdu.nc.validation.delete.issues.DeleteIssueRequest;
 
 @Validated
 @RestController(value = "/issues")
 public class IssueController {
 
     private Logger logger = Logger.getRootLogger();
+    @Autowired
+    private IssueService issueService;
 
     @RequestMapping(
         path = "/create",
@@ -31,19 +30,21 @@ public class IssueController {
             logger.error("Invalid request: " + request.toString());
             return Utils.getInvalidRequestResponse(bindingResult);
         }
-        Issue issue = EntityFactory.get(Issue.class);
-        issue.setCreated(new Date(System.currentTimeMillis()));
-        issue.setTitle(request.getTitle());
-        issue.setAssigneeId(request.getAssigneeId());
-        issue.setBody(request.getBody());
-        issue.setProjectId(request.getProjectId());
-        issue.setReporterId(request.getReporterId());
         try {
-            issue.save();
-        } catch (SQLException e) {
-            logger.error("Unknown error while saving the issue, request=(" + request + ")", e);
-            return Utils.getCommonErrorResponse("Error due to access to database: ", e.getClass().toString());
+            issueService.createIssue(request);
+        } catch (Exception e) {
+            logger.error(e);
+            return Utils.getCommonErrorResponse("Unknown error occurred", e.toString());
         }
-        return Utils.getCommonSuccessResponse("The issue id = " + issue.getIssueId() + " has been created");
+        return Utils.getCommonSuccessResponse("The issue has been successfully created");
+    }
+
+    @RequestMapping(
+        path = "/delete/{issue_id}",
+        method = RequestMethod.GET,
+        produces = "application/json"
+    )
+    public ResponseEntity<String> deleteIssue(@PathVariable(name = "issue_id") long issueID) {
+        issueService.deleteIssue(issueID);
     }
 }

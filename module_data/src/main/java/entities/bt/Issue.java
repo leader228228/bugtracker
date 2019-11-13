@@ -3,7 +3,7 @@ package entities.bt;
 import java.sql.Date;
 
 public interface Issue extends Entity {
-    long getIssueId();
+    long getIssueID();
     long getReporterId();
     void setReporterId(long reporterId);
     long getAssigneeId();
