@@ -11,14 +11,14 @@ import java.sql.Date;
 @NoArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class SearchIssuesRequest implements SearchRequest {
-    private long [] issueIds;
-    private long [] reporterIds;
-    private long [] assigneeIds;
+    private long [] issueIDs;
+    private long [] reporterIDs;
+    private long [] assigneeIDs;
     private String titleRegexp;
     private String bodyRegexp;
-    private int [] statusId;
-    private long [] projectIds;
+    private int [] statusID;
+    private long [] projectIDs;
     private Date from;
     private Date to;
-    private String replyBodyRegexp;
+    private String replyBodyRegExp;
 }

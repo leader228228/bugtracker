@@ -14,13 +14,13 @@ import javax.validation.constraints.Min;
 public class UpdateIssueRequest implements BTRequest {
 @Min(value = 0)
     @JsonProperty(required = true)
-    private Long issueId;
+    private Long issueID;
     @Min(value = 0)
-    private Long assigneeId;
+    private Long assigneeID;
     private String body;
     private String title;
     @Min(value = 0)
-    private Integer statusId;
+    private Integer statusID;
     @Min(value = 0)
-    private Integer projectId;
+    private Integer projectID;
 }
