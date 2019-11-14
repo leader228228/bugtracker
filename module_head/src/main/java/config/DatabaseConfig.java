@@ -17,7 +17,17 @@ public class DatabaseConfig {
     private String user;
     @Value("${db.connection.password}")
     private String password;
+    @Value("${db.connection.driver}")
+    private String driverClass;
+    private Class JDBCDriver;
 
+    {
+        try {
+            JDBCDriver = Class.forName(driverClass);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Can not load JDBC driver", e);
+        }
+    }
 
     @Bean
     @Scope(scopeName = "prototype")
