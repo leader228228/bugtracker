@@ -1,21 +1,23 @@
 package ua.edu.sumdu.nc.controllers.projects;
 
 import entities.bt.Project;
+import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ua.edu.sumdu.nc.controllers.Controller;
 import ua.edu.sumdu.nc.controllers.Utils;
 import ua.edu.sumdu.nc.services.projects.ProjectService;
 import ua.edu.sumdu.nc.validation.create.projects.CreateProjectRequest;
 
 @Validated
 @RestController(value = "/projects")
-public class ProjectController extends Controller {
+public class ProjectController {
 
     private final ProjectService projectService;
+
+    private final Logger logger = Logger.getRootLogger();
 
     public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
