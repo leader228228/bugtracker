@@ -60,10 +60,55 @@ public class ProjectController extends Controller {
                 return new ResponseEntity<>(Utils.buildForResponse(projectService.getAll()), HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(
-                    Utils.buildForResponse(projectService.getProjectsByIDs(projectIDs)),
+                    Utils.buildForResponse(projectService.searchProjectsByIDs(projectIDs)),
                     HttpStatus.OK
                 );
             }
+        } catch (Exception e) {
+            logger.error(e);
+            return new ResponseEntity<>(
+                Utils.getCommonErrorResponse(e.getMessage()),
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    @RequestMapping(
+        path = "/search/name/{project_ids}",
+        method = RequestMethod.GET,
+        produces = "application/json"
+    )
+    public ResponseEntity<String> searchProject(@PathVariable(name = "project_ids") String projectName) {
+        try {
+            if(projectName.isEmpty()) {
+                return new ResponseEntity<>(Utils.buildForResponse(projectService.getAll()), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(Utils.buildForResponse(projectService.searchProjectsByName(projectName)),
+                    HttpStatus.OK
+                );
+            }
+        } catch (Exception e) {
+            logger.error(e);
+            return new ResponseEntity<>(
+                Utils.getCommonErrorResponse(e.getMessage()),
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    @RequestMapping(
+        path = "/delete/{project_id}",
+        method = RequestMethod.GET,
+        produces = "application/json"
+    )
+    public ResponseEntity<String> searchProject(@PathVariable(name = "project_id") long projectID) {
+        try {
+            projectService.deleteProject(projectID);
+            return new ResponseEntity<>(
+                Utils.getCommonSuccessResponse(
+                    "The project and all its issues have been successfully deleted (if the project existed)"),
+                HttpStatus.OK
+            );
         } catch (Exception e) {
             logger.error(e);
             return new ResponseEntity<>(

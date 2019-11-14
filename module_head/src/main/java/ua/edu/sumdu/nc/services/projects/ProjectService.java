@@ -8,6 +8,7 @@ import ua.edu.sumdu.nc.controllers.Utils;
 import ua.edu.sumdu.nc.validation.create.projects.CreateProjectRequest;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,7 +29,8 @@ public class ProjectService {
 
     private void saveProject(Project project) throws SQLException {
         String saveProjectQuery = "insert into bt_projects(name) values(?)";
-        try(PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(saveProjectQuery)) {
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(saveProjectQuery)) {
             preparedStatement.setString(1, project.getName());
             preparedStatement.executeUpdate();
             if(logger.isInfoEnabled()) {
@@ -47,7 +49,8 @@ public class ProjectService {
     public Collection<Project> getAll() throws SQLException {
         String getAllProjects = "select * from bt_projects";
         Collection<Project> allProjects = new ArrayList<>();
-        try(ResultSet resultSet = dataSource.getConnection().prepareStatement(getAllProjects).executeQuery()) {
+        try(Connection connection = dataSource.getConnection();
+            ResultSet resultSet = connection.prepareStatement(getAllProjects).executeQuery()) {
             while (resultSet.next()) {
                 allProjects.add(Utils.readProject(resultSet));
             }
@@ -55,16 +58,43 @@ public class ProjectService {
         return allProjects;
     }
 
-    public Collection<Project> getProjectsByIDs(long [] projectIDs) throws SQLException {
+    public Collection<Project> searchProjectsByIDs(long [] projectIDs) throws SQLException {
         String projectsIDs = Arrays.toString(projectIDs);
         String getProjectsByIDs =
             "select * from bt_projects where project_id in (" + projectsIDs.substring(1, projectsIDs.length() - 1) + ")";
         Collection<Project> projects = new ArrayList<>();
-        try(ResultSet resultSet = dataSource.getConnection().prepareStatement(getProjectsByIDs).executeQuery()) {
+        try(Connection connection = dataSource.getConnection();
+            ResultSet resultSet = connection.prepareStatement(getProjectsByIDs).executeQuery()) {
             while (resultSet.next()) {
                 projects.add(Utils.readProject(resultSet));
             }
         }
         return projects;
     }
+
+    public Collection<Project> searchProjectsByName(String projectName) throws SQLException {
+        String getProjectsQuery =
+            "select * from bt_projects where lower(name) like ?";
+        Collection<Project> projects = new ArrayList<>();
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(getProjectsQuery)) {
+            preparedStatement.setString(1, Utils.getPatternContains(projectName.toLowerCase()));
+            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    projects.add(Utils.readProject(resultSet));
+                }
+            }
+        }
+        return projects;
+    }
+
+    public void deleteProject(long projectID) throws SQLException {
+        String deleteProjectQuery = "delete from bt_projects where project_id = ?";
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(deleteProjectQuery)) {
+            preparedStatement.setLong(1, projectID);
+            preparedStatement.executeUpdate();
+        }
+    }
+
 }
