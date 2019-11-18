@@ -3,7 +3,7 @@ package ua.edu.sumdu.nc.services.projects;
 import entities.bt.Project;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-import ua.edu.sumdu.nc.controllers.EntityFactory;
+import entities.impl.EntityFactory;
 import ua.edu.sumdu.nc.controllers.Utils;
 import ua.edu.sumdu.nc.validation.create.projects.CreateProjectRequest;
 

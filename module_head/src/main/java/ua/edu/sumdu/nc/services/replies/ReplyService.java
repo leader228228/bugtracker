@@ -3,7 +3,7 @@ package ua.edu.sumdu.nc.services.replies;
 import entities.bt.Reply;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.edu.sumdu.nc.controllers.EntityFactory;
+import entities.impl.EntityFactory;
 import ua.edu.sumdu.nc.controllers.Utils;
 import ua.edu.sumdu.nc.validation.create.replies.CreateReplyRequest;
 
@@ -24,8 +24,8 @@ public class ReplyService {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(insertReplyQuery)) {
             preparedStatement.setString(1, reply.getBody());
-            preparedStatement.setLong(2, reply.getIssueId());
-            preparedStatement.setLong(3, reply.getAuthorId());
+            preparedStatement.setLong(2, reply.getIssueID());
+            preparedStatement.setLong(3, reply.getAuthorID());
             preparedStatement.setDate(4, reply.getCreated());
             preparedStatement.executeUpdate();
         }
@@ -33,10 +33,10 @@ public class ReplyService {
 
     public Reply createReply(CreateReplyRequest request) throws SQLException {
         Reply reply = EntityFactory.get(Reply.class);
-        reply.setAuthorId(request.getAuthorId());
+        reply.setAuthorID(request.getAuthorId());
         reply.setBody(request.getBody());
         reply.setCreated(new Date(System.currentTimeMillis()));
-        reply.setIssueId(request.getIssueId());
+        reply.setIssueID(request.getIssueId());
         saveReply(reply);
         return reply;
     }

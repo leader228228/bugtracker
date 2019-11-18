@@ -39,10 +39,10 @@ public class UserController {
         try {
             User user = userService.createUser(request);
             if (logger.isInfoEnabled()) {
-                logger.info("The user (user_id = " + user.getUserId() + " ) has been successfully created");
+                logger.info("The user (user_id = " + user.getUserID() + " ) has been successfully created");
             }
             return new ResponseEntity<>(
-                "The user (user_id = " + user.getUserId() + " ) has been successfully created", HttpStatus.OK
+                "The user (user_id = " + user.getUserID() + " ) has been successfully created", HttpStatus.OK
             );
         } catch (Exception e) {
             logger.error(e);

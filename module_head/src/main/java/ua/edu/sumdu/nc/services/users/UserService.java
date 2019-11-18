@@ -1,11 +1,11 @@
 package ua.edu.sumdu.nc.services.users;
 
 import entities.bt.User;
+import entities.impl.EntityFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ua.edu.sumdu.nc.controllers.EntityFactory;
 import ua.edu.sumdu.nc.controllers.Utils;
 import ua.edu.sumdu.nc.validation.create.users.CreateUserRequest;
 
@@ -42,7 +42,7 @@ public class UserService {
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setLogin(request.getLogin());
-        user.setPassword(passwordEncoder.encodePassword(request.getPassword(), null));
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         saveUser(user);
         return user;
     }
@@ -115,8 +115,8 @@ public class UserService {
     public User hideCredentials(User user) {
         return new User() {
             @Override
-            public long getUserId() {
-                return user.getUserId();
+            public long getUserID() {
+                return user.getUserID();
             }
 
             @Override
@@ -160,7 +160,7 @@ public class UserService {
             }
 
             @Override
-            public void setUserId(long userId) {
+            public void setUserID(long userId) {
                 throw new UnsupportedOperationException("This object is only a user view");
             }
         };

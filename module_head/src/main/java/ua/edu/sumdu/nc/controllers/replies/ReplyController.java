@@ -40,7 +40,7 @@ public class ReplyController {
             Reply reply = replyService.createReply(request);
             return new ResponseEntity<>(
                 Utils.getCommonSuccessResponse("Reply has been successfully created",
-                "reply_id = " + reply.getReplyId()), HttpStatus.OK
+                "reply_id = " + reply.getReplyID()), HttpStatus.OK
             );
         } catch (Exception e) {
             logger.error(e);

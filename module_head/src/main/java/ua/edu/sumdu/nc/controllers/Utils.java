@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import entities.bt.*;
+import entities.impl.EntityFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -79,14 +80,14 @@ public class Utils {
      * */
     public static Issue readIssue(ResultSet resultSet) throws SQLException {
         Issue issue = EntityFactory.get(Issue.class);
-        issue.setIssueId(resultSet.getLong("issue_id"));
-        issue.setReporterId(resultSet.getLong("reporter_id"));
-        issue.setProjectId(resultSet.getLong("project_id"));
+        issue.setIssueID(resultSet.getLong("issue_id"));
+        issue.setReporterID(resultSet.getLong("reporter_id"));
+        issue.setProjectID(resultSet.getLong("project_id"));
         issue.setBody(resultSet.getString("body"));
         issue.setTitle(resultSet.getString("title"));
-        issue.setAssigneeId(resultSet.getLong("assignee_id"));
+        issue.setAssigneeID(resultSet.getLong("assignee_id"));
         issue.setCreated(resultSet.getDate("created"));
-        issue.setStatusId(resultSet.getInt("status_id"));
+        issue.setStatusID(resultSet.getInt("status_id"));
         return issue;
     }
 
@@ -104,7 +105,7 @@ public class Utils {
 
     public static User readUser(ResultSet resultSet) throws SQLException {
         User user = EntityFactory.get(User.class);
-        user.setUserId(resultSet.getLong("user_id"));
+        user.setUserID(resultSet.getLong("user_id"));
         user.setLogin(resultSet.getString("login"));
         user.setPassword(resultSet.getString("password"));
         user.setFirstName(resultSet.getString("first_name"));
@@ -121,10 +122,10 @@ public class Utils {
 
     public static Reply readReply(ResultSet resultSet) throws SQLException {
         Reply reply = EntityFactory.get(Reply.class);
-        reply.setAuthorId(resultSet.getLong("author_id"));
+        reply.setAuthorID(resultSet.getLong("author_id"));
         reply.setBody(resultSet.getString("body"));
-        reply.setIssueId(resultSet.getLong("issue_id"));
-        reply.setReplyId(resultSet.getLong("reply_id"));
+        reply.setIssueID(resultSet.getLong("issue_id"));
+        reply.setReplyID(resultSet.getLong("reply_id"));
         reply.setCreated(resultSet.getDate("created"));
         return reply;
     }

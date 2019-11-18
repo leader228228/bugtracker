@@ -15,6 +15,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>module_head</artifactId>
             <version>${head.version}</version>
+            <type>war</type>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>

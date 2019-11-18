@@ -49,10 +49,7 @@ import java.util.Map;
 @ComponentScan(basePackages = "ua")
 @PropertySource("classpath:/application.properties")
 public class AppConfig
-    extends AnnotationConfigWebApplicationContext
-    implements WebApplicationInitializer, WebMvcConfigurer {
-
-
+    extends AnnotationConfigWebApplicationContext implements WebApplicationInitializer, WebMvcConfigurer {
 
     /*@Bean(name = "DAO")
     @Scope(scopeName = "singleton")

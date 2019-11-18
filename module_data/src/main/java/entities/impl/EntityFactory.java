@@ -1,7 +1,6 @@
-package ua.edu.sumdu.nc.controllers;
+package entities.impl;
 
 import entities.bt.*;
-import entities.impl.*;
 
 public class EntityFactory {
 

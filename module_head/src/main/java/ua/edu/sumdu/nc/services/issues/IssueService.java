@@ -3,7 +3,7 @@ package ua.edu.sumdu.nc.services.issues;
 import entities.bt.Issue;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-import ua.edu.sumdu.nc.controllers.EntityFactory;
+import entities.impl.EntityFactory;
 import ua.edu.sumdu.nc.controllers.Utils;
 import ua.edu.sumdu.nc.validation.create.issues.CreateIssueRequest;
 import ua.edu.sumdu.nc.validation.update.issues.UpdateIssueRequest;
@@ -33,11 +33,11 @@ public class IssueService {
                 + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
         ) {
             preparedStatement.setLong(1, issue.getIssueID());
-            preparedStatement.setLong(2, issue.getReporterId());
-            preparedStatement.setLong(3, issue.getAssigneeId());
+            preparedStatement.setLong(2, issue.getReporterID());
+            preparedStatement.setLong(3, issue.getAssigneeID());
             preparedStatement.setDate(4, issue.getCreated());
-            preparedStatement.setInt(5, issue.getStatusId());
-            preparedStatement.setLong(6, issue.getProjectId());
+            preparedStatement.setInt(5, issue.getStatusID());
+            preparedStatement.setLong(6, issue.getProjectID());
             preparedStatement.setString(7, issue.getBody());
             preparedStatement.setString(8, issue.getTitle());
             preparedStatement.executeUpdate();
@@ -81,12 +81,12 @@ public class IssueService {
      * */
     public Issue createIssue(CreateIssueRequest createIssueRequest) throws SQLException {
         Issue issue = EntityFactory.get(Issue.class);
-        issue.setStatusId(createIssueRequest.getStatusId() == null ? 0 : createIssueRequest.getStatusId());
-        issue.setProjectId(createIssueRequest.getProjectId());
+        issue.setStatusID(createIssueRequest.getStatusId() == null ? 0 : createIssueRequest.getStatusId());
+        issue.setProjectID(createIssueRequest.getProjectId());
         issue.setTitle(createIssueRequest.getTitle());
         issue.setBody(createIssueRequest.getBody());
-        issue.setAssigneeId(createIssueRequest.getAssigneeId() == null ? 0 : createIssueRequest.getAssigneeId());
-        issue.setReporterId(createIssueRequest.getReporterId());
+        issue.setAssigneeID(createIssueRequest.getAssigneeId() == null ? 0 : createIssueRequest.getAssigneeId());
+        issue.setReporterID(createIssueRequest.getReporterId());
         issue.setCreated(new Date(System.currentTimeMillis()));
         saveIssue(issue);
         return issue;
