@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ua.edu.sumdu.nc.services.users.UserService;
+import services.users.UserService;
 import ua.edu.sumdu.nc.controllers.Utils;
 import ua.edu.sumdu.nc.validation.create.users.CreateUserRequest;
 
@@ -37,7 +37,12 @@ public class UserController {
             return new ResponseEntity<>("Bad request", HttpStatus.BAD_REQUEST);
         }
         try {
-            User user = userService.createUser(request);
+            User user = userService.createUser(
+                request.getFirstName(),
+                request.getLastName(),
+                request.getLogin(),
+                String.valueOf(request.getPassword().hashCode())
+            );
             if (logger.isInfoEnabled()) {
                 logger.info("The user (user_id = " + user.getUserID() + " ) has been successfully created");
             }

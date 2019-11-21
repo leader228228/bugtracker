@@ -1,11 +1,10 @@
-package ua.edu.sumdu.nc.services.projects;
+package services.projects;
 
+import entities.EntityFactory;
 import entities.bt.Project;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-import entities.impl.EntityFactory;
-import ua.edu.sumdu.nc.controllers.Utils;
-import ua.edu.sumdu.nc.validation.create.projects.CreateProjectRequest;
+import services.DBUtils;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -39,9 +38,9 @@ public class ProjectService {
         }
     }
 
-    public Project createProject(CreateProjectRequest request) throws SQLException {
+    public Project createProject(String projectName) throws SQLException {
         Project project = EntityFactory.get(Project.class);
-        project.setName(request.getName());
+        project.setName(projectName);
         saveProject(project);
         return project;
     }
@@ -52,7 +51,7 @@ public class ProjectService {
         try(Connection connection = dataSource.getConnection();
             ResultSet resultSet = connection.prepareStatement(getAllProjects).executeQuery()) {
             while (resultSet.next()) {
-                allProjects.add(Utils.readProject(resultSet));
+                allProjects.add(DBUtils.readProject(resultSet));
             }
         }
         return allProjects;
@@ -66,7 +65,7 @@ public class ProjectService {
         try(Connection connection = dataSource.getConnection();
             ResultSet resultSet = connection.prepareStatement(getProjectsByIDs).executeQuery()) {
             while (resultSet.next()) {
-                projects.add(Utils.readProject(resultSet));
+                projects.add(DBUtils.readProject(resultSet));
             }
         }
         return projects;
@@ -78,10 +77,10 @@ public class ProjectService {
         Collection<Project> projects = new ArrayList<>();
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(getProjectsQuery)) {
-            preparedStatement.setString(1, Utils.getPatternContains(projectName.toLowerCase()));
+            preparedStatement.setString(1, DBUtils.getPatternContains(projectName.toLowerCase()));
             try(ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    projects.add(Utils.readProject(resultSet));
+                    projects.add(DBUtils.readProject(resultSet));
                 }
             }
         }
@@ -96,5 +95,4 @@ public class ProjectService {
             preparedStatement.executeUpdate();
         }
     }
-
 }

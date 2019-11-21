@@ -15,11 +15,11 @@ import ua.edu.sumdu.nc.validation.create.CreateRequest;
 public class CreateIssueRequest implements CreateRequest {
     @Range(min = 1)
     @JsonProperty(required = true)
-    private long reporterId;
+    private long reporterID;
 
     @Range(min = 0)
     @JsonProperty(defaultValue = "0")
-    private Long assigneeId;
+    private Long assigneeID;
 
     @JsonProperty(required = true)
     @NotBlank
@@ -31,9 +31,9 @@ public class CreateIssueRequest implements CreateRequest {
     private String body;
 
     @Range(min = 1)
-    private Integer statusId;
+    private Integer statusID;
 
     @JsonProperty(required = true)
     @Range(min = 1)
-    private long projectId;
+    private int projectID;
 }

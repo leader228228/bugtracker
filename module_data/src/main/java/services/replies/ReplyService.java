@@ -1,11 +1,10 @@
-package ua.edu.sumdu.nc.services.replies;
+package services.replies;
 
+import entities.EntityFactory;
 import entities.bt.Reply;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import entities.impl.EntityFactory;
-import ua.edu.sumdu.nc.controllers.Utils;
-import ua.edu.sumdu.nc.validation.create.replies.CreateReplyRequest;
+import services.DBUtils;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -31,12 +30,12 @@ public class ReplyService {
         }
     }
 
-    public Reply createReply(CreateReplyRequest request) throws SQLException {
+    public Reply createReply(long authorID, String body, long issueID) throws SQLException {
         Reply reply = EntityFactory.get(Reply.class);
-        reply.setAuthorID(request.getAuthorId());
-        reply.setBody(request.getBody());
+        reply.setAuthorID(authorID);
+        reply.setBody(body);
         reply.setCreated(new Date(System.currentTimeMillis()));
-        reply.setIssueID(request.getIssueId());
+        reply.setIssueID(issueID);
         saveReply(reply);
         return reply;
     }
@@ -61,7 +60,7 @@ public class ReplyService {
         try (Connection connection = dataSource.getConnection();
             ResultSet resultSet = connection.prepareStatement(selectAllRepliesQuery).executeQuery()) {
             while (resultSet.next()) {
-                allReplies.add(Utils.readReply(resultSet));
+                allReplies.add(DBUtils.readReply(resultSet));
             }
         }
         return allReplies;
@@ -78,7 +77,7 @@ public class ReplyService {
         try (Connection connection = dataSource.getConnection();
              ResultSet resultSet = connection.prepareStatement(selectRepliesByAuthorIDs).executeQuery()) {
             while (resultSet.next()) {
-                replies.add(Utils.readReply(resultSet));
+                replies.add(DBUtils.readReply(resultSet));
             }
         }
         return replies;
@@ -88,11 +87,11 @@ public class ReplyService {
         String selectRepliesByTextQuery = "select * from bt_replies where body like ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(selectRepliesByTextQuery)) {
-            preparedStatement.setString(1, Utils.getPatternContains(text));
+            preparedStatement.setString(1, DBUtils.getPatternContains(text));
             Collection<Reply> replies = new ArrayList<>();
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    replies.add(Utils.readReply(resultSet));
+                    replies.add(DBUtils.readReply(resultSet));
                 }
             }
             return replies;
@@ -110,7 +109,7 @@ public class ReplyService {
         try (Connection connection = dataSource.getConnection();
              ResultSet resultSet = connection.prepareStatement(selectRepliesByIssueIDs).executeQuery()) {
             while (resultSet.next()) {
-                replies.add(Utils.readReply(resultSet));
+                replies.add(DBUtils.readReply(resultSet));
             }
         }
         return replies;

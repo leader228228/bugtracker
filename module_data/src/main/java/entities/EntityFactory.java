@@ -1,4 +1,4 @@
-package entities.impl;
+package entities;
 
 import entities.bt.*;
 
@@ -6,15 +6,15 @@ public class EntityFactory {
 
     public static <T extends Entity> T get(Class<T> clazz) {
         if (clazz.equals(Issue.class)) {
-            return (T) new IssueImpl();
+            return (T) new Issue(){};
         } else if (clazz.equals(Project.class)) {
-            return (T) new ProjectImpl();
+            return (T) new Project(){};
         } else if (clazz.equals(User.class)) {
-            return (T) new UserImpl();
+            return (T) new User(){};
         } else if (clazz.equals(IssueStatus.class)) {
-            return (T) new IssueStatusImpl();
+            return (T) new IssueStatus(){};
         } else if (clazz.equals(Reply.class)) {
-            return (T) new ReplyImpl();
+            return (T) new Reply(){};
         } else {
             throw new IllegalArgumentException("Expected one of Entity successors, found " + clazz);
         }

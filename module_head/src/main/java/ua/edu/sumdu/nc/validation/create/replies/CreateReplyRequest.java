@@ -19,9 +19,9 @@ public class CreateReplyRequest implements CreateRequest {
 
   @JsonProperty(required = true)
   @Min(value = 1)
-  private long issueId;
+  private long issueID;
 
   @JsonProperty(required = true)
   @Min(value = 1)
-  private long authorId;
+  private long authorID;
 }

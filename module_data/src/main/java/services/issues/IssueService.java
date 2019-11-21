@@ -1,12 +1,10 @@
-package ua.edu.sumdu.nc.services.issues;
+package services.issues;
 
+import entities.EntityFactory;
 import entities.bt.Issue;
-import org.apache.log4j.Logger;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-import entities.impl.EntityFactory;
-import ua.edu.sumdu.nc.controllers.Utils;
-import ua.edu.sumdu.nc.validation.create.issues.CreateIssueRequest;
-import ua.edu.sumdu.nc.validation.update.issues.UpdateIssueRequest;
+import services.DBUtils;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -18,8 +16,6 @@ import java.util.Collection;
 public class IssueService {
 
     private DataSource dataSource;
-
-    private final Logger logger = Logger.getRootLogger();
 
     public IssueService(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -44,7 +40,8 @@ public class IssueService {
         }
     }
 
-    public void updateIssue(UpdateIssueRequest updateIssueRequest) throws SQLException {
+    public void updateIssue(long assigneeID, int statusID, long projectID, String body, String title, long issueID)
+        throws SQLException {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("UPDATE BT_ISSUES SET " +
                  " ASSIGNEE_ID = ?" +
@@ -53,12 +50,12 @@ public class IssueService {
                  ", \"body\" = ?" +
                  ", TITLE = ?" +
                  " WHERE ISSUE_ID = ?")) {
-            preparedStatement.setLong(1, updateIssueRequest.getAssigneeID());
-            preparedStatement.setInt(2, updateIssueRequest.getStatusID());
-            preparedStatement.setLong(3, updateIssueRequest.getProjectID());
-            preparedStatement.setString(4, updateIssueRequest.getBody());
-            preparedStatement.setString(5, updateIssueRequest.getTitle());
-            preparedStatement.setLong(6, updateIssueRequest.getIssueID());
+            preparedStatement.setLong(1, assigneeID);
+            preparedStatement.setInt(2, statusID);
+            preparedStatement.setLong(3, projectID);
+            preparedStatement.setString(4, body);
+            preparedStatement.setString(5, title);
+            preparedStatement.setLong(6, issueID);
             preparedStatement.executeUpdate();
         }
     }
@@ -76,17 +73,15 @@ public class IssueService {
         }
     }
 
-    /**
-     * @param           createIssueRequest is expected to be valid. Validation is missed in this method
-     * */
-    public Issue createIssue(CreateIssueRequest createIssueRequest) throws SQLException {
+    public Issue createIssue(@Nullable Integer statusID, int projectID, String title, String body,
+                             @Nullable Long assigneeID, long reporterID) throws SQLException {
         Issue issue = EntityFactory.get(Issue.class);
-        issue.setStatusID(createIssueRequest.getStatusId() == null ? 0 : createIssueRequest.getStatusId());
-        issue.setProjectID(createIssueRequest.getProjectId());
-        issue.setTitle(createIssueRequest.getTitle());
-        issue.setBody(createIssueRequest.getBody());
-        issue.setAssigneeID(createIssueRequest.getAssigneeId() == null ? 0 : createIssueRequest.getAssigneeId());
-        issue.setReporterID(createIssueRequest.getReporterId());
+        issue.setStatusID(statusID == null ? 0 : statusID);
+        issue.setProjectID(projectID);
+        issue.setTitle(title);
+        issue.setBody(body);
+        issue.setAssigneeID(assigneeID == null ? 0 : assigneeID);
+        issue.setReporterID(reporterID);
         issue.setCreated(new Date(System.currentTimeMillis()));
         saveIssue(issue);
         return issue;
@@ -98,7 +93,7 @@ public class IssueService {
              ResultSet resultSet = connection.prepareStatement(getAllIssuesQuery).executeQuery()) {
             Collection<Issue> allIssues = new ArrayList<>();
             while (resultSet.next()) {
-                allIssues.add(Utils.readIssue(resultSet));
+                allIssues.add(DBUtils.readIssue(resultSet));
             }
             return allIssues;
         }
@@ -109,12 +104,12 @@ public class IssueService {
             return getAll();
         } else {
             String _issuesIDs = Arrays.toString(issuesIDs);
-            String getIssues = "select * from bt_issues where issue_id in (" + _issuesIDs.substring(1, _issuesIDs.length() - 1) + ")";
+            String getIssuesQuery = "select * from bt_issues where issue_id in (" + _issuesIDs.substring(1, _issuesIDs.length() - 1) + ")";
             Collection<Issue> issues = new ArrayList<>();
             try (Connection connection = dataSource.getConnection();
-                 ResultSet resultSet = connection.prepareStatement(getIssues).executeQuery()) {
+                 ResultSet resultSet = connection.prepareStatement(getIssuesQuery).executeQuery()) {
                 while (resultSet.next()) {
-                    issues.add(Utils.readIssue(resultSet));
+                    issues.add(DBUtils.readIssue(resultSet));
                 }
                 return issues;
             }
@@ -122,17 +117,17 @@ public class IssueService {
     }
 
     public Collection<Issue> getIssues(String text) throws SQLException {
-        String getIssues = "select * from bt_issues i left join bt_replies r on i.issue_id = r.issue_id where i.body like ? or i.title like ? or r.body like ?";
+        String getIssuesQuery = "select * from bt_issues i left join bt_replies r on i.issue_id = r.issue_id where i.body like ? or i.title like ? or r.body like ?";
         try(Connection connection = dataSource.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(getIssues);
-            String pattern = Utils.getPatternContains(text);
+            PreparedStatement preparedStatement = connection.prepareStatement(getIssuesQuery);
+            String pattern = DBUtils.getPatternContains(text);
             preparedStatement.setString(1, pattern);
             preparedStatement.setString(2, pattern);
             preparedStatement.setString(3, pattern);
             Collection<Issue> issues = new ArrayList<>();
             try(ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    issues.add(Utils.readIssue(resultSet));
+                    issues.add(DBUtils.readIssue(resultSet));
                 }
             }
             return issues;
@@ -144,12 +139,12 @@ public class IssueService {
             return getAll();
         }
         String reporterIDs = Arrays.toString(reportersIDs);
-        String getIssues = "select * from bt_issues where reporter_id in (" + reporterIDs.substring(1, reporterIDs.length() - 1) + ")";
+        String getIssuesQuery = "select * from bt_issues where reporter_id in (" + reporterIDs.substring(1, reporterIDs.length() - 1) + ")";
         Collection<Issue> issues = new ArrayList<>();
         try(Connection connection = dataSource.getConnection();
-            ResultSet resultSet = connection.prepareStatement(getIssues).executeQuery()) {
+            ResultSet resultSet = connection.prepareStatement(getIssuesQuery).executeQuery()) {
             while (resultSet.next()) {
-                issues.add(Utils.readIssue(resultSet));
+                issues.add(DBUtils.readIssue(resultSet));
             }
         }
         return issues;
@@ -160,12 +155,12 @@ public class IssueService {
             return getAll();
         }
         String _reportersIDs = Arrays.toString(reportersIDs);
-        String getIssues = "select * from bt_issues where assignee_id in (" + _reportersIDs.substring(1, _reportersIDs.length() - 1) + ")";
+        String getIssuesQuery = "select * from bt_issues where assignee_id in (" + _reportersIDs.substring(1, _reportersIDs.length() - 1) + ")";
         Collection<Issue> issues = new ArrayList<>();
         try(Connection connection = dataSource.getConnection();
-            ResultSet resultSet = connection.prepareStatement(getIssues).executeQuery()) {
+            ResultSet resultSet = connection.prepareStatement(getIssuesQuery).executeQuery()) {
             while (resultSet.next()) {
-                issues.add(Utils.readIssue(resultSet));
+                issues.add(DBUtils.readIssue(resultSet));
             }
         }
         return issues;

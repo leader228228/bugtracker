@@ -1,13 +1,11 @@
-package ua.edu.sumdu.nc.services.users;
+package services.users;
 
+import entities.EntityFactory;
 import entities.bt.User;
-import entities.impl.EntityFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ua.edu.sumdu.nc.controllers.Utils;
-import ua.edu.sumdu.nc.validation.create.users.CreateUserRequest;
+import services.DBUtils;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -22,8 +20,6 @@ import java.util.Collection;
 public class UserService {
     @Autowired
     private DataSource dataSource;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     private void saveUser(User user) throws SQLException {
         String insertUserQuery = "insert into bt_users(login, password, first_name, last_name) values(?, ?, ?, ?)";
@@ -37,12 +33,12 @@ public class UserService {
         }
     }
 
-    public User createUser(CreateUserRequest request) throws SQLException {
+    public User createUser(String firstName, String lastName, String login, String password) throws SQLException {
         User user = EntityFactory.get(User.class);
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setLogin(request.getLogin());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setLogin(login);
+        user.setPassword(String.valueOf(password.hashCode()));
         saveUser(user);
         return user;
     }
@@ -53,7 +49,7 @@ public class UserService {
         try (Connection connection = dataSource.getConnection();
              ResultSet resultSet = connection.prepareStatement(selectAllUsersQuery).executeQuery()) {
             while (resultSet.next()) {
-                allUsers.add(Utils.readUser(resultSet));
+                allUsers.add(DBUtils.readUser(resultSet));
             }
         }
         return allUsers;
@@ -70,7 +66,7 @@ public class UserService {
         try (Connection connection = dataSource.getConnection();
              ResultSet resultSet = connection.prepareStatement(selectUsersByIDs).executeQuery()) {
             while (resultSet.next()) {
-                users.add(Utils.readUser(resultSet));
+                users.add(DBUtils.readUser(resultSet));
             }
         }
         return users;
@@ -88,11 +84,11 @@ public class UserService {
         Collection<User> users = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(selectUsersByName)) {
-            preparedStatement.setString(1, Utils.getPatternContains(name.toLowerCase()));
-            preparedStatement.setString(2, Utils.getPatternContains(name.toLowerCase()));
+            preparedStatement.setString(1, DBUtils.getPatternContains(name.toLowerCase()));
+            preparedStatement.setString(2, DBUtils.getPatternContains(name.toLowerCase()));
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    users.add(Utils.readUser(resultSet));
+                    users.add(DBUtils.readUser(resultSet));
                 }
             }
         }

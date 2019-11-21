@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ua.edu.sumdu.nc.services.replies.ReplyService;
+import services.replies.ReplyService;
 import ua.edu.sumdu.nc.controllers.Utils;
 import ua.edu.sumdu.nc.validation.create.replies.CreateReplyRequest;
 
@@ -37,7 +37,11 @@ public class ReplyController {
             return new ResponseEntity<>(Utils.getCommonErrorResponse("Bad request"), HttpStatus.BAD_REQUEST);
         }
         try {
-            Reply reply = replyService.createReply(request);
+            Reply reply = replyService.createReply(
+                request.getAuthorID(),
+                request.getBody(),
+                request.getIssueID()
+            );
             return new ResponseEntity<>(
                 Utils.getCommonSuccessResponse("Reply has been successfully created",
                 "reply_id = " + reply.getReplyID()), HttpStatus.OK

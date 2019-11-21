@@ -8,7 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ua.edu.sumdu.nc.controllers.Utils;
-import ua.edu.sumdu.nc.services.projects.ProjectService;
+import services.projects.ProjectService;
 import ua.edu.sumdu.nc.validation.create.projects.CreateProjectRequest;
 
 @Validated
@@ -35,7 +35,7 @@ public class ProjectController {
             return new ResponseEntity<>(Utils.getInvalidRequestResponse(bindingResult), HttpStatus.BAD_REQUEST);
         }
         try {
-            Project project = projectService.createProject(request);
+            Project project = projectService.createProject(request.getName());
             return new ResponseEntity<>(
                 Utils.getCommonSuccessResponse(
                     "The project has been successfully created",

@@ -8,7 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ua.edu.sumdu.nc.controllers.Utils;
-import ua.edu.sumdu.nc.services.issues.IssueService;
+import services.issues.IssueService;
 import ua.edu.sumdu.nc.validation.create.issues.CreateIssueRequest;
 import ua.edu.sumdu.nc.validation.update.issues.UpdateIssueRequest;
 
@@ -39,7 +39,14 @@ public class IssueController {
         }
         Issue issue;
         try {
-            issue = issueService.createIssue(request);
+            issue = issueService.createIssue(
+                request.getStatusID(),
+                request.getProjectID(),
+                request.getTitle(),
+                request.getBody(),
+                request.getAssigneeID(),
+                request.getReporterID()
+            );
         } catch (Exception e) {
             logger.error(e);
             return new ResponseEntity<>(Utils.getCommonErrorResponse("Unknown error occurred", e.toString()),
@@ -80,7 +87,14 @@ public class IssueController {
             return new ResponseEntity<>(Utils.getInvalidRequestResponse(bindingResult), HttpStatus.BAD_REQUEST);
         }
         try {
-            issueService.updateIssue(request);
+            issueService.updateIssue(
+                request.getAssigneeID(),
+                request.getStatusID(),
+                request.getProjectID(),
+                request.getBody(),
+                request.getTitle(),
+                request.getIssueID()
+            );
         } catch (SQLException e) {
             logger.error(e);
             return new ResponseEntity<>(Utils.getCommonErrorResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
