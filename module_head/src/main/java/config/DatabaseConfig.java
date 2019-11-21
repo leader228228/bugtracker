@@ -11,22 +11,23 @@ import java.sql.SQLException;
 
 @Configuration
 public class DatabaseConfig {
-    @Value("${db.connection.url}")
-    private String URL;
-    @Value("${db.connection.user}")
-    private String user;
-    @Value("${db.connection.password}")
-    private String password;
-    @Value("${db.connection.driver}")
-    private String driverClass;
-    private Class JDBCDriver;
 
-    {
+    private String URL;
+    private String user;
+    private String password;
+
+    public DatabaseConfig(@Value("${db.connection.url}") String URL,
+                          @Value("${db.connection.user}") String user,
+                          @Value("${db.connection.password}") String password,
+                          @Value("${db.connection.driver}") String driverClass) {
         try {
-            JDBCDriver = Class.forName(driverClass);
+            Class.forName(driverClass);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Can not load JDBC driver", e);
         }
+        this.URL = URL;
+        this.user = user;
+        this.password = password;
     }
 
     @Bean

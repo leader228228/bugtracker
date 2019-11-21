@@ -9,7 +9,6 @@ import services.DBUtils;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 @Service
@@ -99,11 +98,11 @@ public class IssueService {
         }
     }
 
-    public Collection<Issue> getIssues(long [] issuesIDs) throws SQLException {
-        if (issuesIDs.length == 0) {
+    public Collection<Issue> getIssues(Collection<Long> issuesIDs) throws SQLException {
+        if (issuesIDs.size() == 0) {
             return getAll();
         } else {
-            String _issuesIDs = Arrays.toString(issuesIDs);
+            String _issuesIDs = issuesIDs.toString();
             String getIssuesQuery = "select * from bt_issues where issue_id in (" + _issuesIDs.substring(1, _issuesIDs.length() - 1) + ")";
             Collection<Issue> issues = new ArrayList<>();
             try (Connection connection = dataSource.getConnection();
@@ -134,11 +133,11 @@ public class IssueService {
         }
     }
 
-    public Collection<Issue> getIssuesByReporters(long [] reportersIDs) throws SQLException {
-        if (reportersIDs.length == 0) {
+    public Collection<Issue> getIssuesByReporters(Collection<Long> reportersIDs) throws SQLException {
+        if (reportersIDs.size() == 0) {
             return getAll();
         }
-        String reporterIDs = Arrays.toString(reportersIDs);
+        String reporterIDs = reportersIDs.toString();
         String getIssuesQuery = "select * from bt_issues where reporter_id in (" + reporterIDs.substring(1, reporterIDs.length() - 1) + ")";
         Collection<Issue> issues = new ArrayList<>();
         try(Connection connection = dataSource.getConnection();
@@ -150,11 +149,11 @@ public class IssueService {
         return issues;
     }
 
-    public Collection<Issue> getIssuesByAssignees(long [] reportersIDs) throws SQLException {
-        if (reportersIDs.length == 0) {
+    public Collection<Issue> getIssuesByAssignees(Collection<Long> reportersIDs) throws SQLException {
+        if (reportersIDs.size() == 0) {
             return getAll();
         }
-        String _reportersIDs = Arrays.toString(reportersIDs);
+        String _reportersIDs = reportersIDs.toString();
         String getIssuesQuery = "select * from bt_issues where assignee_id in (" + _reportersIDs.substring(1, _reportersIDs.length() - 1) + ")";
         Collection<Issue> issues = new ArrayList<>();
         try(Connection connection = dataSource.getConnection();

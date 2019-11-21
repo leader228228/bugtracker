@@ -17,7 +17,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-@RestController(value = "/user")
+@RestController()
+@RequestMapping(path = "/users")
 public class UserController {
 
     @Autowired

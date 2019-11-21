@@ -11,8 +11,11 @@ import ua.edu.sumdu.nc.controllers.Utils;
 import services.projects.ProjectService;
 import ua.edu.sumdu.nc.validation.create.projects.CreateProjectRequest;
 
+import javax.validation.Valid;
+
 @Validated
-@RestController(value = "/projects")
+@RestController()
+@RequestMapping(path = "/projects")
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -29,7 +32,7 @@ public class ProjectController {
         consumes = "application/json",
         produces = "application/json"
     )
-    public ResponseEntity<String> createProject(@RequestBody CreateProjectRequest request, BindingResult bindingResult) {
+    public ResponseEntity<String> createProject(@Valid @RequestBody CreateProjectRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             logger.error("Invalid request: " + request.toString());
             return new ResponseEntity<>(Utils.getInvalidRequestResponse(bindingResult), HttpStatus.BAD_REQUEST);

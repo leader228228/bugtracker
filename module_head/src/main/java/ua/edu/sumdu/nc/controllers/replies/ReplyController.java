@@ -16,7 +16,8 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @Service
-@RestController(value = "/reply")
+@RestController()
+@RequestMapping(path = "/replies")
 public class ReplyController {
 
     private final Logger logger = Logger.getRootLogger();

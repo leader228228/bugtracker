@@ -46,23 +46,10 @@ import java.util.Map;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "ua")
+@ComponentScan(basePackages = {"ua", "entities", "services"})
 @PropertySource("classpath:/application.properties")
 public class AppConfig
     extends AnnotationConfigWebApplicationContext implements WebApplicationInitializer, WebMvcConfigurer {
-
-    /*@Bean(name = "DAO")
-    @Scope(scopeName = "singleton")
-    public DAO DAO() throws ClassNotFoundException {
-        Class.forName(env.getProperty("db.connection.driver"));
-        return new DAOImpl(
-                env.getProperty("db.connection.url"),
-                env.getProperty("db.connection.user"),
-                env.getProperty("db.connection.password")
-        );
-    }*/
-
-
 
     @Override
     public void onStartup(ServletContext servletContext) {
