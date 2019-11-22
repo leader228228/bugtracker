@@ -5,20 +5,21 @@ import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ua.edu.sumdu.nc.controllers.Utils;
 import services.issues.IssueService;
+import ua.edu.sumdu.nc.controllers.Utils;
 import ua.edu.sumdu.nc.validation.create.issues.CreateIssueRequest;
 import ua.edu.sumdu.nc.validation.update.issues.UpdateIssueRequest;
 
 import javax.validation.Valid;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
-@Validated
-@RestController(value = "/issues")
+@RestController
+@RequestMapping(value = "/issues")
 public class IssueController {
 
     private Logger logger = Logger.getRootLogger();
@@ -206,3 +207,5 @@ public class IssueController {
         }
     }
 }
+
+
