@@ -11,15 +11,12 @@ import ua.edu.sumdu.nc.controllers.Utils;
 import ua.edu.sumdu.nc.validation.create.issues.CreateIssueRequest;
 import ua.edu.sumdu.nc.validation.update.issues.UpdateIssueRequest;
 
-import javax.validation.Valid;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/issues")
+@RequestMapping(path = "/issues")
 public class IssueController {
 
     private Logger logger = Logger.getRootLogger();
@@ -85,7 +82,7 @@ public class IssueController {
         produces = "application/json",
         consumes = "application/json"
     )
-    public ResponseEntity<String> updateIssue(@Valid @RequestBody UpdateIssueRequest request, BindingResult bindingResult) {
+    public ResponseEntity<String> updateIssue(@RequestBody UpdateIssueRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             logger.error("Invalid request: " + request.toString());
             return new ResponseEntity<>(Utils.getInvalidRequestResponse(bindingResult), HttpStatus.BAD_REQUEST);
@@ -110,26 +107,28 @@ public class IssueController {
     }
 
     /**
-     * @param           issuesIDs a set of {@code issue_id}s of the issues are requested
+     * @param           issueIDs a set of {@code issue_id}s of the issues are requested
      *                           if no one issue is passed, all the issues are returned
      * */
     @RequestMapping(
-        path = "/search/id/{issues_ids}",
+        path = "/search/id/{issue_ids}",
         method = RequestMethod.GET,
         produces = "application/json"
     )
-    public ResponseEntity<String> searchIssuesByIDs(@PathVariable(name = "issues_ids") String [] issuesIDs) {
-        Collection<Long> _issuesIDs;
-        try {
-            _issuesIDs = Arrays.stream(issuesIDs).map(Long::valueOf).collect(Collectors.toCollection(HashSet::new));
-        } catch (NumberFormatException e) {
-            logger.error(e);
-            return new ResponseEntity<>(Utils.getCommonErrorResponse("Wrong number format"),
-                HttpStatus.BAD_REQUEST
+    public ResponseEntity<String> searchIssuesByIDs(@PathVariable(name = "issue_ids") long [] issueIDs) {
+        if (issueIDs == null) {
+            logger.error("issueIDs is null");
+            return new ResponseEntity<>(Utils.getCommonErrorResponse("Internal error"),
+                HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
         try {
-            return new ResponseEntity<>(Utils.buildForResponse(issueService.getIssues(_issuesIDs)), HttpStatus.OK);
+            return new ResponseEntity<>(
+                Utils.buildForResponse(
+                    issueService.getIssues(Arrays.stream(issueIDs).boxed().collect(Collectors.toList()))
+                ),
+                HttpStatus.OK
+            );
         } catch (Exception e) {
             logger.error(e);
             return new ResponseEntity<>(Utils.getCommonErrorResponse(e.getMessage()),
@@ -159,18 +158,13 @@ public class IssueController {
         method = RequestMethod.GET,
         produces = "application/json"
     )
-    public ResponseEntity<String> searchIssuesByReporters(@PathVariable(name = "reporter_ids") String [] reporterIDs) {
-        Collection<Long> _reporterIDs;
+    public ResponseEntity<String> searchIssuesByReporters(@PathVariable(name = "reporter_ids") long [] reporterIDs) {
         try {
-            _reporterIDs = Arrays.stream(reporterIDs).map(Long::valueOf).collect(Collectors.toCollection(HashSet::new));
-        } catch (NumberFormatException e) {
-            logger.error(e);
-            return new ResponseEntity<>(Utils.getCommonErrorResponse("Wrong number format"),
-                HttpStatus.BAD_REQUEST
+            return new ResponseEntity<>(
+                Utils.buildForResponse(
+                    issueService.getIssuesByReporters(Arrays.stream(reporterIDs).boxed().collect(Collectors.toList()))),
+                HttpStatus.OK
             );
-        }
-        try {
-            return new ResponseEntity<>(Utils.buildForResponse(issueService.getIssuesByReporters(_reporterIDs)), HttpStatus.OK);
         } catch (Exception e) {
             logger.error(e);
             return new ResponseEntity<>(Utils.getCommonErrorResponse(e.getMessage()),
@@ -184,19 +178,12 @@ public class IssueController {
         method = RequestMethod.GET,
         produces = "application/json"
     )
-    public ResponseEntity<String> searchIssuesByAssignees(@PathVariable(name = "assignee_ids") String [] assigneeIDs) {
-        Collection<Long> _assigneeIDs;
-        try {
-            _assigneeIDs = Arrays.stream(assigneeIDs).map(Long::valueOf).collect(Collectors.toCollection(HashSet::new));
-        } catch (NumberFormatException e) {
-            logger.error(e);
-            return new ResponseEntity<>(Utils.getCommonErrorResponse("Wrong number format"),
-                HttpStatus.BAD_REQUEST
-            );
-        }
+    public ResponseEntity<String> searchIssuesByAssignees(@PathVariable(name = "assignee_ids") long [] assigneeIDs) {
         try {
             return new ResponseEntity<>(
-                Utils.buildForResponse(issueService.getIssuesByAssignees(_assigneeIDs)),
+                Utils.buildForResponse(
+                    issueService.getIssuesByAssignees(Arrays.stream(assigneeIDs).boxed().collect(Collectors.toList()))
+                ),
                 HttpStatus.OK
             );
         } catch (Exception e) {
@@ -207,5 +194,3 @@ public class IssueController {
         }
     }
 }
-
-

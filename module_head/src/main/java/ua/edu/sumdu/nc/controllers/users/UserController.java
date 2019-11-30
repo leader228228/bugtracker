@@ -3,7 +3,6 @@ package ua.edu.sumdu.nc.controllers.users;
 import entities.bt.User;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,14 +16,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-@RestController()
-@RequestMapping(path = "/users")
+@RestController
+@RequestMapping(path = "/user")
 public class UserController {
 
-    @Autowired
     private UserService userService;
 
     private final Logger logger = Logger.getRootLogger();
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @RequestMapping(
         method = RequestMethod.POST,

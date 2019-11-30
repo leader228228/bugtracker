@@ -5,16 +5,12 @@ import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ua.edu.sumdu.nc.controllers.Utils;
 import services.projects.ProjectService;
+import ua.edu.sumdu.nc.controllers.Utils;
 import ua.edu.sumdu.nc.validation.create.projects.CreateProjectRequest;
 
-import javax.validation.Valid;
-
-@Validated
-@RestController()
+@RestController
 @RequestMapping(path = "/projects")
 public class ProjectController {
 
@@ -32,7 +28,7 @@ public class ProjectController {
         consumes = "application/json",
         produces = "application/json"
     )
-    public ResponseEntity<String> createProject(@Valid @RequestBody CreateProjectRequest request, BindingResult bindingResult) {
+    public ResponseEntity<String> createProject(@RequestBody CreateProjectRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             logger.error("Invalid request: " + request.toString());
             return new ResponseEntity<>(Utils.getInvalidRequestResponse(bindingResult), HttpStatus.BAD_REQUEST);

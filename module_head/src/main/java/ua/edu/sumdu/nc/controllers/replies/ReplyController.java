@@ -4,7 +4,6 @@ import entities.bt.Reply;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import services.replies.ReplyService;
@@ -15,9 +14,8 @@ import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-@Service
-@RestController()
-@RequestMapping(path = "/replies")
+@RestController
+@RequestMapping(path = "/reply")
 public class ReplyController {
 
     private final Logger logger = Logger.getRootLogger();
@@ -38,11 +36,7 @@ public class ReplyController {
             return new ResponseEntity<>(Utils.getCommonErrorResponse("Bad request"), HttpStatus.BAD_REQUEST);
         }
         try {
-            Reply reply = replyService.createReply(
-                request.getAuthorID(),
-                request.getBody(),
-                request.getIssueID()
-            );
+            Reply reply = replyService.createReply(request.getAuthorID(), request.getBody(), request.getIssueID());
             return new ResponseEntity<>(
                 Utils.getCommonSuccessResponse("Reply has been successfully created",
                 "reply_id = " + reply.getReplyID()), HttpStatus.OK
@@ -63,7 +57,7 @@ public class ReplyController {
     )
     public ResponseEntity<String> deleteReply(@PathVariable(name = "reply_ids") long [] replyID) {
         try {
-            replyService.deleteReplies(Arrays.stream(replyID).boxed().collect(Collectors.toSet()));
+            replyService.deleteReplies(Arrays.stream(replyID).boxed().collect(Collectors.toList()));
             return new ResponseEntity<>(
                 Utils.getCommonSuccessResponse("The replies have been successfully deleted (existed)"),
                 HttpStatus.OK

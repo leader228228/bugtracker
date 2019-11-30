@@ -81,10 +81,6 @@
             <id>nexus</id>
             <url>http://nexus.saas.hand-china.com/content/repositories/rdc/</url>
         </repository>
-        <repository>
-            <id>maven-icm-edu</id>
-            <url>http://maven.icm.edu.pl/artifactory/repo/</url>
-        </repository>
     </repositories>
     <build>
         <plugins>
