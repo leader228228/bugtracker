@@ -1,6 +1,6 @@
 package ua.edu.sumdu.nc.controllers.users;
 
-import entities.bt.User;
+import entities.User;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import services.users.UserService;
 import ua.edu.sumdu.nc.controllers.Utils;
-import ua.edu.sumdu.nc.validation.create.users.CreateUserRequest;
+import ua.edu.sumdu.nc.validation.users.CreateUserRequest;
 
 import javax.validation.Valid;
 import java.util.Arrays;

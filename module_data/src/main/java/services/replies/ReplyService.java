@@ -1,7 +1,7 @@
 package services.replies;
 
 import entities.EntityFactory;
-import entities.bt.Reply;
+import entities.Reply;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import services.DBUtils;

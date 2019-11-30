@@ -2,7 +2,7 @@ package ua.edu.sumdu.nc.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import entities.bt.Entity;
+import entities.Entity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -50,6 +50,7 @@ public class Utils {
 
     public static String buildForResponse(Collection<? extends Entity> issues) throws JsonProcessingException {
         return new ObjectMapper().writer().writeValueAsString(new Object() {
+            /** @noinspection unused*/
             public Collection<? extends Entity> _issues = issues;
         });
     }

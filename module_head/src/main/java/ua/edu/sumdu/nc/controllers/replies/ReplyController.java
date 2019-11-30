@@ -1,6 +1,6 @@
 package ua.edu.sumdu.nc.controllers.replies;
 
-import entities.bt.Reply;
+import entities.Reply;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import services.replies.ReplyService;
 import ua.edu.sumdu.nc.controllers.Utils;
-import ua.edu.sumdu.nc.validation.create.replies.CreateReplyRequest;
+import ua.edu.sumdu.nc.validation.replies.CreateReplyRequest;
 
 import javax.validation.Valid;
 import java.util.Arrays;

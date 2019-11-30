@@ -1,9 +1,8 @@
 package entities;
 
-import entities.bt.*;
-
 public class EntityFactory {
 
+    /** @noinspection unchecked*/
     public static <T extends Entity> T get(Class<T> clazz) {
         if (clazz.equals(Issue.class)) {
             return (T) new Issue(){};

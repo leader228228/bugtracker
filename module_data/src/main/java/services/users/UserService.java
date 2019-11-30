@@ -1,9 +1,8 @@
 package services.users;
 
 import entities.EntityFactory;
-import entities.bt.User;
+import entities.User;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import services.DBUtils;
 
@@ -16,10 +15,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+/** @noinspection Duplicates*/
 @Service
 public class UserService {
-    @Autowired
+
     private DataSource dataSource;
+
+    public UserService(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     private void saveUser(User user) throws SQLException {
         String insertUserQuery = "insert into bt_users(login, password, first_name, last_name) values(?, ?, ?, ?)";
@@ -110,6 +114,7 @@ public class UserService {
 
     public User hideCredentials(User user) {
         return new User() {
+
             @Override
             public long getUserID() {
                 return user.getUserID();
@@ -122,7 +127,7 @@ public class UserService {
 
             @Override
             public void setFirstName(String firstName) {
-                throw new UnsupportedOperationException("This object is only a user view");
+                throw new UnsupportedOperationException("This object is a read-only user view");
             }
 
             @Override
@@ -132,7 +137,7 @@ public class UserService {
 
             @Override
             public void setLastName(String lastName) {
-                throw new UnsupportedOperationException("This object is only a user view");
+                throw new UnsupportedOperationException("This object is a read-only user view");
             }
 
             @Override
@@ -142,7 +147,7 @@ public class UserService {
 
             @Override
             public void setLogin(String login) {
-                throw new UnsupportedOperationException("This object is only a user view");
+                throw new UnsupportedOperationException("This object is a read-only user view");
             }
 
             @Override
@@ -152,12 +157,12 @@ public class UserService {
 
             @Override
             public void setPassword(String password) {
-                throw new UnsupportedOperationException("This object is only a user view");
+                throw new UnsupportedOperationException("This object is a read-only user view");
             }
 
             @Override
             public void setUserID(long userId) {
-                throw new UnsupportedOperationException("This object is only a user view");
+                throw new UnsupportedOperationException("This object is a read-only user view");
             }
         };
     }

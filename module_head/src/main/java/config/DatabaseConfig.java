@@ -7,18 +7,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 import javax.sql.DataSource;
+import java.sql.Driver;
 import java.sql.SQLException;
 
 @Configuration
 public class DatabaseConfig {
-    //@Value("${db.connection.url}")
+
     private String URL;
-    //@Value("${db.connection.user}")
     private String user;
-    //@Value("${db.connection.password}")
     private String password;
-    //@Value("${db.connection.driver}")
-    private Class JDBCDriver;
+    /** @noinspection FieldCanBeLocal, unused */
+    private Class<? extends Driver> JDBCDriver;
 
     public DatabaseConfig(
         @Value("${db.connection.url}") String URL,
@@ -28,18 +27,9 @@ public class DatabaseConfig {
         this.URL = URL;
         this.user = user;
         this.password = password;
-        JDBCDriver = Class.forName(driverClass);
+        //noinspection unchecked
+        JDBCDriver = (Class<? extends Driver>) Class.forName(driverClass);
     }
-
-    /*{
-        try {
-            JDBCDriver = Class.forName(driverClass);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Can not load JDBC driver", e);
-        }
-    }*/
-
-
 
     @Bean
     @Scope(scopeName = "prototype")

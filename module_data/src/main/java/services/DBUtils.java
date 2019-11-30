@@ -1,23 +1,23 @@
 package services;
 
 import entities.EntityFactory;
-import entities.bt.Issue;
-import entities.bt.Project;
-import entities.bt.Reply;
-import entities.bt.User;
+import entities.Issue;
+import entities.Project;
+import entities.Reply;
+import entities.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DBUtils {
 
-    public static final char SQL_ESCAPE_CHAR = '&';
+    private static final char SQL_ESCAPE_CHAR = '&';
 
     public static String getPatternContains(String string) {
         return '%' + escapeRegexChars(string) + '%';
     }
 
-    public static String escapeRegexChars(String string) {
+    private static String escapeRegexChars(String string) {
         return string
             .replaceAll("%",SQL_ESCAPE_CHAR + "%")
             .replaceAll(String.valueOf(SQL_ESCAPE_CHAR), "" + SQL_ESCAPE_CHAR + SQL_ESCAPE_CHAR)

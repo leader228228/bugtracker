@@ -1,6 +1,6 @@
 package ua.edu.sumdu.nc.controllers.issues;
 
-import entities.bt.Issue;
+import entities.Issue;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,8 +8,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import services.issues.IssueService;
 import ua.edu.sumdu.nc.controllers.Utils;
-import ua.edu.sumdu.nc.validation.create.issues.CreateIssueRequest;
-import ua.edu.sumdu.nc.validation.update.issues.UpdateIssueRequest;
+import ua.edu.sumdu.nc.validation.issues.CreateIssueRequest;
+import ua.edu.sumdu.nc.validation.issues.UpdateIssueRequest;
 
 import java.sql.SQLException;
 import java.util.Arrays;

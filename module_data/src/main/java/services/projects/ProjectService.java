@@ -1,7 +1,7 @@
 package services.projects;
 
 import entities.EntityFactory;
-import entities.bt.Project;
+import entities.Project;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import services.DBUtils;

@@ -1,7 +1,7 @@
 package services.issues;
 
 import entities.EntityFactory;
-import entities.bt.Issue;
+import entities.Issue;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import services.DBUtils;

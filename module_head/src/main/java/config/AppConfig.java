@@ -10,34 +10,22 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import ua.edu.sumdu.nc.converters.RequestConverterFactory;
-import ua.edu.sumdu.nc.converters.create.issues.CreateIssueRequestConverter;
-import ua.edu.sumdu.nc.converters.create.projects.CreateProjectRequestConverter;
-import ua.edu.sumdu.nc.converters.create.replies.CreateReplyRequestConverter;
-import ua.edu.sumdu.nc.converters.create.users.CreateUserRequestConverter;
-import ua.edu.sumdu.nc.converters.delete.issues.DeleteIssueRequestConverter;
-import ua.edu.sumdu.nc.converters.delete.projects.DeleteProjectRequestConverter;
-import ua.edu.sumdu.nc.converters.delete.replies.DeleteReplyRequestConverter;
-import ua.edu.sumdu.nc.converters.delete.users.DeleteUserRequestConverter;
-import ua.edu.sumdu.nc.converters.search.issues.IssueSearchRequestConverter;
-import ua.edu.sumdu.nc.converters.search.replies.ReplySearchRequestConverter;
-import ua.edu.sumdu.nc.converters.search.users.UserSearchRequestConverter;
-import ua.edu.sumdu.nc.converters.update.issues.IssueUpdateRequestConverter;
-import ua.edu.sumdu.nc.converters.update.replies.ReplyUpdateRequestConverter;
+import ua.edu.sumdu.nc.validation.BTConverter;
 import ua.edu.sumdu.nc.validation.BTRequest;
-import ua.edu.sumdu.nc.validation.create.issues.CreateIssueRequest;
-import ua.edu.sumdu.nc.validation.create.projects.CreateProjectRequest;
-import ua.edu.sumdu.nc.validation.create.replies.CreateReplyRequest;
-import ua.edu.sumdu.nc.validation.create.users.CreateUserRequest;
-import ua.edu.sumdu.nc.validation.delete.issues.DeleteIssueRequest;
-import ua.edu.sumdu.nc.validation.delete.projects.DeleteProjectRequest;
-import ua.edu.sumdu.nc.validation.delete.replies.DeleteReplyRequest;
-import ua.edu.sumdu.nc.validation.delete.users.DeleteUserRequest;
-import ua.edu.sumdu.nc.validation.search.issues.SearchIssuesRequest;
-import ua.edu.sumdu.nc.validation.search.replies.SearchRepliesRequest;
-import ua.edu.sumdu.nc.validation.search.users.SearchUsersRequest;
-import ua.edu.sumdu.nc.validation.update.issues.UpdateIssueRequest;
-import ua.edu.sumdu.nc.validation.update.replies.UpdateReplyRequest;
+import ua.edu.sumdu.nc.converters.BTRequestConverterFactory;
+import ua.edu.sumdu.nc.validation.issues.CreateIssueRequest;
+import ua.edu.sumdu.nc.validation.projects.CreateProjectRequest;
+import ua.edu.sumdu.nc.validation.replies.CreateReplyRequest;
+import ua.edu.sumdu.nc.validation.users.CreateUserRequest;
+import ua.edu.sumdu.nc.validation.issues.DeleteIssueRequest;
+import ua.edu.sumdu.nc.validation.projects.DeleteProjectRequest;
+import ua.edu.sumdu.nc.validation.replies.DeleteReplyRequest;
+import ua.edu.sumdu.nc.validation.users.DeleteUserRequest;
+import ua.edu.sumdu.nc.validation.issues.SearchIssuesRequest;
+import ua.edu.sumdu.nc.validation.replies.SearchRepliesRequest;
+import ua.edu.sumdu.nc.validation.users.SearchUsersRequest;
+import ua.edu.sumdu.nc.validation.issues.UpdateIssueRequest;
+import ua.edu.sumdu.nc.validation.replies.UpdateReplyRequest;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
@@ -57,8 +45,6 @@ public class AppConfig
         context.register(AppConfig.class);
         context.scan("config");
         context.setBeanName("applicationContext");
-        //XmlWebApplicationContext appContext = new XmlWebApplicationContext();
-        //appContext.setConfigLocation("/WEB-INF/dispatcherServlet-servlet.xml");
         ServletRegistration.Dynamic dispatcher =
                 servletContext.addServlet("dispatcherServlet", new DispatcherServlet(context));
         dispatcher.setLoadOnStartup(1);
@@ -68,23 +54,19 @@ public class AppConfig
     @Override
     public void addFormatters(FormatterRegistry registry) {
         Map<Class<? extends BTRequest>, Converter<String, BTRequest>> map = new HashMap<>();
-        map.put(CreateIssueRequest.class, new CreateIssueRequestConverter());
-        map.put(CreateProjectRequest.class, new CreateProjectRequestConverter());
-        map.put(CreateUserRequest.class, new CreateUserRequestConverter());
-        map.put(CreateReplyRequest.class, new CreateReplyRequestConverter());
-
-        map.put(DeleteIssueRequest.class, new DeleteIssueRequestConverter());
-        map.put(DeleteProjectRequest.class, new DeleteProjectRequestConverter());
-        map.put(DeleteUserRequest.class, new DeleteUserRequestConverter());
-        map.put(DeleteReplyRequest.class, new DeleteReplyRequestConverter());
-
-        map.put(SearchIssuesRequest.class, new IssueSearchRequestConverter());
-        map.put(SearchRepliesRequest.class, new ReplySearchRequestConverter());
-        map.put(SearchUsersRequest.class, new UserSearchRequestConverter());
-
-        map.put(UpdateIssueRequest.class, new IssueUpdateRequestConverter());
-        map.put(UpdateReplyRequest.class, new ReplyUpdateRequestConverter());
-
-        registry.addConverterFactory(new RequestConverterFactory(map));
+        map.put(CreateIssueRequest.class,   (BTConverter) () -> CreateIssueRequest.class);
+        map.put(CreateProjectRequest.class, (BTConverter) () -> CreateProjectRequest.class);
+        map.put(CreateUserRequest.class,    (BTConverter) () -> CreateUserRequest.class);
+        map.put(CreateReplyRequest.class,   (BTConverter) () -> CreateReplyRequest.class);
+        map.put(DeleteIssueRequest.class,   (BTConverter) () -> DeleteIssueRequest.class);
+        map.put(DeleteProjectRequest.class, (BTConverter) () -> DeleteProjectRequest.class);
+        map.put(DeleteUserRequest.class,    (BTConverter) () -> DeleteUserRequest.class);
+        map.put(DeleteReplyRequest.class,   (BTConverter) () -> DeleteReplyRequest.class);
+        map.put(SearchIssuesRequest.class,  (BTConverter) () -> SearchIssuesRequest.class);
+        map.put(SearchRepliesRequest.class, (BTConverter) () -> SearchRepliesRequest.class);
+        map.put(SearchUsersRequest.class,   (BTConverter) () -> SearchUsersRequest.class);
+        map.put(UpdateIssueRequest.class,   (BTConverter) () -> UpdateIssueRequest.class);
+        map.put(UpdateReplyRequest.class,   (BTConverter) () -> UpdateReplyRequest.class);
+        registry.addConverterFactory(new BTRequestConverterFactory(map));
     }
 }
