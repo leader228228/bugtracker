@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 
 /** @noinspection Duplicates*/
 @Service
@@ -165,5 +166,39 @@ public class UserService {
                 throw new UnsupportedOperationException("This object is a read-only user view");
             }
         };
+    }
+
+    public User searchUserByLogin(String login) throws SQLException {
+        String query = "select * from bt_users where login = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, login);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return DBUtils.readUser(resultSet);
+                } else {
+                    return null;
+                }
+            }
+        }
+    }
+
+    public void updateUser(long userID, String firstName, String lastName, String login, String password)
+        throws SQLException {
+        Objects.requireNonNull(firstName, "First name can not be set to null");
+        Objects.requireNonNull(lastName, "Last name can not be set to null");
+        Objects.requireNonNull(login, "Login can not be set to null");
+        Objects.requireNonNull(password, "Password can not be set to null");
+        String updateQuery =
+            "update bt_users set first_name = ?, last_name = ?, login = ?, password = ? where user_id = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+            preparedStatement.setString(1, firstName);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setString(3, login);
+            preparedStatement.setString(4, password);
+            preparedStatement.setLong(5, userID);
+            preparedStatement.executeUpdate();
+        }
     }
 }

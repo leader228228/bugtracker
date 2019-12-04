@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import services.users.UserService;
 import ua.edu.sumdu.nc.controllers.Utils;
 import ua.edu.sumdu.nc.validation.users.CreateUserRequest;
+import ua.edu.sumdu.nc.validation.users.UpdateUserRequest;
 
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -51,6 +53,31 @@ public class UserController {
             }
             return new ResponseEntity<>(
                 "The user (user_id = " + user.getUserID() + " ) has been successfully created", HttpStatus.OK
+            );
+        } catch (Exception e) {
+            logger.error(e);
+            return new ResponseEntity<>("Internal error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(
+        method = RequestMethod.POST,
+        consumes = "application/json",
+        produces = "application/json",
+        path = "/update/{login}"
+    )
+    public ResponseEntity<String> updateUser(@PathVariable(name = "login") String login, @Valid @RequestBody UpdateUserRequest request, BindingResult bindingResult) {
+        try {
+            User user = userService.searchUserByLogin(login);
+            userService.updateUser(
+                user.getUserID(),
+                StringUtils.isBlank(request.getFirstName()) ? user.getFirstName() : request.getFirstName(),
+                StringUtils.isBlank(request.getLastName()) ? user.getLastName() : request.getLastName(),
+                Objects.requireNonNull(login, "Login must not be blank"),
+                StringUtils.isBlank(request.getPassword()) ? user.getPassword() : request.getPassword()
+            );
+            return new ResponseEntity<>(
+                "The user (" + login + " ) has been successfully updated", HttpStatus.OK
             );
         } catch (Exception e) {
             logger.error(e);
