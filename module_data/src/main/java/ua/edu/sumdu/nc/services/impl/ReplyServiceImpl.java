@@ -31,7 +31,14 @@ public class ReplyServiceImpl implements ReplyService {
         return reply;
     }
 
-    private void saveReply(Reply reply) throws SQLException {
+    @Override
+    public Reply createReply(long authorID, String body, long issueID) throws SQLException {
+        Reply reply = new Reply();
+        reply.setAuthorID(authorID);
+        reply.setBody(body);
+        reply.setCreated(new Date(System.currentTimeMillis()));
+        reply.setIssueID(issueID);
+
         String insertReplyQuery = "insert into bt_replies(\"body\", issue_id, author_id, created) values(?, ?, ?, ?)";
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(insertReplyQuery)) {
@@ -41,16 +48,6 @@ public class ReplyServiceImpl implements ReplyService {
             preparedStatement.setDate(4, reply.getCreated());
             preparedStatement.executeUpdate();
         }
-    }
-
-    @Override
-    public Reply createReply(long authorID, String body, long issueID) throws SQLException {
-        Reply reply = new Reply();
-        reply.setAuthorID(authorID);
-        reply.setBody(body);
-        reply.setCreated(new Date(System.currentTimeMillis()));
-        reply.setIssueID(issueID);
-        saveReply(reply);
         return reply;
     }
 

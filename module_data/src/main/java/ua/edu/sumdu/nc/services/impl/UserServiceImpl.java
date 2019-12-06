@@ -36,7 +36,13 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private void saveUser(User user) throws SQLException {
+    @Override
+    public User createUser(String firstName, String lastName, String login, String password) throws SQLException {
+        User user = new User();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setLogin(login);
+        user.setPassword(String.valueOf(password.hashCode()));
         String insertUserQuery = "insert into bt_users(login, password, first_name, last_name) values(?, ?, ?, ?)";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(insertUserQuery)) {
@@ -46,16 +52,6 @@ public class UserServiceImpl implements UserService {
             preparedStatement.setString(4, user.getLastName());
             preparedStatement.executeUpdate();
         }
-    }
-
-    @Override
-    public User createUser(String firstName, String lastName, String login, String password) throws SQLException {
-        User user = new User();
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setLogin(login);
-        user.setPassword(String.valueOf(password.hashCode()));
-        saveUser(user);
         return user;
     }
 

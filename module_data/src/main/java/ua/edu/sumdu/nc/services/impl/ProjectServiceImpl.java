@@ -33,7 +33,11 @@ public class ProjectServiceImpl implements ProjectService {
         return project;
     }
 
-    private void saveProject(Project project) throws SQLException {
+    @Override
+    public Project createProject(String projectName) throws SQLException {
+        Project project = new Project();
+        project.setName(projectName);
+
         String saveProjectQuery = "insert into bt_projects(name) values(?)";
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(saveProjectQuery)) {
@@ -43,13 +47,6 @@ public class ProjectServiceImpl implements ProjectService {
                 logger.info("Project id = " + project.getProjectID() + " has been successfully saved");
             }
         }
-    }
-
-    @Override
-    public Project createProject(String projectName) throws SQLException {
-        Project project = new Project();
-        project.setName(projectName);
-        saveProject(project);
         return project;
     }
 

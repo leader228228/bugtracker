@@ -43,25 +43,6 @@ public class IssueServiceImpl implements IssueService {
         return issue;
     }
 
-    private void saveIssue(Issue issue) throws SQLException {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(
-            "INSERT INTO BT_ISSUES("
-                + "ISSUE_ID, REPORTER_ID, ASSIGNEE_ID, CREATED, STATUS_ID, PROJECT_ID, \"body\", TITLE)"
-                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
-        ) {
-            preparedStatement.setLong(1, issue.getIssueID());
-            preparedStatement.setLong(2, issue.getReporterID());
-            preparedStatement.setLong(3, issue.getAssigneeID());
-            preparedStatement.setDate(4, issue.getCreated());
-            preparedStatement.setInt(5, issue.getStatusID());
-            preparedStatement.setLong(6, issue.getProjectID());
-            preparedStatement.setString(7, issue.getBody());
-            preparedStatement.setString(8, issue.getTitle());
-            preparedStatement.executeUpdate();
-        }
-    }
-
     @Override
     public void updateIssue(long assigneeID, int statusID, long projectID, String body, String title, long issueID)
         throws SQLException {
@@ -104,7 +85,23 @@ public class IssueServiceImpl implements IssueService {
         issue.setAssigneeID(assigneeID == null ? 0 : assigneeID);
         issue.setReporterID(reporterID);
         issue.setCreated(new Date(System.currentTimeMillis()));
-        saveIssue(issue);
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                 "INSERT INTO BT_ISSUES("
+                     + "ISSUE_ID, REPORTER_ID, ASSIGNEE_ID, CREATED, STATUS_ID, PROJECT_ID, \"body\", TITLE)"
+                     + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
+        ) {
+            preparedStatement.setLong(1, issue.getIssueID());
+            preparedStatement.setLong(2, issue.getReporterID());
+            preparedStatement.setLong(3, issue.getAssigneeID());
+            preparedStatement.setDate(4, issue.getCreated());
+            preparedStatement.setInt(5, issue.getStatusID());
+            preparedStatement.setLong(6, issue.getProjectID());
+            preparedStatement.setString(7, issue.getBody());
+            preparedStatement.setString(8, issue.getTitle());
+            preparedStatement.executeUpdate();
+        }
         return issue;
     }
 
