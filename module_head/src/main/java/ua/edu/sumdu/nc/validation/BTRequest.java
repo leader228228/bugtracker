@@ -1,6 +1,6 @@
 package ua.edu.sumdu.nc.validation;
 
-import ua.edu.sumdu.nc.converters.BTRequestConverterFactory;
+import ua.edu.sumdu.nc.BTRequestConverterFactory;
 
 /**
  *  The class marked by this interface should be a POJO class and represents
