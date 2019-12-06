@@ -1,7 +1,6 @@
 package ua.edu.sumdu.nc.services.impl;
 
 import org.springframework.stereotype.Service;
-import ua.edu.sumdu.nc.entities.EntityFactory;
 import ua.edu.sumdu.nc.entities.Reply;
 import ua.edu.sumdu.nc.services.DBUtils;
 import ua.edu.sumdu.nc.services.ReplyService;
@@ -23,7 +22,7 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     private static Reply readReply(ResultSet resultSet) throws SQLException {
-        Reply reply = EntityFactory.get(Reply.class);
+        Reply reply = new Reply();
         reply.setAuthorID(resultSet.getLong("author_id"));
         reply.setBody(resultSet.getString("body"));
         reply.setIssueID(resultSet.getLong("issue_id"));
@@ -46,7 +45,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public Reply createReply(long authorID, String body, long issueID) throws SQLException {
-        Reply reply = EntityFactory.get(Reply.class);
+        Reply reply = new Reply();
         reply.setAuthorID(authorID);
         reply.setBody(body);
         reply.setCreated(new Date(System.currentTimeMillis()));

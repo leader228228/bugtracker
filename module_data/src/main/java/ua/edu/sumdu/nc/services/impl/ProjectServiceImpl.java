@@ -2,7 +2,6 @@ package ua.edu.sumdu.nc.services.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-import ua.edu.sumdu.nc.entities.EntityFactory;
 import ua.edu.sumdu.nc.entities.Project;
 import ua.edu.sumdu.nc.services.DBUtils;
 import ua.edu.sumdu.nc.services.ProjectService;
@@ -28,7 +27,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     private static Project readProject(ResultSet resultSet) throws SQLException {
-        Project project = EntityFactory.get(Project.class);
+        Project project = new Project();
         project.setName(resultSet.getString("name"));
         project.setProjectID(resultSet.getInt("project_id"));
         return project;
@@ -48,7 +47,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project createProject(String projectName) throws SQLException {
-        Project project = EntityFactory.get(Project.class);
+        Project project = new Project();
         project.setName(projectName);
         saveProject(project);
         return project;

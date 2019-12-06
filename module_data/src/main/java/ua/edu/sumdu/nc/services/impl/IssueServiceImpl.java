@@ -2,7 +2,6 @@ package ua.edu.sumdu.nc.services.impl;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-import ua.edu.sumdu.nc.entities.EntityFactory;
 import ua.edu.sumdu.nc.entities.Issue;
 import ua.edu.sumdu.nc.services.DBUtils;
 import ua.edu.sumdu.nc.services.IssueService;
@@ -32,7 +31,7 @@ public class IssueServiceImpl implements IssueService {
      * !NOTE the method expects that you have invoked {@code ResultSet.next()} method before
      * */
     private static Issue readIssue(ResultSet resultSet) throws SQLException {
-        Issue issue = EntityFactory.get(Issue.class);
+        Issue issue = new Issue();
         issue.setIssueID(resultSet.getLong("issue_id"));
         issue.setReporterID(resultSet.getLong("reporter_id"));
         issue.setProjectID(resultSet.getLong("project_id"));
@@ -97,7 +96,7 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public Issue createIssue(@Nullable Integer statusID, int projectID, String title, String body,
                              @Nullable Long assigneeID, long reporterID) throws SQLException {
-        Issue issue = EntityFactory.get(Issue.class);
+        Issue issue = new Issue();
         issue.setStatusID(statusID == null ? 0 : statusID);
         issue.setProjectID(projectID);
         issue.setTitle(title);

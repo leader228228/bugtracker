@@ -2,7 +2,6 @@ package ua.edu.sumdu.nc.services.impl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import ua.edu.sumdu.nc.entities.EntityFactory;
 import ua.edu.sumdu.nc.entities.User;
 import ua.edu.sumdu.nc.services.DBUtils;
 import ua.edu.sumdu.nc.services.UserService;
@@ -28,7 +27,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private static User readUser(ResultSet resultSet) throws SQLException {
-        User user = EntityFactory.get(User.class);
+        User user = new User();
         user.setUserID(resultSet.getLong("user_id"));
         user.setLogin(resultSet.getString("login"));
         user.setPassword(resultSet.getString("password"));
@@ -51,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(String firstName, String lastName, String login, String password) throws SQLException {
-        User user = EntityFactory.get(User.class);
+        User user = new User();
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setLogin(login);
