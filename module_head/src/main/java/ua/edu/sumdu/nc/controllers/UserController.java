@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(path = "/user")
@@ -53,7 +54,8 @@ public class UserController {
                 logger.info("The user (user_id = " + user.getUserID() + " ) has been successfully created");
             }
             return new ResponseEntity<>(
-                "The user (user_id = " + user.getUserID() + " ) has been successfully created", HttpStatus.OK
+                    String.valueOf(Stream.of(user).map(DBUtils::createUserView).collect(Collectors.toList())),
+                    HttpStatus.OK
             );
         } catch (Exception e) {
             logger.error(e);
@@ -78,7 +80,8 @@ public class UserController {
                 StringUtils.isBlank(request.getPassword()) ? user.getPassword() : request.getPassword()
             );
             return new ResponseEntity<>(
-                "The user (" + login + " ) has been successfully updated", HttpStatus.OK
+                    String.valueOf(Stream.of(user).map(DBUtils::createUserView).collect(Collectors.toList())),
+                    HttpStatus.OK
             );
         } catch (Exception e) {
             logger.error(e);

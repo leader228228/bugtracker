@@ -13,6 +13,7 @@ import ua.edu.sumdu.nc.validation.issues.UpdateIssueRequest;
 
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 @RestController
@@ -54,9 +55,7 @@ public class IssueController {
                 HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
-        return new ResponseEntity<>(Utils.getCommonSuccessResponse(
-            "The issue has been successfully created", "issue_id = " + issue.getIssueID()), HttpStatus.OK
-        );
+        return new ResponseEntity<>(Utils.getCommonSuccessResponse(issue.toString()), HttpStatus.OK);
     }
 
     @RequestMapping(
@@ -100,10 +99,15 @@ public class IssueController {
             logger.error(e);
             return new ResponseEntity<>(Utils.getCommonErrorResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(Utils.getCommonSuccessResponse(
-            "The issue id = " + request.getIssueID() + " was successfully updated (if it existed)"),
-            HttpStatus.ACCEPTED
-        );
+        try {
+            return new ResponseEntity<String>(
+                Utils.getCommonSuccessResponse(
+                    issueService.getIssues(Collections.singletonList(request.getIssueID())).toString()),
+                HttpStatus.OK
+            );
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     /**

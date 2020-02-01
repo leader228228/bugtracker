@@ -38,8 +38,7 @@ public class ReplyController {
         try {
             Reply reply = replyService.createReply(request.getAuthorID(), request.getBody(), request.getIssueID());
             return new ResponseEntity<>(
-                Utils.getCommonSuccessResponse("Reply has been successfully created",
-                "reply_id = " + reply.getReplyID()), HttpStatus.OK
+                Utils.getCommonSuccessResponse(reply.toString()), HttpStatus.OK
             );
         } catch (Exception e) {
             logger.error(e);

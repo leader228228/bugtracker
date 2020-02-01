@@ -36,10 +36,7 @@ public class ProjectController {
         try {
             Project project = projectService.createProject(request.getName());
             return new ResponseEntity<>(
-                Utils.getCommonSuccessResponse(
-                    "The project has been successfully created",
-                    "project_id = " + project.getName()
-                ),
+                Utils.getCommonSuccessResponse(project.toString()),
                 HttpStatus.OK
             );
         } catch (Exception e) {
