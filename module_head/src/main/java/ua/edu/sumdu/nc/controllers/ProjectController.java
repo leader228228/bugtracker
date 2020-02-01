@@ -99,14 +99,21 @@ public class ProjectController {
         method = RequestMethod.GET,
         produces = "application/json"
     )
-    public ResponseEntity<String> searchProject(@PathVariable(name = "project_id") long projectID) {
+    public ResponseEntity<String> deleteProject(@PathVariable(name = "project_id") long projectID) {
         try {
-            projectService.deleteProject(projectID);
-            return new ResponseEntity<>(
-                Utils.getCommonSuccessResponse(
-                    "The project and all its issues have been successfully deleted (if the project existed)"),
-                HttpStatus.OK
-            );
+            boolean projectHasBeenDeleted = projectService.deleteProject(projectID);
+            if (projectHasBeenDeleted) {
+                return new ResponseEntity<>(
+                        Utils.getCommonSuccessResponse("The project and all its issues has been deleted"),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        Utils.getCommonErrorResponse(
+                                "The project can not be deleted"),
+                        HttpStatus.BAD_REQUEST
+                );
+            }
         } catch (Exception e) {
             logger.error(e);
             return new ResponseEntity<>(

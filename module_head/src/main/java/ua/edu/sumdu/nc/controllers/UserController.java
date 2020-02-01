@@ -59,7 +59,10 @@ public class UserController {
             );
         } catch (Exception e) {
             logger.error(e);
-            return new ResponseEntity<>("Internal error", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(
+                    Utils.getCommonErrorResponse("Internal error"),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
 
@@ -69,20 +72,34 @@ public class UserController {
         produces = "application/json",
         path = "/update/{login}"
     )
-    public ResponseEntity<String> updateUser(@PathVariable(name = "login") String login, @Valid @RequestBody UpdateUserRequest request, BindingResult bindingResult) {
+    public ResponseEntity<String>
+    updateUser(
+            @PathVariable(name = "login") String login,
+            @Valid @RequestBody UpdateUserRequest request,
+            BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return new ResponseEntity<>(Utils.getCommonErrorResponse("Bad request"), HttpStatus.BAD_REQUEST);
+        }
         try {
             User user = userService.searchUserByLogin(login);
-            userService.updateUser(
+            boolean hasUserBeenUpdated = userService.updateUser(
                 user.getUserID(),
                 StringUtils.isBlank(request.getFirstName()) ? user.getFirstName() : request.getFirstName(),
                 StringUtils.isBlank(request.getLastName()) ? user.getLastName() : request.getLastName(),
                 Objects.requireNonNull(login, "Login must not be blank"),
                 StringUtils.isBlank(request.getPassword()) ? user.getPassword() : request.getPassword()
             );
-            return new ResponseEntity<>(
-                    String.valueOf(Stream.of(user).map(DBUtils::createUserView).collect(Collectors.toList())),
-                    HttpStatus.OK
-            );
+            if (hasUserBeenUpdated) {
+                return new ResponseEntity<>(
+                        Utils.getCommonSuccessResponse("The user has been successfully updated"),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        Utils.getCommonErrorResponse("The user has not been updated"),
+                        HttpStatus.BAD_REQUEST
+                );
+            }
         } catch (Exception e) {
             logger.error(e);
             return new ResponseEntity<>("Internal error", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -97,14 +114,24 @@ public class UserController {
     public ResponseEntity<String> deleteUsers(@PathVariable(name = "user_ids") long [] userIDs) {
         if (userIDs.length == 0) {
             logger.error("Any user_id is detected");
-            return new ResponseEntity<>("Bad request", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(Utils.getCommonErrorResponse("Bad request"), HttpStatus.BAD_REQUEST);
         }
         try {
-            userService.deleteUsers(userIDs);
+            boolean hasUserBeenDeleted = userService.deleteUsers(userIDs);
             if (logger.isInfoEnabled()) {
                 logger.info("The users (user_id in " + Arrays.toString(userIDs) + ") are deleted");
             }
-            return new ResponseEntity<>("The users are deleted (which existed)", HttpStatus.OK);
+            if (hasUserBeenDeleted) {
+                return new ResponseEntity<>(
+                        Utils.getCommonSuccessResponse("The user has been successfully deleted"),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        Utils.getCommonErrorResponse("The user has not been deleted"),
+                        HttpStatus.BAD_REQUEST
+                );
+            }
         } catch (Exception e) {
             logger.error(e);
             return new ResponseEntity<>("Internal error", HttpStatus.INTERNAL_SERVER_ERROR);

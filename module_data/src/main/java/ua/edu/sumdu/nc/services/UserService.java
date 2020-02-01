@@ -19,10 +19,10 @@ public interface UserService {
      * */
     Collection<User> searchUsersByName(String name) throws SQLException;
 
-    void deleteUsers(long[] userIDs) throws SQLException;
+    boolean deleteUsers(long[] userIDs) throws SQLException;
 
     User searchUserByLogin(String login) throws SQLException;
 
-    void updateUser(long userID, String firstName, String lastName, String login, String password)
+    boolean updateUser(long userID, String firstName, String lastName, String login, String password)
         throws SQLException;
 }

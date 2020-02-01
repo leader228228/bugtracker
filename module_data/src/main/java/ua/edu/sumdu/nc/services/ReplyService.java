@@ -9,7 +9,7 @@ public interface ReplyService {
 
     Reply createReply(long authorID, String body, long issueID) throws SQLException;
 
-    void deleteReplies(Collection<Long> repliesIDs) throws SQLException;
+    boolean deleteReplies(Collection<Long> repliesIDs) throws SQLException;
 
     Collection<Reply> getAll() throws SQLException;
 

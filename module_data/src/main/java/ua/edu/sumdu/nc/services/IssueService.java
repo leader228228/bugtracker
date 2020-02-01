@@ -8,10 +8,10 @@ import java.util.Collection;
 
 public interface IssueService {
 
-    void updateIssue(long assigneeID, int statusID, long projectID, String body, String title, long issueID)
+    boolean updateIssue(long assigneeID, int statusID, long projectID, String body, String title, long issueID)
         throws SQLException;
 
-    void deleteIssue(long issueID) throws SQLException;
+    boolean deleteIssue(long issueID) throws SQLException;
 
     Issue createIssue(@Nullable Integer statusID, int projectID, String title, String body,
                       @Nullable Long assigneeID, long reporterID) throws SQLException;

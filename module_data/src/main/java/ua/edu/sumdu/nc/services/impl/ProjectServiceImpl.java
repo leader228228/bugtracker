@@ -96,12 +96,12 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void deleteProject(long projectID) throws SQLException {
+    public boolean deleteProject(long projectID) throws SQLException {
         String deleteProjectQuery = "delete from bt_projects where project_id = ?";
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(deleteProjectQuery)) {
             preparedStatement.setLong(1, projectID);
-            preparedStatement.executeUpdate();
+            return preparedStatement.executeUpdate() != 0;
         }
     }
 }

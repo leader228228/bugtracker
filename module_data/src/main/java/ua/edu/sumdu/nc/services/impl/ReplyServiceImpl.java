@@ -52,16 +52,16 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public void deleteReplies(Collection<Long> repliesIDs) throws SQLException {
+    public boolean deleteReplies(Collection<Long> repliesIDs) throws SQLException {
         if (repliesIDs.size() == 0 || repliesIDs.contains(null)) {
-            return;
+            return false;
         }
         String _repliesIDs = repliesIDs.toString();
         String deleteRepliesQuery = "delete from bt_replies where reply_id in ("
             + _repliesIDs.substring(1, _repliesIDs.length() - 1) + ")";
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(deleteRepliesQuery)) {
-            preparedStatement.executeUpdate();
+            return preparedStatement.executeUpdate() != 0;
         }
     }
 

@@ -107,16 +107,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUsers(long[] userIDs) throws SQLException {
+    public boolean deleteUsers(long[] userIDs) throws SQLException {
         if (userIDs.length == 0) {
-            return;
+            return true;
         }
         String _userIDs = Arrays.toString(userIDs);
         String deleteUsersQuery =
             "delete from bt_users where user_id in (" + _userIDs.substring(1, _userIDs.length() -1) + ")";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(deleteUsersQuery)) {
-            preparedStatement.executeUpdate();
+            return preparedStatement.executeUpdate() == userIDs.length;
         }
     }
 
@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(long userID, String firstName, String lastName, String login, String password)
+    public boolean updateUser(long userID, String firstName, String lastName, String login, String password)
         throws SQLException {
         Objects.requireNonNull(firstName, "First name can not be set to null");
         Objects.requireNonNull(lastName, "Last name can not be set to null");
@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
             preparedStatement.setString(3, login);
             preparedStatement.setString(4, password);
             preparedStatement.setLong(5, userID);
-            preparedStatement.executeUpdate();
+            return preparedStatement.executeUpdate() != 0;
         }
     }
 }

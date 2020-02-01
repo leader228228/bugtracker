@@ -44,7 +44,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public void updateIssue(long assigneeID, int statusID, long projectID, String body, String title, long issueID)
+    public boolean updateIssue(long assigneeID, int statusID, long projectID, String body, String title, long issueID)
         throws SQLException {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("UPDATE BT_ISSUES SET " +
@@ -60,17 +60,17 @@ public class IssueServiceImpl implements IssueService {
             preparedStatement.setString(4, body);
             preparedStatement.setString(5, title);
             preparedStatement.setLong(6, issueID);
-            preparedStatement.executeUpdate();
+            return preparedStatement.executeUpdate() != 0;
         }
     }
 
     @Override
-    public void deleteIssue(long issueID) throws SQLException {
+    public boolean deleteIssue(long issueID) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
                 "DELETE FROM BT_ISSUES WHERE ISSUE_ID = ?");
             preparedStatement.setLong(1, issueID);
-            preparedStatement.executeUpdate();
+            return preparedStatement.executeUpdate() != 0;
         }
     }
 

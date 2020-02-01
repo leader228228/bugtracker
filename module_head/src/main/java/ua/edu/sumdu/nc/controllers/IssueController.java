@@ -65,14 +65,22 @@ public class IssueController {
     )
     public ResponseEntity<String> deleteIssue(@PathVariable(name = "issue_id") long issueID) {
         try {
-            issueService.deleteIssue(issueID);
+            boolean hasIssueBeenDelete = issueService.deleteIssue(issueID);
+            if (hasIssueBeenDelete) {
+                return new ResponseEntity<>(
+                        Utils.getCommonSuccessResponse("The issue has been successfully deleted"),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        Utils.getCommonErrorResponse("The issue has not been found"),
+                        HttpStatus.NOT_FOUND
+                );
+            }
         } catch (SQLException e) {
             logger.error(e);
             return new ResponseEntity<>(Utils.getCommonErrorResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(Utils.getCommonSuccessResponse(
-            "The issue id = " + issueID + " was deleted (if it existed)"), HttpStatus.ACCEPTED
-        );
     }
 
     @RequestMapping(
@@ -87,7 +95,7 @@ public class IssueController {
             return new ResponseEntity<>(Utils.getInvalidRequestResponse(bindingResult), HttpStatus.BAD_REQUEST);
         }
         try {
-            issueService.updateIssue(
+            boolean hasIssueBeenUpdated = issueService.updateIssue(
                 request.getAssigneeID(),
                 request.getStatusID(),
                 request.getProjectID(),
@@ -95,18 +103,23 @@ public class IssueController {
                 request.getTitle(),
                 request.getIssueID()
             );
+            if (hasIssueBeenUpdated) {
+                return new ResponseEntity<String>(
+                        Utils.getCommonSuccessResponse(
+                                issueService.getIssues(Collections.singletonList(request.getIssueID())).toString()
+                        ),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<String>(
+                        Utils.getCommonErrorResponse("The issue can not be updated"),
+                        HttpStatus.BAD_REQUEST
+                );
+            }
+
         } catch (SQLException e) {
             logger.error(e);
             return new ResponseEntity<>(Utils.getCommonErrorResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        try {
-            return new ResponseEntity<String>(
-                Utils.getCommonSuccessResponse(
-                    issueService.getIssues(Collections.singletonList(request.getIssueID())).toString()),
-                HttpStatus.OK
-            );
-        } catch (SQLException e) {
-            return null;
         }
     }
 

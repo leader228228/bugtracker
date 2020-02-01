@@ -56,11 +56,23 @@ public class ReplyController {
     )
     public ResponseEntity<String> deleteReply(@PathVariable(name = "reply_ids") long [] replyID) {
         try {
-            replyService.deleteReplies(Arrays.stream(replyID).boxed().collect(Collectors.toList()));
-            return new ResponseEntity<>(
-                Utils.getCommonSuccessResponse("The replies have been successfully deleted (existed)"),
-                HttpStatus.OK
-            );
+            boolean allRepliesHaveBeenDeleted =
+                    replyService.deleteReplies(Arrays.stream(replyID).boxed().collect(Collectors.toList()));
+            if (allRepliesHaveBeenDeleted) {
+                return new ResponseEntity<>(
+                        Utils.getCommonSuccessResponse(
+                                "All the replies have been successfully deleted"
+                        ),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        Utils.getCommonSuccessResponse(
+                                "Not all the replies have been successfully deleted"
+                        ),
+                        HttpStatus.ACCEPTED
+                );
+            }
         } catch (Exception e) {
             logger.error(e);
             return new ResponseEntity<>(

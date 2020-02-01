@@ -15,5 +15,5 @@ public interface ProjectService {
 
     Collection<Project> searchProjectsByName(String projectName) throws SQLException;
 
-    void deleteProject(long projectID) throws SQLException;
+    boolean deleteProject(long projectID) throws SQLException;
 }
