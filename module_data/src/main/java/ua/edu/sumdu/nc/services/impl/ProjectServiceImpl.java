@@ -43,9 +43,7 @@ public class ProjectServiceImpl implements ProjectService {
             PreparedStatement preparedStatement = connection.prepareStatement(saveProjectQuery)) {
             preparedStatement.setString(1, project.getName());
             preparedStatement.executeUpdate();
-            if(logger.isInfoEnabled()) {
-                logger.info("Project id = " + project.getProjectID() + " has been successfully saved");
-            }
+            logger.info("Project id = " + project.getProjectID() + " has been successfully saved");
         }
         return project;
     }

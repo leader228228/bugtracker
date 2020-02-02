@@ -50,9 +50,7 @@ public class UserController {
                 request.getLogin(),
                 String.valueOf(request.getPassword().hashCode())
             );
-            if (logger.isInfoEnabled()) {
-                logger.info("The user (user_id = " + user.getUserID() + " ) has been successfully created");
-            }
+            logger.info("The user (user_id = " + user.getUserID() + " ) has been successfully created");
             return new ResponseEntity<>(
                     String.valueOf(Stream.of(user).map(DBUtils::createUserView).collect(Collectors.toList())),
                     HttpStatus.OK
@@ -118,9 +116,7 @@ public class UserController {
         }
         try {
             boolean hasUserBeenDeleted = userService.deleteUsers(userIDs);
-            if (logger.isInfoEnabled()) {
-                logger.info("The users (user_id in " + Arrays.toString(userIDs) + ") are deleted");
-            }
+            logger.info("The users (user_id in " + Arrays.toString(userIDs) + ") are deleted");
             if (hasUserBeenDeleted) {
                 return new ResponseEntity<>(
                         Utils.getCommonSuccessResponse("The user has been successfully deleted"),
@@ -146,9 +142,7 @@ public class UserController {
     public ResponseEntity<String> searchUsersByIDs(@PathVariable(name = "user_ids") long [] userIDs) {
         try {
             if (userIDs.length == 0) {
-                if (logger.isInfoEnabled()) {
-                    logger.info("Any ID is passed, returning all the users");
-                }
+                logger.info("Any ID is passed, returning all the users");
                 return new ResponseEntity<>(
                     Utils.getCommonSuccessResponse(Utils.buildForResponse(userService.getAll())),
                     HttpStatus.OK
@@ -156,9 +150,7 @@ public class UserController {
             }
             Collection<User> userViews = userService.searchUsersByIDs(userIDs).stream()
                 .map(DBUtils::createUserView).collect(Collectors.toList());
-            if (logger.isInfoEnabled()) {
-                logger.info("Found users " + userViews);
-            }
+            logger.info("Found users " + userViews);
             return new ResponseEntity<>(
                 Utils.getCommonSuccessResponse(Utils.buildForResponse(userViews)),
                 HttpStatus.OK
@@ -177,9 +169,7 @@ public class UserController {
     public ResponseEntity<String> searchUsersByName(@PathVariable(name = "name") String name) {
         try {
             if (StringUtils.isBlank(name)) {
-                if (logger.isInfoEnabled()) {
-                    logger.info("Empty string is passed, returning all the users");
-                }
+                logger.info("Empty string is passed, returning all the users");
                 return new ResponseEntity<>(
                     Utils.getCommonSuccessResponse(Utils.buildForResponse(userService.getAll())),
                     HttpStatus.OK
@@ -187,9 +177,7 @@ public class UserController {
             }
             Collection<User> userViews = userService.searchUsersByName(name).stream()
                 .map(DBUtils::createUserView).collect(Collectors.toList());
-            if (logger.isInfoEnabled()) {
-                logger.info("Found users " + userViews);
-            }
+            logger.info("Found users " + userViews);
             return new ResponseEntity<>(
                 Utils.getCommonSuccessResponse(Utils.buildForResponse(userViews)),
                 HttpStatus.OK
