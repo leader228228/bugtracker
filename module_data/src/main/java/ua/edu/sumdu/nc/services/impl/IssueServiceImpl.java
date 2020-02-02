@@ -138,7 +138,7 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public Collection<Issue> getIssues(String text) throws SQLException {
-        String getIssuesQuery = "select * from bt_issues i left join bt_replies r on i.issue_id = r.issue_id where i.body like ? or i.title like ? or r.body like ?";
+        String getIssuesQuery = "select * from bt_issues i left join bt_replies r on i.issue_id = r.issue_id where i.body like ? or i.title like ? or r.\"body\" like ?";
         try(Connection connection = dataSource.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(getIssuesQuery);
             String pattern = DBUtils.getPatternContains(text);
