@@ -18,7 +18,8 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "/reply")
 public class ReplyController {
 
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(ReplyController.class);
+
     private ReplyService replyService;
 
     public ReplyController(ReplyService replyService) {

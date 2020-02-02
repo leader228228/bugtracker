@@ -16,7 +16,7 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(ProjectController.class);
 
     public ProjectController(ProjectService projectService) {
         this.projectService = projectService;

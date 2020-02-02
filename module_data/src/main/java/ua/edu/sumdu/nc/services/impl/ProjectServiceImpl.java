@@ -18,7 +18,7 @@ import java.util.Collection;
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(ProjectServiceImpl.class);
 
     private final DataSource dataSource;
 

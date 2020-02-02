@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "/issues")
 public class IssueController {
 
-    private Logger logger = Logger.getRootLogger();
+    private Logger logger = Logger.getLogger(IssueController.class);
 
     private IssueService issueService;
 

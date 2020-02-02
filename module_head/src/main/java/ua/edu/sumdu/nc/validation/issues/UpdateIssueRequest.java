@@ -12,7 +12,7 @@ import javax.validation.constraints.Min;
 @NoArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class UpdateIssueRequest implements BTRequest {
-@Min(value = 0)
+    @Min(value = 0)
     @JsonProperty(required = true)
     private Long issueID;
     @Min(value = 0)

@@ -26,7 +26,7 @@ public class UserController {
 
     private UserService userService;
 
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(UserController.class);
 
     public UserController(UserService userService) {
         this.userService = userService;
