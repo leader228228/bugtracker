@@ -173,12 +173,14 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public Collection<Issue> getIssuesByAssignees(Collection<Long> reportersIDs) throws SQLException {
-        if (reportersIDs.size() == 0) {
+    public Collection<Issue> getIssuesByAssignees(Collection<Long> assigneesIDs) throws SQLException {
+        if (assigneesIDs.size() == 0) {
             return getAll();
         }
-        String _reportersIDs = reportersIDs.toString();
-        String getIssuesQuery = "select * from bt_issues where assignee_id in (" + _reportersIDs.substring(1, _reportersIDs.length() - 1) + ")";
+        String _assigneesIDs = assigneesIDs.toString();
+        String getIssuesQuery =
+                "select * from bt_issues where assignee_id in ("
+                        + _assigneesIDs.substring(1, _assigneesIDs.length() - 1) + ")";
         Collection<Issue> issues = new ArrayList<>();
         try(Connection connection = dataSource.getConnection();
             ResultSet resultSet = connection.prepareStatement(getIssuesQuery).executeQuery()) {
