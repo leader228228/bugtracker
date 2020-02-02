@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 @RequestMapping(path = "/user")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     private final Logger logger = Logger.getLogger(UserController.class);
 

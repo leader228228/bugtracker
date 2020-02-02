@@ -20,7 +20,7 @@ public class ReplyController {
 
     private final Logger logger = Logger.getLogger(ReplyController.class);
 
-    private ReplyService replyService;
+    private final ReplyService replyService;
 
     public ReplyController(ReplyService replyService) {
         this.replyService = replyService;

@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "/issues")
 public class IssueController {
 
-    private Logger logger = Logger.getLogger(IssueController.class);
+    private final Logger logger = Logger.getLogger(IssueController.class);
 
-    private IssueService issueService;
+    private final IssueService issueService;
 
     public IssueController(IssueService issueService) {
         this.issueService = issueService;
