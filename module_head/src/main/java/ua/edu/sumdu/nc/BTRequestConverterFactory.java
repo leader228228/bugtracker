@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BTRequestConverterFactory implements ConverterFactory<String, BTRequest> {
+
     private Map<Class<? extends BTRequest>, Converter<String, BTRequest>> map = new HashMap<>();
 
     public BTRequestConverterFactory(Map<Class<? extends BTRequest>, Converter<String, BTRequest>> map) {

@@ -14,8 +14,11 @@ import java.sql.SQLException;
 public class DatabaseConfig {
 
     private String URL;
+
     private String user;
+
     private String password;
+
     /** @noinspection FieldCanBeLocal, unused */
     private Class<? extends Driver> JDBCDriver;
 
