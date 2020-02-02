@@ -2,36 +2,37 @@ package ua.edu.sumdu.nc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import ua.edu.sumdu.nc.entities.Entity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 public class Utils {
 
-    private static final String RESPONSE_JSON_TEMPLATE = "{\"status\":\"#status#\",\"messages\":[#messages#]}";
-
     public static String getCommonErrorResponse(String...messages) {
-        return RESPONSE_JSON_TEMPLATE
-            .replaceFirst("#status#", "error")
-            .replaceFirst("#messages#", wrapAndJoin(messages));
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayNode _messages = mapper.createArrayNode();
+        Arrays.stream(messages).forEach(_messages::add);
+        ObjectNode successResponse = mapper.createObjectNode();
+        successResponse.put("status", "error");
+        successResponse.set("messages", _messages);
+        return successResponse.toString();
     }
 
     public static String getCommonSuccessResponse(String...messages) {
-        return RESPONSE_JSON_TEMPLATE
-            .replaceFirst("#status#", "success")
-            .replaceFirst("#messages#", wrapAndJoin(messages));
-    }
-
-    private static String wrapAndJoin(String... strings) {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (strings.length != 0) {
-            stringBuilder = new StringBuilder("\"").append(String.join("\", \"", strings)).append("\"");
-        }
-        return stringBuilder.toString();
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayNode _messages = mapper.createArrayNode();
+        Arrays.stream(messages).forEach(_messages::add);
+        ObjectNode successResponse = mapper.createObjectNode();
+        successResponse.put("status", "success");
+        successResponse.set("messages", _messages);
+        return successResponse.toString();
     }
 
     public static String getInvalidRequestResponse(BindingResult bindingResult) {
@@ -46,10 +47,10 @@ public class Utils {
         return getCommonErrorResponse(errorMessages);
     }
 
-    public static String buildForResponse(Collection<? extends Entity> issues) throws JsonProcessingException {
+    public static String buildForResponse(Collection<? extends Entity> entities) throws JsonProcessingException {
         return new ObjectMapper().writer().writeValueAsString(new Object() {
             /** @noinspection unused*/
-            public Collection<? extends Entity> _issues = issues;
+            public Collection<? extends Entity> _entities = entities;
         });
     }
 }
