@@ -1,5 +1,7 @@
 package ua.edu.sumdu.nc.services.impl;
 
+import oracle.jdbc.OracleCallableStatement;
+import oracle.jdbc.OracleTypes;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import ua.edu.sumdu.nc.entities.User;
@@ -43,14 +45,19 @@ public class UserServiceImpl implements UserService {
         user.setLastName(lastName);
         user.setLogin(login);
         user.setPassword(String.valueOf(password.hashCode()));
-        String insertUserQuery = "insert into bt_users(login, password, first_name, last_name) values(?, ?, ?, ?)";
+        String insertUserQuery =
+                "begin insert into bt_users(login, password, first_name, last_name) values(?, ?, ?, ?) " +
+                        "returning user_id into ?; end;";
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(insertUserQuery)) {
-            preparedStatement.setString(1, user.getLogin());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, user.getFirstName());
-            preparedStatement.setString(4, user.getLastName());
-            preparedStatement.executeUpdate();
+             OracleCallableStatement callableStatement =
+                     (OracleCallableStatement) connection.prepareCall(insertUserQuery)) {
+            callableStatement.registerOutParameter(5, OracleTypes.INTEGER);
+            callableStatement.setString(1, user.getLogin());
+            callableStatement.setString(2, user.getPassword());
+            callableStatement.setString(3, user.getFirstName());
+            callableStatement.setString(4, user.getLastName());
+            callableStatement.execute();
+            user.setUserID(callableStatement.getInt(5));
         }
         return user;
     }

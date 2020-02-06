@@ -47,10 +47,10 @@ public class Utils {
         return getCommonErrorResponse(errorMessages);
     }
 
-    public static String buildForResponse(Collection<? extends Entity> entities) throws JsonProcessingException {
+    public static String buildForResponse(Collection<? extends Entity> _entities) throws JsonProcessingException {
         return new ObjectMapper().writer().writeValueAsString(new Object() {
             /** @noinspection unused*/
-            public Collection<? extends Entity> _entities = entities;
+            public Collection<? extends Entity> entities = _entities;
         });
     }
 }

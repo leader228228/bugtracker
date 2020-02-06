@@ -1,5 +1,7 @@
 package ua.edu.sumdu.nc.services.impl;
 
+import oracle.jdbc.OracleCallableStatement;
+import oracle.jdbc.internal.OracleTypes;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ua.edu.sumdu.nc.entities.Issue;
@@ -86,21 +88,23 @@ public class IssueServiceImpl implements IssueService {
         issue.setReporterID(reporterID);
         issue.setCreated(new Date(System.currentTimeMillis()));
 
+
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(
-                 "INSERT INTO BT_ISSUES("
-                     + "ISSUE_ID, REPORTER_ID, ASSIGNEE_ID, CREATED, STATUS_ID, PROJECT_ID, \"body\", TITLE)"
-                     + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
+             OracleCallableStatement callableStatement = (OracleCallableStatement) connection.prepareCall(
+                     "begin insert into BT_ISSUES("
+                             + "REPORTER_ID, ASSIGNEE_ID, CREATED, STATUS_ID, PROJECT_ID, \"body\", TITLE)"
+                             + " values (?, ?, ?, ?, ?, ?, ?) returning issue_id into ?; end;")
         ) {
-            preparedStatement.setLong(1, issue.getIssueID());
-            preparedStatement.setLong(2, issue.getReporterID());
-            preparedStatement.setLong(3, issue.getAssigneeID());
-            preparedStatement.setDate(4, issue.getCreated());
-            preparedStatement.setInt(5, issue.getStatusID());
-            preparedStatement.setLong(6, issue.getProjectID());
-            preparedStatement.setString(7, issue.getBody());
-            preparedStatement.setString(8, issue.getTitle());
-            preparedStatement.executeUpdate();
+            callableStatement.registerOutParameter(8, OracleTypes.INTEGER);
+            callableStatement.setLong(1, issue.getReporterID());
+            callableStatement.setLong(2, issue.getAssigneeID());
+            callableStatement.setDate(3, issue.getCreated());
+            callableStatement.setInt(4, issue.getStatusID());
+            callableStatement.setLong(5, issue.getProjectID());
+            callableStatement.setString(6, issue.getBody());
+            callableStatement.setString(7, issue.getTitle());
+            callableStatement.execute();
+            issue.setIssueID(callableStatement.getInt(8));
         }
         return issue;
     }

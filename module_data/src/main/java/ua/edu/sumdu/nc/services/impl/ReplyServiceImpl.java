@@ -1,5 +1,7 @@
 package ua.edu.sumdu.nc.services.impl;
 
+import oracle.jdbc.OracleCallableStatement;
+import oracle.jdbc.OracleTypes;
 import org.springframework.stereotype.Service;
 import ua.edu.sumdu.nc.entities.Reply;
 import ua.edu.sumdu.nc.services.DBUtils;
@@ -39,14 +41,19 @@ public class ReplyServiceImpl implements ReplyService {
         reply.setCreated(new Date(System.currentTimeMillis()));
         reply.setIssueID(issueID);
 
-        String insertReplyQuery = "insert into bt_replies(\"body\", issue_id, author_id, created) values(?, ?, ?, ?)";
+        String insertReplyQuery =
+                "begin insert into bt_replies(\"body\", issue_id, author_id, created) values(?, ?, ?, ?)" +
+                        " returning reply_id into ?; end;";
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(insertReplyQuery)) {
-            preparedStatement.setString(1, reply.getBody());
-            preparedStatement.setLong(2, reply.getIssueID());
-            preparedStatement.setLong(3, reply.getAuthorID());
-            preparedStatement.setDate(4, reply.getCreated());
-            preparedStatement.executeUpdate();
+            OracleCallableStatement callableStatement =
+                    (OracleCallableStatement) connection.prepareCall(insertReplyQuery)) {
+            callableStatement.registerOutParameter(5, OracleTypes.INTEGER);
+            callableStatement.setString(1, reply.getBody());
+            callableStatement.setLong(2, reply.getIssueID());
+            callableStatement.setLong(3, reply.getAuthorID());
+            callableStatement.setDate(4, reply.getCreated());
+            callableStatement.execute();
+            reply.setReplyID(callableStatement.getInt(5));
         }
         return reply;
     }

@@ -52,7 +52,9 @@ public class UserController {
             );
             logger.info("The user (user_id = " + user.getUserID() + " ) has been successfully created");
             return new ResponseEntity<>(
-                    String.valueOf(Stream.of(user).map(DBUtils::createUserView).collect(Collectors.toList())),
+                    Utils.getCommonSuccessResponse(
+                            String.valueOf(Stream.of(user).map(DBUtils::createUserView).collect(Collectors.toList()))
+                    ),
                     HttpStatus.OK
             );
         } catch (Exception e) {

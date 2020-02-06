@@ -1,5 +1,7 @@
 package ua.edu.sumdu.nc.services.impl;
 
+import oracle.jdbc.OracleCallableStatement;
+import oracle.jdbc.OracleTypes;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import ua.edu.sumdu.nc.entities.Project;
@@ -38,11 +40,13 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = new Project();
         project.setName(projectName);
 
-        String saveProjectQuery = "insert into bt_projects(name) values(?)";
+        String saveQuery = "begin insert into bt_projects(name) values(?) returning project_id into ?; end;";
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(saveProjectQuery)) {
-            preparedStatement.setString(1, project.getName());
-            preparedStatement.executeUpdate();
+            OracleCallableStatement callableStatement = (OracleCallableStatement) connection.prepareCall(saveQuery)) {
+            callableStatement.registerOutParameter(2, OracleTypes.INTEGER);
+            callableStatement.setString(1, project.getName());
+            callableStatement.execute();
+            project.setProjectID(callableStatement.getInt(2));
             logger.info("Project id = " + project.getProjectID() + " has been successfully saved");
         }
         return project;
