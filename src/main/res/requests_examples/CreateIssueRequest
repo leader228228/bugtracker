@@ -1,0 +1,8 @@
+{
+	"reporterID" : 1,
+	"assigneeID" : 0,
+	"title" : "Test title",
+	"body" : "Test body",
+	"statusID" : 1,
+	"projectID" : 1
+}
