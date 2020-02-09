@@ -17,7 +17,7 @@ import java.util.HashSet;
 @Service
 public class ReplyServiceImpl implements ReplyService {
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     public ReplyServiceImpl(DataSource dataSource) {
         this.dataSource = dataSource;

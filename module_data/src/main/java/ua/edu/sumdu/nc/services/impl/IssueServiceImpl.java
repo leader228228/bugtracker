@@ -16,7 +16,7 @@ import java.util.Collection;
 @Service
 public class IssueServiceImpl implements IssueService {
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     public IssueServiceImpl(DataSource dataSource) {
         this.dataSource = dataSource;

@@ -22,7 +22,7 @@ import java.util.Objects;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     public UserServiceImpl(DataSource dataSource) {
         this.dataSource = dataSource;
