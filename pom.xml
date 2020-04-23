@@ -128,7 +128,7 @@
         <project.build.format>ear</project.build.format>
         <javax.validation.version>1.1.0.Final</javax.validation.version>
         <org.hibernate.version>5.1.0.Final</org.hibernate.version>
-        <jackson.version>2.9.9.1</jackson.version>
+        <jackson.version>2.9.10.4</jackson.version>
         <spring.security.version>5.1.6.RELEASE</spring.security.version>
         <apache.common.lang3.version>3.0</apache.common.lang3.version>
         <lombok.version>1.18.10</lombok.version>
